@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">Pričakuj potrdilo str. TLS</string>
   <string name="remote_tlscn_check_summary">Preveri DN zadeve potrdila oddaljenega strežnika</string>
   <string name="remote_tlscn_check_title">Preveri ime gost. potrdila</string>
-  <string name="enter_tlscn_dialog">Določite preverjanje, ki naj se uporabi za preverjanje DN-a oddaljenega potrdila (npr. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de).\n\nDoločite celoten DN ali RDN (npr. openvpn.blinkt.de) ali predpono RDN-a za preverjanje.\n\nKadar uporabljate predpono RDN, se \"Strežnik\" primerja s \"Strežnik-1\" in \"Strežnik-2\".\n\nČe pustite besedilno polje prazno, bo RDN preverjen z imenom gostitelja.\n\nZa več podatkov glejte OpenVPN 2.3.1 + stran man v —verify-x509-name.</string>
+  <string name="enter_tlscn_dialog">Določite preverjanje, ki naj se uporabi za preverjanje DN-a oddaljenega potrdila (npr. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.rroadvpn.net).\n\nDoločite celoten DN ali RDN (npr. openvpn.rroadvpn.net) ali predpono RDN-a za preverjanje.\n\nKadar uporabljate predpono RDN, se \"Strežnik\" primerja s \"Strežnik-1\" in \"Strežnik-2\".\n\nČe pustite besedilno polje prazno, bo RDN preverjen z imenom gostitelja.\n\nZa več podatkov glejte OpenVPN 2.3.1 + stran man v —verify-x509-name.</string>
   <string name="enter_tlscn_title">Zadeva oddaljenega potrdila</string>
   <string name="tls_key_auth">Omogoči overitev ključa TLS</string>
   <string name="tls_auth_file">Datoteka overitve TLS</string>

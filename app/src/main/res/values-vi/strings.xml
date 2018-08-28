@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">Đợi chứng chỉ máy chủ TLS</string>
   <string name="remote_tlscn_check_summary">Kiểm tra Chứng chỉ máy chủ từ xa</string>
   <string name="remote_tlscn_check_title">Kiểm tra chứng chỉ tên miền</string>
-  <string name="enter_tlscn_dialog">Xác định để kiểm tra sử dụng chứng nhận từ xa DN (e.g. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de)\n\nHoàn chỉnh các DN hoặc RDN (openvpn.blinkt.de làm ví dụ) hoặc một tiền tố RDN để xác minh.\n\nKhi dùng tiền tố RDN phù hợp \"Server-1\" và \"Server-2\"\n\nĐể trường văn bản trống sẽ kiểm tra tiền tố RDN phản biện tên miền máy chủ. \n\nĐể biết thêm chi tiết xem tại phần quản lý OpenVPN 2.3.1+ bên dưới —xác minh-x509-tên</string>
+  <string name="enter_tlscn_dialog">Xác định để kiểm tra sử dụng chứng nhận từ xa DN (e.g. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.rroadvpn.net)\n\nHoàn chỉnh các DN hoặc RDN (openvpn.rroadvpn.net làm ví dụ) hoặc một tiền tố RDN để xác minh.\n\nKhi dùng tiền tố RDN phù hợp \"Server-1\" và \"Server-2\"\n\nĐể trường văn bản trống sẽ kiểm tra tiền tố RDN phản biện tên miền máy chủ. \n\nĐể biết thêm chi tiết xem tại phần quản lý OpenVPN 2.3.1+ bên dưới —xác minh-x509-tên</string>
   <string name="enter_tlscn_title">Chủ đề chứng chỉ từ xa</string>
   <string name="tls_key_auth">Cho phép xác thực khóa TLS</string>
   <string name="tls_auth_file">Tập tin chứng thực TLS</string>

@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">Attendre le certificat de serveur TLS</string>
   <string name="remote_tlscn_check_summary">Vérifie l\'objet du certificat serveur distant DN</string>
   <string name="remote_tlscn_check_title">"Vérification du certificat de l\'hôte"</string>
-  <string name="enter_tlscn_dialog">Spécifiez le contrôle utilisé pour vérifier le certificat à distance DN (par exemple, C=DE, L=Paderborn, OU =Avian IP Carriers, CN=openvpn.blinkt.de)\n\nIndiquez le DN complet ou le RDN (openvpn.blinkt.de dans l\'exemple) ou un préfixe RDN pour vérification.\n\nEn utilisant le préfixe RDN \"Server\" correspond à \"Server-1\" et \"Server 2\"\n\nSi vous laissez le champ de texte vide, cela vérifiera le RDN contre le nom du serveur.\n\nPour plus de détails, voir la page du manuel OpenVPN 2.3.1 sous —verify-x509-name</string>
+  <string name="enter_tlscn_dialog">Spécifiez le contrôle utilisé pour vérifier le certificat à distance DN (par exemple, C=DE, L=Paderborn, OU =Avian IP Carriers, CN=openvpn.rroadvpn.net)\n\nIndiquez le DN complet ou le RDN (openvpn.rroadvpn.net dans l\'exemple) ou un préfixe RDN pour vérification.\n\nEn utilisant le préfixe RDN \"Server\" correspond à \"Server-1\" et \"Server 2\"\n\nSi vous laissez le champ de texte vide, cela vérifiera le RDN contre le nom du serveur.\n\nPour plus de détails, voir la page du manuel OpenVPN 2.3.1 sous —verify-x509-name</string>
   <string name="enter_tlscn_title">Objet du certificat distant</string>
   <string name="tls_key_auth">"Activer l\'authentification par clé TLS"</string>
   <string name="tls_auth_file">"Fichier d\'authentification TLS"</string>

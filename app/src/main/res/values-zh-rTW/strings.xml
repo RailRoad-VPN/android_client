@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">預期的 TLS 伺服器憑證</string>
   <string name="remote_tlscn_check_summary">檢查遠端的伺服器憑證主旨 DN</string>
   <string name="remote_tlscn_check_title">憑證主機名稱檢查</string>
-  <string name="enter_tlscn_dialog">指定這個檢查用於驗證遠端憑證 DN（例如：C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de）\n\n指定完整的 DN 或 RDN（openvpn.blinkt.de 在範例中）或 RDN 前綴來驗證。\n\n當使用 RDN 前綴 \"Server\" 符合 \"Server-1\" 及 \"Server-2\"\n\n如文字欄位為空，將檢查 RDN 的主機名稱。\n\n更多詳情，請參閱 OpenVPN 2.3.1 + 在 manpage 的 —verify-x509-name</string>
+  <string name="enter_tlscn_dialog">指定這個檢查用於驗證遠端憑證 DN（例如：C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.rroadvpn.net）\n\n指定完整的 DN 或 RDN（openvpn.rroadvpn.net 在範例中）或 RDN 前綴來驗證。\n\n當使用 RDN 前綴 \"Server\" 符合 \"Server-1\" 及 \"Server-2\"\n\n如文字欄位為空，將檢查 RDN 的主機名稱。\n\n更多詳情，請參閱 OpenVPN 2.3.1 + 在 manpage 的 —verify-x509-name</string>
   <string name="enter_tlscn_title">遠端憑證主旨</string>
   <string name="tls_key_auth">啟用 TLS 密鑰認證</string>
   <string name="tls_auth_file">TLS 驗證檔</string>

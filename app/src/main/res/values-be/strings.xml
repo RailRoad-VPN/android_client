@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">Чакаць серверны сертыфікат TLS</string>
   <string name="remote_tlscn_check_summary">Праверка DN аб\'екта падаленага сертыфіката</string>
   <string name="remote_tlscn_check_title">Праверка імя хаста сертыфіката</string>
-  <string name="enter_tlscn_dialog">Увядзіце значэнне для праверкі DN выдаленага сертыфіката (прыкладам, C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de)\n\n \Магчымыя значэнні: поўны DN ці RDN (у прыкладзе вышэй openvpn.blinkt.de) ці толькі прэфікс RDN для праверкі.\n\nПры выкарыстанні прэфікса RDN, «Server» падыдзе для «Server-1» і «Server-2»\n\nПры пустой тэкставай падлозе будзе правярацца, што RDN супадае з іменем вузла.\n\nПадрабязнасці гледзіце ў кіраўніцтве OpenVPN 2.3.1+, падзел --verify-x509-name</string>
+  <string name="enter_tlscn_dialog">Увядзіце значэнне для праверкі DN выдаленага сертыфіката (прыкладам, C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.rroadvpn.net)\n\n \Магчымыя значэнні: поўны DN ці RDN (у прыкладзе вышэй openvpn.rroadvpn.net) ці толькі прэфікс RDN для праверкі.\n\nПры выкарыстанні прэфікса RDN, «Server» падыдзе для «Server-1» і «Server-2»\n\nПры пустой тэкставай падлозе будзе правярацца, што RDN супадае з іменем вузла.\n\nПадрабязнасці гледзіце ў кіраўніцтве OpenVPN 2.3.1+, падзел --verify-x509-name</string>
   <string name="enter_tlscn_title">Аб\'ект падаленага сертыфіката</string>
   <string name="tls_key_auth">Уключыць аўтэнтыфікацыю па TLS ключу</string>
   <string name="tls_auth_file">Файл аўтэнтыфікацыі TLS</string>

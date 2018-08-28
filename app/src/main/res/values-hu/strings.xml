@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">TLS server tanúsítvány megkövetelése</string>
   <string name="remote_tlscn_check_summary">Ellenőrzi a Távoli Kiszolgáló Tanúsítvány Subject DN mezőt</string>
   <string name="remote_tlscn_check_title">Tanúsítvány Kiszolgálónév Ellenőrzés</string>
-  <string name="enter_tlscn_dialog">Adja meg a távoli tanúsítvány DN ellenőrzését (pl.: C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de)\n\nAdja meg a teljes DN-t vagy az RDN-t (openvpn.blinkt.de a példában) vagy egy RDN prefix-et az ellenőrzéshez.\n\nRDN prefix használatakor a \"Server\" egyezik a \"Server-1\"-gyel és a \"Server-2\"-vel\n\nA mező üresen hagyásakor az RDN a kiszolgáló nevével kerül ellenőrzésre.\n\nTovábbi részleteket az OpenVPN 2.3.1+ manuál oldalon talál —verify-x509-name</string>
+  <string name="enter_tlscn_dialog">Adja meg a távoli tanúsítvány DN ellenőrzését (pl.: C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.rroadvpn.net)\n\nAdja meg a teljes DN-t vagy az RDN-t (openvpn.rroadvpn.net a példában) vagy egy RDN prefix-et az ellenőrzéshez.\n\nRDN prefix használatakor a \"Server\" egyezik a \"Server-1\"-gyel és a \"Server-2\"-vel\n\nA mező üresen hagyásakor az RDN a kiszolgáló nevével kerül ellenőrzésre.\n\nTovábbi részleteket az OpenVPN 2.3.1+ manuál oldalon talál —verify-x509-name</string>
   <string name="enter_tlscn_title">Távoli tanúsítvány tárgy</string>
   <string name="tls_key_auth">TLS Key Hitelesítés engedélyetése</string>
   <string name="tls_auth_file">TLS Auth Fájl</string>

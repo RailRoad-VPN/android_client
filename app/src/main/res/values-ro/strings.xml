@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">Aşteptă certificat de server TLS</string>
   <string name="remote_tlscn_check_summary">Verifică Remote Server Certificate Subject DN</string>
   <string name="remote_tlscn_check_title">Verficare hostname certificat</string>
-  <string name="enter_tlscn_dialog">Specifică verificarea ce va fi utilizată pentru certificatul DN (e.g. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de)\n\nSpecifică DN complet sau RDN (openvpn.blinkt.de in exemplu) sau un prefix RDN pentru verificare.\n\nCând folosiți prefix RDN \"Server\" face match si cu \"Server-1\" și \"Server-2\"\n\nDacă lăsați câmpul gol se va verifica RDN contra hostaname-ul serverului.\n\nPentru mai multe detalii verificați manualul OpenVPN 2.3.1+ la —verify-x509-name</string>
+  <string name="enter_tlscn_dialog">Specifică verificarea ce va fi utilizată pentru certificatul DN (e.g. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.rroadvpn.net)\n\nSpecifică DN complet sau RDN (openvpn.rroadvpn.net in exemplu) sau un prefix RDN pentru verificare.\n\nCând folosiți prefix RDN \"Server\" face match si cu \"Server-1\" și \"Server-2\"\n\nDacă lăsați câmpul gol se va verifica RDN contra hostaname-ul serverului.\n\nPentru mai multe detalii verificați manualul OpenVPN 2.3.1+ la —verify-x509-name</string>
   <string name="enter_tlscn_title">Subiect certificat remote</string>
   <string name="tls_key_auth">Activează autentificarea cu cheie TLS</string>
   <string name="tls_auth_file">Fişier TLS Auth</string>

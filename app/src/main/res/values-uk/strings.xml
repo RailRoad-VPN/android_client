@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">Очікувати TLS сертифікат сервера</string>
   <string name="remote_tlscn_check_summary">Перевірка DN об\'єкта віддаленого сертифіката</string>
   <string name="remote_tlscn_check_title">Перевірка імені вузла сертифікату</string>
-  <string name="enter_tlscn_dialog">Перемикач способу перевірки DN сертифікату (eg C = DE, L = Paderborn, OU = Avian IP Carriers, CN = openvpn.blinkt.de) \n \nМожливо значення: повний DN, RDN (для прикладу openvpn.blinkt.de) або тільки преффікс RDN для перевірки. \n \nПрі використанні преффікса RDN, наприклад \"Server\", значення будуть \"Server-1\", \"Server-2\" і т.д. \n \nПрі порожньому текстовому полі перевірка проводитиметься по імені хоста. \n \nДля подробиць дивіться керівництво для OpenVPN 2.3.1 +, розділ-verify-x509-name</string>
+  <string name="enter_tlscn_dialog">Перемикач способу перевірки DN сертифікату (eg C = DE, L = Paderborn, OU = Avian IP Carriers, CN = openvpn.rroadvpn.net) \n \nМожливо значення: повний DN, RDN (для прикладу openvpn.rroadvpn.net) або тільки преффікс RDN для перевірки. \n \nПрі використанні преффікса RDN, наприклад \"Server\", значення будуть \"Server-1\", \"Server-2\" і т.д. \n \nПрі порожньому текстовому полі перевірка проводитиметься по імені хоста. \n \nДля подробиць дивіться керівництво для OpenVPN 2.3.1 +, розділ-verify-x509-name</string>
   <string name="enter_tlscn_title">Об\'єкт віддаленого сертифіката</string>
   <string name="tls_key_auth">Увімкнути автентифікацію по TLS ключу</string>
   <string name="tls_auth_file">Файл авторизації TLS</string>

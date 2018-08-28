@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">Verwacht TLS server-certificaat</string>
   <string name="remote_tlscn_check_summary">Controleert de DN van het externe servercertificaat</string>
   <string name="remote_tlscn_check_title">Controleer Certificaat Hostname</string>
-  <string name="enter_tlscn_dialog">Specificeer de controle die gebruikt wordt om het externe certificaat DN te verifiëren (bijv. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de)\n\nSpecificeer de volledige DN of de RDN (openvpn.blinkt.de in het voorbeeld) of een RDN-voorvoegsel voor verificatie.\n\nWanneer het gebruikte RDN-voorvoegsel \"Server\" overeenkomt met \"Server-1\" en \"Server-2\"\n\nEen leeg tekstveld zorgt dat de RDN wordt gecontroleerd tegen de hostnaam van de server.\n\nVoor meer details zie de OpenVPN 2.3.1+ manpage onder --verify-x509-name</string>
+  <string name="enter_tlscn_dialog">Specificeer de controle die gebruikt wordt om het externe certificaat DN te verifiëren (bijv. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.rroadvpn.net)\n\nSpecificeer de volledige DN of de RDN (openvpn.rroadvpn.net in het voorbeeld) of een RDN-voorvoegsel voor verificatie.\n\nWanneer het gebruikte RDN-voorvoegsel \"Server\" overeenkomt met \"Server-1\" en \"Server-2\"\n\nEen leeg tekstveld zorgt dat de RDN wordt gecontroleerd tegen de hostnaam van de server.\n\nVoor meer details zie de OpenVPN 2.3.1+ manpage onder --verify-x509-name</string>
   <string name="enter_tlscn_title">Externe certificaathouder</string>
   <string name="tls_key_auth">Activeert TLS Key Authenticatie</string>
   <string name="tls_auth_file">TLS Auth Bestand</string>

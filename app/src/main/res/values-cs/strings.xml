@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">Očekávat serverový TLS certifikát</string>
   <string name="remote_tlscn_check_summary">Kontrola DN v certifikátu vzdáleného serveru</string>
   <string name="remote_tlscn_check_title">Ověření jména certifikátu</string>
-  <string name="enter_tlscn_dialog">Specifikuj způsob kontroly DN v certifikátu vzdáleného serveru (př. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de)\n\nSpecifikuj kompletní DN nebo RDN (openvpn.blinkt.de v příkladu) nebo RDN prefix pro verifikaci.\n\nPři použití RDN prefixu, \"Server\" sedí na \"Server-1\" i \"Server-2\"\n\nJe-li RDN pole prázdné, kontroluje se proti jménu serveru.\n\nPro více detailů, viz manuálová stránka OpenVPN 2.3.1+, přepínač —verify-x509-name</string>
+  <string name="enter_tlscn_dialog">Specifikuj způsob kontroly DN v certifikátu vzdáleného serveru (př. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.rroadvpn.net)\n\nSpecifikuj kompletní DN nebo RDN (openvpn.rroadvpn.net v příkladu) nebo RDN prefix pro verifikaci.\n\nPři použití RDN prefixu, \"Server\" sedí na \"Server-1\" i \"Server-2\"\n\nJe-li RDN pole prázdné, kontroluje se proti jménu serveru.\n\nPro více detailů, viz manuálová stránka OpenVPN 2.3.1+, přepínač —verify-x509-name</string>
   <string name="enter_tlscn_title">Předmět vzdáleného certifikátu</string>
   <string name="tls_key_auth">Zapnout autentikaci pomocí TLS klíče</string>
   <string name="tls_auth_file">TLS autentikační soubor</string>

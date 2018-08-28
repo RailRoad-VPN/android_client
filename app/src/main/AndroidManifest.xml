@@ -229,7 +229,7 @@
             android:parentActivityName="net.rroadvpn.openvpn.activities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.rroadvpn.openvpn.net.rroadvpn.openvpn.activities.MainActivity" />
+                android:value="net.rroadvpn.openvpn.activities.MainActivity" />
         </activity>
         <activity
             android:name="net.rroadvpn.openvpn.api.RemoteAction"

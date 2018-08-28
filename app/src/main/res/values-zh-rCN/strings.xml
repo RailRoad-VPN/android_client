@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">需要 TLS 服务器证书</string>
   <string name="remote_tlscn_check_summary">检查远程服务器证书的 DN 属性</string>
   <string name="remote_tlscn_check_title">证书主机名检查</string>
-  <string name="enter_tlscn_dialog">勾选此项将验证远程证书的 DN 属性（例：C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de）\n\n输入完整的 DN 或者 RDN 以便进行验证。\n\nRDN前缀 \"Server\" 可以匹配 \"Server-1\" 以及 \"SERVER-2\"\n\n若留空则将仅验证 RDN 而不验证主机名。\n\n有关更多信息请查看 OpenVPN 2.3.1+ 参考手册的 --verify-x509-name 小节</string>
+  <string name="enter_tlscn_dialog">勾选此项将验证远程证书的 DN 属性（例：C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.rroadvpn.net）\n\n输入完整的 DN 或者 RDN 以便进行验证。\n\nRDN前缀 \"Server\" 可以匹配 \"Server-1\" 以及 \"SERVER-2\"\n\n若留空则将仅验证 RDN 而不验证主机名。\n\n有关更多信息请查看 OpenVPN 2.3.1+ 参考手册的 --verify-x509-name 小节</string>
   <string name="enter_tlscn_title">远程证书账户</string>
   <string name="tls_key_auth">启用TLS密钥验证</string>
   <string name="tls_auth_file">TLS认证文件</string>

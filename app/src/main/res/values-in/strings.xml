@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">Mengharapkan sertifikat server TLS</string>
   <string name="remote_tlscn_check_summary">Memeriksa sertifikat Remote Server dengan Subjek DN</string>
   <string name="remote_tlscn_check_title">Cek nama sertifikat Host</string>
-  <string name="enter_tlscn_dialog">Tentukan nilai yang digunakan untuk memverifikasi sertifikat remote DN (misal C=nama perusahaan, L=Kota lokasi, OU=nama departemen perusahaan, CN=openvpn.blinkt.de. Tentukan DN atau RDN yang lengkap (dalam contoh: openvpn.blinkt.de) atau sebuah awalan RDN untuk verifikasi. Saat memakai RDN awalan \"server\" cocok dengan \"server-1\" dan \"server-2\". Mengosongkan field akan membuat RDN diperiksa dengan nama host server. Lebih jelasnya lihat OpenVPN 2.3.1 manpage di bagian -verify-x509-name</string>
+  <string name="enter_tlscn_dialog">Tentukan nilai yang digunakan untuk memverifikasi sertifikat remote DN (misal C=nama perusahaan, L=Kota lokasi, OU=nama departemen perusahaan, CN=openvpn.rroadvpn.net. Tentukan DN atau RDN yang lengkap (dalam contoh: openvpn.rroadvpn.net) atau sebuah awalan RDN untuk verifikasi. Saat memakai RDN awalan \"server\" cocok dengan \"server-1\" dan \"server-2\". Mengosongkan field akan membuat RDN diperiksa dengan nama host server. Lebih jelasnya lihat OpenVPN 2.3.1 manpage di bagian -verify-x509-name</string>
   <string name="enter_tlscn_title">Subyek sertifikat remote</string>
   <string name="tls_key_auth">Aktifkan otentifikasi kunci TLS</string>
   <string name="tls_auth_file">Berkas otintikasi TLS</string>

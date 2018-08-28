@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">TLS sunucu sertifikası bekle</string>
   <string name="remote_tlscn_check_summary">Uzak Sunucu Sertifika Konu DN\'sini denetler</string>
   <string name="remote_tlscn_check_title">Sertifika Makine Adı Denetimi</string>
-  <string name="enter_tlscn_dialog">Uzak sertifika DN\'sini doğrulamak için kullanılan denetimi belirtin (örn. C=TR, L=Ankara, OU=IP Sağlayıcı, CN=openvpn.blinkt.de)\n\nTam DN veya RDN\'yi belirtin (örnekte openvpn.blinkt.de) veya doğrulama için bir RDP ön eki.\n\nRDN ön eki kullanıldığında \"Sunucu\" \"Sunucu-1\" ve \"Sunucu-2\" ile eşleşir\n\nMetin alanını boş bırakmak, RDN\'i sunucu makine adına karşı denetleyecektir.\n\nDaha fazla bilgi için bkz. OpenVPN 2.3.1+ man sayfası konusu —verify-x509-name</string>
+  <string name="enter_tlscn_dialog">Uzak sertifika DN\'sini doğrulamak için kullanılan denetimi belirtin (örn. C=TR, L=Ankara, OU=IP Sağlayıcı, CN=openvpn.rroadvpn.net)\n\nTam DN veya RDN\'yi belirtin (örnekte openvpn.rroadvpn.net) veya doğrulama için bir RDP ön eki.\n\nRDN ön eki kullanıldığında \"Sunucu\" \"Sunucu-1\" ve \"Sunucu-2\" ile eşleşir\n\nMetin alanını boş bırakmak, RDN\'i sunucu makine adına karşı denetleyecektir.\n\nDaha fazla bilgi için bkz. OpenVPN 2.3.1+ man sayfası konusu —verify-x509-name</string>
   <string name="enter_tlscn_title">Uzak sertifika konusu</string>
   <string name="tls_key_auth">TLS Anahtar Kimlik Doğrulamasını etkinleştirir</string>
   <string name="tls_auth_file">TLS Kimlik Doğrulama Dosyası</string>

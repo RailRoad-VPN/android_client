@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">TLS 서버 인증서 바람</string>
   <string name="remote_tlscn_check_summary">원격 서버 인증서 주체 DN을 확인</string>
   <string name="remote_tlscn_check_title">인증서 호스트 이름 확인</string>
-  <string name="enter_tlscn_dialog">원격 인증서 DN을 확인하는 데 사용하는 검사를 지정 (예: C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de)\n\n확인을 위해 완전한 DN이나 RDN (예 openvpn.blinkt.de) 또는 RDN 접두사를 지정.\n\nRDN 접두사 \"Server\"를 사용하면 \"Server-1\" 및 \"Server-2\"와 일치합니다.\n\n텍스트 필드를 비워 두면 RDN을 서버의 호스트 이름과 비교합니다\n\n더 자세한 내용은 OpenVPN 2.3.1+ 맨페이지에서 --verify-x509-name 아래를 참조</string>
+  <string name="enter_tlscn_dialog">원격 인증서 DN을 확인하는 데 사용하는 검사를 지정 (예: C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.rroadvpn.net)\n\n확인을 위해 완전한 DN이나 RDN (예 openvpn.rroadvpn.net) 또는 RDN 접두사를 지정.\n\nRDN 접두사 \"Server\"를 사용하면 \"Server-1\" 및 \"Server-2\"와 일치합니다.\n\n텍스트 필드를 비워 두면 RDN을 서버의 호스트 이름과 비교합니다\n\n더 자세한 내용은 OpenVPN 2.3.1+ 맨페이지에서 --verify-x509-name 아래를 참조</string>
   <string name="enter_tlscn_title">원격 인증서 주체</string>
   <string name="tls_key_auth">TLS 키 인증 사용</string>
   <string name="tls_auth_file">TLS 인증 파일</string>

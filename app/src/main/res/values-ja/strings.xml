@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">TLSサーバー証明書を要求する</string>
   <string name="remote_tlscn_check_summary">リモートサーバー証明書の所有者識別子(Subject DN)を確認します。</string>
   <string name="remote_tlscn_check_title">証明書のホスト名を確認する</string>
-  <string name="enter_tlscn_dialog">リモート証明書の照合に使用する識別名(DN)を指定します。(例: C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de)\n\n完全な識別名(DN)または相対識別名(RDN)、あるいは相対識別名のプリフィクスを指定します。\n\nたとえば相対識別名のプリフィクスとして\"Server\"を指定すると、\"Server-1\"と\"Server-2\"にマッチします。\n\n空欄にした場合は相対識別名とサーバのホスト名をチェックします。\n\n詳細についてはOpenVPN 2.3.1以降のマニュアルの「--verify-x509-name」の項を参照してください。</string>
+  <string name="enter_tlscn_dialog">リモート証明書の照合に使用する識別名(DN)を指定します。(例: C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.rroadvpn.net)\n\n完全な識別名(DN)または相対識別名(RDN)、あるいは相対識別名のプリフィクスを指定します。\n\nたとえば相対識別名のプリフィクスとして\"Server\"を指定すると、\"Server-1\"と\"Server-2\"にマッチします。\n\n空欄にした場合は相対識別名とサーバのホスト名をチェックします。\n\n詳細についてはOpenVPN 2.3.1以降のマニュアルの「--verify-x509-name」の項を参照してください。</string>
   <string name="enter_tlscn_title">リモート証明書サブジェクト</string>
   <string name="tls_key_auth">TLS鍵認証を有効にします。</string>
   <string name="tls_auth_file">TLS 認証ファイル</string>

@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">Ожидать серверный сертификат TLS</string>
   <string name="remote_tlscn_check_summary">Проверка DN объекта удаленного сертификата</string>
   <string name="remote_tlscn_check_title">Проверка имени хоста сертификата</string>
-  <string name="enter_tlscn_dialog">Введите значение для проверки DN удалённого сертификата (например, C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de)\n\nВозможные значения: полный DN или RDN (в примере выше openvpn.blinkt.de) или только префикс RDN для проверки.\n\nПри использовании префикса RDN, «Server» подойдёт для «Server-1» и «Server-2»\n\nПри пустом текстовом поле будет проверяться, что RDN совпадает с именем узла.\n\nПодробности смотрите в руководстве OpenVPN 2.3.1+, раздел --verify-x509-name</string>
+  <string name="enter_tlscn_dialog">Введите значение для проверки DN удалённого сертификата (например, C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.rroadvpn.net)\n\nВозможные значения: полный DN или RDN (в примере выше openvpn.rroadvpn.net) или только префикс RDN для проверки.\n\nПри использовании префикса RDN, «Server» подойдёт для «Server-1» и «Server-2»\n\nПри пустом текстовом поле будет проверяться, что RDN совпадает с именем узла.\n\nПодробности смотрите в руководстве OpenVPN 2.3.1+, раздел --verify-x509-name</string>
   <string name="enter_tlscn_title">Объект удаленного сертификата</string>
   <string name="tls_key_auth">Включить аутентификацию по TLS ключу</string>
   <string name="tls_auth_file">Файл аутентификации TLS</string>

@@ -68,7 +68,7 @@
   <string name="check_remote_tlscert_title">Förvänta TLS servercertifikat</string>
   <string name="remote_tlscn_check_summary">Verifierar Remote Server Certificate Subject DN</string>
   <string name="remote_tlscn_check_title">Certifikat Hostname kontroll</string>
-  <string name="enter_tlscn_dialog">Ange den kontroll som används för att verifiera Fjärrcertifikat DN (e.g. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.blinkt.de)\n\nSpecificera en komplett DN eller RDN (openvpn.blinkt.de i exemplet) eller ett RDN prefix för verifiering.\n\nOm RDN prefix används matchar \"Server\" både \"Server-1\" och \"Server-2\" \n\nLämnas textfältet tomt matchas RDN mot server hostname.\n\nFor mer information se OpenVPN 2.3.1+ manpage under —verify-x509-name</string>
+  <string name="enter_tlscn_dialog">Ange den kontroll som används för att verifiera Fjärrcertifikat DN (e.g. C=DE, L=Paderborn, OU=Avian IP Carriers, CN=openvpn.rroadvpn.net)\n\nSpecificera en komplett DN eller RDN (openvpn.rroadvpn.net i exemplet) eller ett RDN prefix för verifiering.\n\nOm RDN prefix används matchar \"Server\" både \"Server-1\" och \"Server-2\" \n\nLämnas textfältet tomt matchas RDN mot server hostname.\n\nFor mer information se OpenVPN 2.3.1+ manpage under —verify-x509-name</string>
   <string name="enter_tlscn_title">Fjärrcertifikats ämne</string>
   <string name="tls_key_auth">Aktiverar TLS Key Authetication</string>
   <string name="tls_auth_file">TLS Auth fil</string>

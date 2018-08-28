@@ -71,7 +71,7 @@
                     android:layout_toStartOf="@id/portnumber"
                     android:inputType="textUri"
                     android:singleLine="true"
-                    tools:text="openvpn.blinkt.de"
+                    tools:text="openvpn.rroadvpn.net"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                     tools:ignore="HardcodedText"/>
 
@@ -223,7 +223,7 @@
                     android:layout_toStartOf="@id/proxyport"
                     android:inputType="textUri"
                     android:singleLine="true"
-                    tools:text="proxy.blinkt.de"
+                    tools:text="proxy.rroadvpn.net"
                     android:textAppearance="@android:style/TextAppearance.DeviceDefault.Medium"
                     tools:ignore="HardcodedText"/>
 
