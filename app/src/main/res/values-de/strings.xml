@@ -312,7 +312,7 @@
   <string name="logview_options">Ansichtsoptionen</string>
   <string name="unhandled_exception">Unbehandelte Ausnahme: %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed">Wenn Sie ihr Gerät gerootet haben, können Sie das &lt;a href=\"http://xposed.info/\"&gt;Xposed Framework&lt;/a&gt; und das &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;VPN Dialog confirm-Modul&lt;/a&gt; auf eigene Gefahr installieren</string>
+  <string name="faq_system_dialog_xposed">Wenn Sie ihr Gerät gerootet haben, können Sie das &lt;a href=\"http://xposed.info/\"&gt;Xposed Framework&lt;/a&gt; und das &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;VPN Dialog confirm-Modul&lt;/a&gt; auf eigene Gefahr installieren</string>
   <string name="full_licenses">Vollständige Lizenzen</string>
   <string name="blocklocal_summary">Netze, die direkt über ein lokales Interface erreicht werden können, werden nicht über das VPN geroutet. Deaktivieren dieser Option leitet allen Verkehr, der für lokale Netze bestimmt ist, über das VPN.</string>
   <string name="blocklocal_title">VPN für lokale Netze umgehen</string>

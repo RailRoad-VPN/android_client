@@ -350,7 +350,7 @@ Android 4.4以上はポリシールーティングを使用します。route/ifc
   <string name="logview_options">オプションを表示</string>
   <string name="unhandled_exception">未処理の例外: %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed">もしあなたがデバイスをroot化しているのであれば、 &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt;と&lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;VPN Dialog confirm module&lt;/a&gt; を自己責任においてインストールできます</string>
+  <string name="faq_system_dialog_xposed">もしあなたがデバイスをroot化しているのであれば、 &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt;と&lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;VPN Dialog confirm module&lt;/a&gt; を自己責任においてインストールできます</string>
   <string name="full_licenses">完全なライセンス告知</string>
   <string name="blocklocal_summary">ローカルインターフェイスに直接接続されているネットワークはVPNを経由しません。
 このオプションを外すとローカルネットワーク宛のすべての通信をVPNにリダイレクトします。</string>

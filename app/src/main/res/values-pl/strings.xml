@@ -312,7 +312,7 @@
   <string name="logview_options">Opcje widoku</string>
   <string name="unhandled_exception">Nieobsługiwany wyjątek: %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed">Jeśli masz dostęp do roota możesz zaisntalować &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; oraz  &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;VPN potwierdzi moduł&lt;/a&gt;na wsłasne ryzyko\"</string>
+  <string name="faq_system_dialog_xposed">Jeśli masz dostęp do roota możesz zaisntalować &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; oraz  &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;VPN potwierdzi moduł&lt;/a&gt;na wsłasne ryzyko\"</string>
   <string name="full_licenses">Pełne licencje</string>
   <string name="blocklocal_summary">Sieci połączone bezpośrednio do lokalnych interfejsów nie będą kierowane przez VPN. Odznaczając tę opcję przeniesiesz cały ruch przeznaczony dla sieci lokalnych przez VPN.</string>
   <string name="blocklocal_title">Obejdź VPN dla sieci lokalnych</string>

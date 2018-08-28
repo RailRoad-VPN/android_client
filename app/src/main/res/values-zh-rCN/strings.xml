@@ -314,7 +314,7 @@
   <string name="logview_options">查看选项</string>
   <string name="unhandled_exception">未处理的异常： %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed">如果您的 Android 设备已经 root，您可以自担风险安装&lt;a href=\"http://xposed.info/\"&gt;Xposed 框架&lt;/a&gt; 和 &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;VPN 对话框确认模块&lt;/a&gt;</string>
+  <string name="faq_system_dialog_xposed">如果您的 Android 设备已经 root，您可以自担风险安装&lt;a href=\"http://xposed.info/\"&gt;Xposed 框架&lt;/a&gt; 和 &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;VPN 对话框确认模块&lt;/a&gt;</string>
   <string name="full_licenses">完整授权</string>
   <string name="blocklocal_summary">不会将网络直接连接到本地接口路由通过 VPN。取消选中此选项会将缩进到 VPN 的本地网络的所有流量重都定向。</string>
   <string name="blocklocal_title">绕过本地地址</string>

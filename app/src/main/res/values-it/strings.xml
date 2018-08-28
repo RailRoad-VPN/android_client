@@ -313,7 +313,7 @@ Effettuata la lettura del file di configurazione</string>
   <string name="logview_options">Visualizza opzioni</string>
   <string name="unhandled_exception">Eccezione non gestita: %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed">Se il tuo dispositivo Android ha il root allora è possibile installare il &lt;a href=\"http://xposed.info/\"&gt;framework Xposed&lt;/a&gt; e il &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;modulo di conferma VPN Dialog&lt;/a&gt; a proprio rischio e pericolo\"</string>
+  <string name="faq_system_dialog_xposed">Se il tuo dispositivo Android ha il root allora è possibile installare il &lt;a href=\"http://xposed.info/\"&gt;framework Xposed&lt;/a&gt; e il &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;modulo di conferma VPN Dialog&lt;/a&gt; a proprio rischio e pericolo\"</string>
   <string name="full_licenses">Licenze complete</string>
   <string name="blocklocal_summary">Le reti direttamente collegate alle interfacce locali non verranno instradate attraverso la VPN. Deselezionando questa opzione si inoltrerà tutto il traffico dalle reti locali alla VPN.</string>
   <string name="blocklocal_title">Ignora VPN per le reti locali</string>

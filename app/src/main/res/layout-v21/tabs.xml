@@ -4,7 +4,7 @@
   -->
 <merge xmlns:blinkt="http://schemas.android.com/apk/res-auto">
 
-    <de.blinkt.openvpn.views.PagerSlidingTabStrip xmlns:android="http://schemas.android.com/apk/res/android"
+    <net.rroadvpn.openvpn.views.PagerSlidingTabStrip xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/sliding_tabs"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"

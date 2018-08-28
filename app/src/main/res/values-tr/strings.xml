@@ -312,7 +312,7 @@
   <string name="logview_options">Görünüm seçenekleri</string>
   <string name="unhandled_exception">Kural dışı durum: %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed"> Android cihazınız root\'lu ise &lt;a href=\"http://xposed.info/\"&gt;Xposed çalışma çerçevesini&lt;/a&gt; ve &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;VPN Pencere onay modülünü&lt;/a&gt; kendi sorumluluğunuzda yükleyebilirsiniz\"</string>
+  <string name="faq_system_dialog_xposed"> Android cihazınız root\'lu ise &lt;a href=\"http://xposed.info/\"&gt;Xposed çalışma çerçevesini&lt;/a&gt; ve &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;VPN Pencere onay modülünü&lt;/a&gt; kendi sorumluluğunuzda yükleyebilirsiniz\"</string>
   <string name="full_licenses">Tam lisanslar</string>
   <string name="blocklocal_summary">Doğrudan yerel arabirimlere bağlı ağlar VPN üzerinden yönlendirilmez. Bu seçenekteki işaretin kaldırılması, yerel ağlar için amaçlanmış tüm trafiği VPN\'e yönlendirir.</string>
   <string name="blocklocal_title">Yerel ağlar için VPN\'i yoksay</string>

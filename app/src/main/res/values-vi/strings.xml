@@ -312,7 +312,7 @@
   <string name="logview_options">Xem tùy chọn</string>
   <string name="unhandled_exception">Tùy chọn ngoại lệ: %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed">Nếu bạn đã root thiết bị Android bạn có thể cài đặt &lt;href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; và &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;Hộp thoại xác nhận VPN module&lt;/a&gt; để xác nhận nguy cơ\"</string>
+  <string name="faq_system_dialog_xposed">Nếu bạn đã root thiết bị Android bạn có thể cài đặt &lt;href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; và &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;Hộp thoại xác nhận VPN module&lt;/a&gt; để xác nhận nguy cơ\"</string>
   <string name="full_licenses">Giấy phép đầy đủ</string>
   <string name="blocklocal_summary">Mạng kết nối trực tiếp đến giao diện địa phương sẽ không định tuyến qua VPN. Bỏ tùy chọn này sẽ chuyển hướng tất cả lưu lượng truy cập cho mạng nội bộ đến VPN.</string>
   <string name="blocklocal_title">Bỏ qua VPN cho mạng địa phương</string>

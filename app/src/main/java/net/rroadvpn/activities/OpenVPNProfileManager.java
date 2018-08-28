@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import de.blinkt.openvpn.VpnProfile;
-import de.blinkt.openvpn.core.ConfigParser;
+import net.rroadvpn.openvpn.VpnProfile;
+import net.rroadvpn.openvpn.core.ConfigParser;
 
 public class OpenVPNProfileManager {
 

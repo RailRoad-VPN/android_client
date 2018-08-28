@@ -312,7 +312,7 @@
   <string name="logview_options">Nézet beállításai</string>
   <string name="unhandled_exception">Nem kezelt kivétel: %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed">Ha root-olta Android eszközét, akkor installálhatja a &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; -öt és a &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;VPN Dialog confirm module&lt;/a&gt; -t saját felelősségére</string>
+  <string name="faq_system_dialog_xposed">Ha root-olta Android eszközét, akkor installálhatja a &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; -öt és a &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;VPN Dialog confirm module&lt;/a&gt; -t saját felelősségére</string>
   <string name="full_licenses">Teljes licenszek</string>
   <string name="blocklocal_summary">Azok a hálózatok útvonalai amik közvetlenül a helyi interfészére csatlakoznak nem a VPN-en keresztül fognak vezetni. Az opció kiválasztásának törlésével minden helyi forgalmat a VPN-hez irányíthat.</string>
   <string name="blocklocal_title">VPN megkerülése helyi hálózatokhoz</string>

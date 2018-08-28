@@ -311,7 +311,7 @@
   <string name="logview_options">查看選項</string>
   <string name="unhandled_exception">未處理的異常：%1$s \n\n %2$s</string>
   <string name="unhandled_exception_context">%3$s：%1$s \n\n %2$s</string>
-  <string name="faq_system_dialog_xposed">如果你的 Android 裝置已取得 root 權限，你可以自行承擔風險安裝 &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; 和 &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;VPN Dialog confirm module&lt;/a&gt;</string>
+  <string name="faq_system_dialog_xposed">如果你的 Android 裝置已取得 root 權限，你可以自行承擔風險安裝 &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; 和 &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;VPN Dialog confirm module&lt;/a&gt;</string>
   <string name="full_licenses">完整授權</string>
   <string name="blocklocal_summary">直接連線到本機介面的網路將不會被送至 VPN。取消選擇這個選項，將會把所有畚箕網路的流量導向 VPN。</string>
   <string name="blocklocal_title">對區域網路繞過 VPN</string>

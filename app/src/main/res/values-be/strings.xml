@@ -312,7 +312,7 @@
   <string name="logview_options">Налады выгляду</string>
   <string name="unhandled_exception">Неапазнаная памылка: %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed">Калі на вашай прыладзе ёсць root, можаце ўсталяваць &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; і &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;модуль аўтаматычнага пацверджання дыялогу падлучэння VPN&lt;/a&gt; на свой страх і рызык</string>
+  <string name="faq_system_dialog_xposed">Калі на вашай прыладзе ёсць root, можаце ўсталяваць &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; і &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;модуль аўтаматычнага пацверджання дыялогу падлучэння VPN&lt;/a&gt; на свой страх і рызык</string>
   <string name="full_licenses">Поўныя тэксты ліцэнзій</string>
   <string name="blocklocal_summary">Сеткі, даступныя наўпрост праз лакальны інтэрфейс, не будуць маршрутызаваны праз VPN. Адключыце гэту опцыю, каб скіраваць трафік праз VPN.</string>
   <string name="blocklocal_title">Не выкарыстоўваць VPN для лакальных адрасоў</string>

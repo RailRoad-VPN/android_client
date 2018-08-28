@@ -313,7 +313,7 @@ Sur certaines images, cette notification joue un son.\nAndroid à introduit ces 
   <string name="logview_options">Options d\'affichage</string>
   <string name="unhandled_exception">Exception non gérée : %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s : %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed">Si vous avez \"rooté\" votre Android vous pouvez installer &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; et &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;le module de confirmation VPN&lt;/a&gt; à vos risques et périls\"</string>
+  <string name="faq_system_dialog_xposed">Si vous avez \"rooté\" votre Android vous pouvez installer &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; et &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;le module de confirmation VPN&lt;/a&gt; à vos risques et périls\"</string>
   <string name="full_licenses">Licences complètes</string>
   <string name="blocklocal_summary">Les réseaux directement connectés aux interfaces locales ne seront pas routés via le VPN. Décochez cette option pour rediriger tout le trafic local vers le VPN.</string>
   <string name="blocklocal_title">Bypass VPN pour les réseaux locaux</string>

@@ -311,7 +311,7 @@
   <string name="logview_options">Indstillinger for visning</string>
   <string name="unhandled_exception">Ubehandlet undtagelse: %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed">Hvis du har rootet din androidenhed kan du installere &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; og &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;VPN Dialog confirm module&lt;/a&gt; på din egen risiko</string>
+  <string name="faq_system_dialog_xposed">Hvis du har rootet din androidenhed kan du installere &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; og &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;VPN Dialog confirm module&lt;/a&gt; på din egen risiko</string>
   <string name="full_licenses">Fulde licenser</string>
   <string name="blocklocal_summary">Netværk forbundet direkte til det lokale interface vil ikke blive dirigeret gennem VPN\'en. Fravælges denne indstilling vil alt trafik til lokale netværk dirigeres gennem VPN\'en.</string>
   <string name="blocklocal_title">Forbipasser VPN for lokale netværk</string>

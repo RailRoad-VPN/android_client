@@ -311,7 +311,7 @@
   <string name="logview_options">Visa alternativ</string>
   <string name="unhandled_exception">Ohanterat undantag: %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed">Om du har rootat din Android-enhet, så kan du installera &lt;a href=\"http://xposed.info/\"&gt;Xposed-ramverket&lt;/a&gt; och &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;VPN-bekräftelsemodulen&lt;/a&gt; på egen risk\"</string>
+  <string name="faq_system_dialog_xposed">Om du har rootat din Android-enhet, så kan du installera &lt;a href=\"http://xposed.info/\"&gt;Xposed-ramverket&lt;/a&gt; och &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;VPN-bekräftelsemodulen&lt;/a&gt; på egen risk\"</string>
   <string name="full_licenses">Fullständiga licensavtal</string>
   <string name="blocklocal_summary">Nätverk direkt kopplade till lokala gränssnitt kommer inte att dirigeras över VPN. Avmarkering av detta alternativ kommer att omdirigera all trafik avsedda för lokala nätverk till VPN.</string>
   <string name="blocklocal_title">Kringgå VPN för lokala nätverk</string>

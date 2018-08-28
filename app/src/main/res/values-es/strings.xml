@@ -313,7 +313,7 @@ hacia/de Móvil)</string>
   <string name="logview_options">Opciones de visualización</string>
   <string name="unhandled_exception">Excepcion no controlada: %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed">Si ha rooteado su dispositivo Android, puede instalar el &lt;a href=\"http://xposed.info/\"&gt;framework Xposed&lt;/a&gt; y añadir el &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;módulo de confirmación de Diálogo VPN&lt;/a&gt; bajo su propio riesgo\"</string>
+  <string name="faq_system_dialog_xposed">Si ha rooteado su dispositivo Android, puede instalar el &lt;a href=\"http://xposed.info/\"&gt;framework Xposed&lt;/a&gt; y añadir el &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;módulo de confirmación de Diálogo VPN&lt;/a&gt; bajo su propio riesgo\"</string>
   <string name="full_licenses">Licencias completas</string>
   <string name="blocklocal_summary">Las redes conectadas directamente a los interfaces locales no serán enrutadas a través de la VPN. Al desmarcar esta opción, todo el tráfico previsto para las redes locales será redirigido a la VPN.</string>
   <string name="blocklocal_title">Saltarse la VPN en redes locales</string>

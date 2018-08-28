@@ -311,7 +311,7 @@
   <string name="logview_options">Подивитися налаштування</string>
   <string name="unhandled_exception">Невідома помилка: %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed">Якщо на Вашому пристрої встановлені root права, Ви можете встановити &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; та  &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;VPN Dialog confirm module&lt;/a&gt;  на свій страх і ризик\"</string>
+  <string name="faq_system_dialog_xposed">Якщо на Вашому пристрої встановлені root права, Ви можете встановити &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; та  &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;VPN Dialog confirm module&lt;/a&gt;  на свій страх і ризик\"</string>
   <string name="full_licenses">Повні ліцензії</string>
   <string name="blocklocal_summary">Мережі, безпосередньо доступні через локальний інтерфейс  не направлятимуться на VPN. Відключіть цю опцію щоб направити увесь трафік через VPN.</string>
   <string name="blocklocal_title">Не використовувати VPN для локальних мереж</string>

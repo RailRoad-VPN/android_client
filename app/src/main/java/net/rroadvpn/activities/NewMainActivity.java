@@ -3,13 +3,13 @@ package net.rroadvpn.activities;
 
 import android.content.Intent;
 
-import de.blinkt.openvpn.LaunchVPN;
-import de.blinkt.openvpn.R;
-import de.blinkt.openvpn.VpnProfile;
-import de.blinkt.openvpn.activities.BaseActivity;
-import de.blinkt.openvpn.activities.DisconnectVPN;
-import de.blinkt.openvpn.core.ProfileManager;
-import de.blinkt.openvpn.core.VpnStatus;
+import net.rroadvpn.openvpn.LaunchVPN;
+import net.rroadvpn.openvpn.R;
+import net.rroadvpn.openvpn.VpnProfile;
+import net.rroadvpn.openvpn.activities.BaseActivity;
+import net.rroadvpn.openvpn.activities.DisconnectVPN;
+import net.rroadvpn.openvpn.core.ProfileManager;
+import net.rroadvpn.openvpn.core.VpnStatus;
 
 public class NewMainActivity extends BaseActivity {
 

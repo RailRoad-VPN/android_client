@@ -311,7 +311,7 @@
   <string name="logview_options">Kuva valikud</string>
   <string name="unhandled_exception">Käsitlematu erand: %1$s\n\n%2$s</string>
   <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-  <string name="faq_system_dialog_xposed">Kui olete ome Androidiseadme ruutinud, saate paigaldada omal riisikol &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; ja &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;VPN Dialoogi kinnitusmooduli&lt;/a&gt;\"</string>
+  <string name="faq_system_dialog_xposed">Kui olete ome Androidiseadme ruutinud, saate paigaldada omal riisikol &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; ja &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;VPN Dialoogi kinnitusmooduli&lt;/a&gt;\"</string>
   <string name="full_licenses">Kõik litsentsid</string>
   <string name="blocklocal_summary">Kohaliku liidese külge ühendatud võrkude ühendusi ei suunata üle VPN\'i. Selle valiku keelamisel suunatakse ka kohaliku võrgu andmeliiklus VPN\'i.</string>
   <string name="blocklocal_title">Keela VPN kohalike võrkude jaoks</string>

@@ -313,7 +313,7 @@
     <string name="logview_options">View options</string>
     <string name="unhandled_exception">Unhandled exception: %1$s\n\n%2$s</string>
     <string name="unhandled_exception_context">%3$s: %1$s\n\n%2$s</string>
-    <string name="faq_system_dialog_xposed">If you have rooted your Android device you can install the &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; and the &lt;a href=\"http://repo.xposed.info/module/de.blinkt.vpndialogxposed\"&gt;VPN Dialog confirm module&lt;/a&gt; at your own risk"</string>
+    <string name="faq_system_dialog_xposed">If you have rooted your Android device you can install the &lt;a href=\"http://xposed.info/\"&gt;Xposed framework&lt;/a&gt; and the &lt;a href=\"http://repo.xposed.info/module/net.rroadvpn.vpndialogxposed\"&gt;VPN Dialog confirm module&lt;/a&gt; at your own risk"</string>
     <string name="full_licenses">Full licenses</string>
     <string name="blocklocal_summary">Networks directly connected to the local interfaces will not be routed over the VPN. Deselecting this option will redirect all traffic intented for local networks to the VPN.</string>
     <string name="blocklocal_title">Bypass VPN for local networks</string>
@@ -474,7 +474,7 @@
     <string name="openvpn3_socksproxy">OpenVPN 3 C++ implementation does not support connecting via Socks proxy</string>
     <string name="no_orbotfound">Orbot application cannot be found. Please install Orbot or use manual Socks v5 integration.</string>
     <string name="faq_remote_api_title">Remote API</string>
-    <string name="faq_remote_api">OpenVPN for Android supports two remote APIs, a sophisticated API using AIDL (remoteEXample in the git repository) and a simple one using Intents. &lt;p>Examples using adb shell and the intents. Replace profilname with your profile name&lt;p>&lt;p> adb shell am start-activity -a android.intent.action.MAIN de.blinkt.openvpn/.api.DisconnectVPN&lt;p> adb shell am start-activity -a android.intent.action.MAIN -e de.blinkt.openvpn.api.profileName Blinkt de.blinkt.openvpn/.api.ConnectVPN</string>
+    <string name="faq_remote_api">OpenVPN for Android supports two remote APIs, a sophisticated API using AIDL (remoteEXample in the git repository) and a simple one using Intents. &lt;p>Examples using adb shell and the intents. Replace profilname with your profile name&lt;p>&lt;p> adb shell am start-activity -a android.intent.action.MAIN net.rroadvpn.openvpn/.api.DisconnectVPN&lt;p> adb shell am start-activity -a android.intent.action.MAIN -e net.rroadvpn.openvpn.api.profileName Blinkt net.rroadvpn.openvpn/.api.ConnectVPN</string>
     <string name ="enableproxyauth">Enable Proxy Authentication</string>
     <string name="error_orbot_and_proxy_options">Cannot use extra http-proxy-option statement and Orbot integration at the same timeO</string>
     <string name="info_from_server">Info from server: \'%s\'</string>
