@@ -487,5 +487,8 @@
     <string name="external_authenticator">External Authenticator</string>
     <string name="configure">Configure</string>
     <string name="extauth_not_configured">External Authneticator not configured</string>
+    <string name="button">Button</string>
+    <string name="button13">button13</string>
+    <string name="Artyr">Artyr</string>
 
 </resources>
