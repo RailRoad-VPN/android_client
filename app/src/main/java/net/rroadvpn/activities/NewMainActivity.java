@@ -2,6 +2,8 @@ package net.rroadvpn.activities;
 
 
 import android.content.Intent;
+import android.view.View;
+import android.widget.Button;
 
 import net.rroadvpn.openvpn.LaunchVPN;
 import net.rroadvpn.openvpn.R;
@@ -18,7 +20,22 @@ public class NewMainActivity extends BaseActivity {
 
         setContentView(R.layout.new_main_activity);
 
+        Button button = (Button) findViewById(R.id.fasd);
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                connectToVpn();
+            }
+        });
+    }
 
+    private ProfileManager getPM() {
+        return ProfileManager.getInstance(getBaseContext());
+    }
+
+    private void connectToVpn() {
         String configBase64 = TestConfig.conf_base64;
 
         byte[] decoded = android.util.Base64.decode(configBase64, android.util.Base64.DEFAULT);
@@ -44,9 +61,5 @@ public class NewMainActivity extends BaseActivity {
         } catch (OpenVPNProfileException e) {
             e.printStackTrace();
         }
-    }
-
-    private ProfileManager getPM() {
-        return ProfileManager.getInstance(getBaseContext());
     }
 }
