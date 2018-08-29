@@ -4,7 +4,6 @@ import net.rroadvpn.model.rest.RESTResponse;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map;
 
 public class RESTService implements RESTServiceI {
 
