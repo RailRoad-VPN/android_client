@@ -73,10 +73,6 @@ public class RESTService implements RESTServiceI {
     public String getServiceURL() {
         return serviceURL;
     }
-
-    public void setServiceURL(String serviceURL) {
-        this.serviceURL = serviceURL;
-    }
 }
 
 

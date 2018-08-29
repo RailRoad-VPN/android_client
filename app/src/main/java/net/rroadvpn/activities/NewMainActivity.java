@@ -12,6 +12,8 @@ import net.rroadvpn.openvpn.activities.BaseActivity;
 import net.rroadvpn.openvpn.activities.DisconnectVPN;
 import net.rroadvpn.openvpn.core.ProfileManager;
 import net.rroadvpn.openvpn.core.VpnStatus;
+import net.rroadvpn.services.ServersService;
+import net.rroadvpn.services.UsersService;
 
 public class NewMainActivity extends BaseActivity {
 
@@ -20,15 +22,26 @@ public class NewMainActivity extends BaseActivity {
 
         setContentView(R.layout.new_main_activity);
 
-        Button button = (Button) findViewById(R.id.fasd);
-        button.setOnClickListener(new View.OnClickListener()
-        {
+        Button button = (Button) findViewById(R.id.add_new_remote);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 connectToVpn();
             }
         });
+
+        String apiURL = "http://api.rroadvpn.net";
+        String apiVer = "v1";
+
+        String usersAPIResourceName = "users";
+        String userServiceURL = apiURL + "/api/" + apiVer + "/" + usersAPIResourceName;
+        UsersService usersService = new UsersService(userServiceURL);
+
+
+
+        String serversAPIResouceName = "servers";
+        String serversServiceURL = apiURL + "/api/" + apiVer + "/" + serversAPIResouceName;
+        ServersService serversService = new ServersService(serversServiceURL);
     }
 
     private ProfileManager getPM() {

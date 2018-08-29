@@ -5,8 +5,12 @@ import net.rroadvpn.services.rest.RESTServiceI;
 
 public class UsersService extends RESTService {
 
-    public UsersService() {
+    public UsersService(String serviceURL) {
+        super(serviceURL);
+    }
+
+    public void getUserByPinCode(Integer pincode) {
+        String url = this.getServiceURL() + "/pincode/" + String.valueOf(pincode);
         this.get(null, null, null);
     }
-    
 }
