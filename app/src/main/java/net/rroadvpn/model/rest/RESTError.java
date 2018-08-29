@@ -1,4 +1,4 @@
-package net.rroadvpn.services;
+package net.rroadvpn.model.rest;
 
 public class RESTError {
     public Integer code;

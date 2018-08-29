@@ -1,4 +1,4 @@
-package net.rroadvpn.services;
+package net.rroadvpn.model.rest;
 
 import java.util.HashMap;
 import java.util.List;
