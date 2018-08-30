@@ -1,7 +1,6 @@
 package net.rroadvpn.model.rest;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -10,44 +9,14 @@ public class RESTResponse {
     public String status;
     public Integer code;
     public JSONArray headers;
-    public JSONObject data;
+    public Object data;
     public List<RESTError> errors;
     public Integer limit;
     public Integer offset;
 
-    public RESTResponse(String status, Integer code, JSONArray headers) {
+    public RESTResponse(String status, int responseCode) {
         this.status = status;
-        this.code = code;
-        this.headers = headers;
-    }
-
-    public RESTResponse(String status, Integer code, JSONObject data) {
-        this.status = status;
-        this.code = code;
-        this.data = data;
-    }
-
-    public RESTResponse(String status, Integer code, List<RESTError> errors) {
-        this.status = status;
-        this.code = code;
-        this.errors = errors;
-    }
-
-    public RESTResponse(String status, Integer code, JSONArray headers, JSONObject data) {
-        this.status = status;
-        this.code = code;
-        this.headers = headers;
-        this.data = data;
-    }
-
-    public RESTResponse(String status, Integer code, JSONArray headers, JSONObject data,
-                        Integer limit, Integer offset) {
-        this.status = status;
-        this.code = code;
-        this.headers = headers;
-        this.data = data;
-        this.limit = limit;
-        this.offset = offset;
+        this.code = responseCode;
     }
 
     public Boolean getOk() {
@@ -82,11 +51,11 @@ public class RESTResponse {
         this.headers = headers;
     }
 
-    public JSONObject getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(JSONObject data) {
+    public void setData(Object data) {
         this.data = data;
     }
 
