@@ -1,6 +1,6 @@
 package net.rroadvpn.exception;
 
-public class RESTNotFoundException extends RESTException {
+public class RESTNotFoundException extends Exception {
     public RESTNotFoundException(String s) {
         super(s);
     }

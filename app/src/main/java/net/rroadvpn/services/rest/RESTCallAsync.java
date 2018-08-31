@@ -27,11 +27,9 @@ import okhttp3.ResponseBody;
 class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
 
     private OkHttpClient client;
-    private Gson gson;
 
-    public RESTCallAsync(OkHttpClient client, Gson gson) {
+    public RESTCallAsync(OkHttpClient client) {
         this.client = client;
-        this.gson = gson;
     }
 
     @Override
@@ -45,12 +43,20 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                     return this.doGet(url);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } catch (RESTNotFoundException e) {
+                    e.printStackTrace();
+                } catch (RESTException e) {
+                    e.printStackTrace();
                 }
             case "POST": {
                 RequestBody requestBody = (RequestBody) params[2];
                 try {
                     return this.doPost(url, requestBody);
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (RESTNotFoundException e) {
+                    e.printStackTrace();
+                } catch (RESTException e) {
                     e.printStackTrace();
                 }
             }
@@ -60,6 +66,10 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                     return this.doPut(url, requestBody);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                } catch (RESTNotFoundException e) {
+                    e.printStackTrace();
+                } catch (RESTException e) {
+                    e.printStackTrace();
                 }
             }
             case "DELETE": {
@@ -67,6 +77,10 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                 try {
                     return this.doDelete(url, requestBody);
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (RESTNotFoundException e) {
+                    e.printStackTrace();
+                } catch (RESTException e) {
                     e.printStackTrace();
                 }
             }
@@ -92,60 +106,22 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
             throw new RESTException("Stub");
         }
 
-        int responseCode = response.code();
-
-        String string;
+        String responseBodyString;
         try {
             ResponseBody body = response.body();
             if (body == null) {
                 throw new RESTException("Stub");
             } else {
-                string = body.string();
+                responseBodyString = body.string();
             }
         } catch (IOException e) {
             throw new RESTException("Stub");
         }
 
-        JSONObject jsonObj = new JSONObject(string);
-
-        String status = (String) jsonObj.get("status");
-
-        RESTResponse restResponse = new RESTResponse(status, responseCode);
-
-        if (response.isSuccessful()) {
-            restResponse.setOk(true);
-
-            Object data = jsonObj.get("data");
-            restResponse.setData(data);
-
-            if (jsonObj.has("limit")) {
-                Integer limit = (Integer) jsonObj.get("limit");
-                restResponse.setLimit(limit);
-            }
-
-            if (jsonObj.has("offset")) {
-                Integer offset = (Integer) jsonObj.get("offset");
-                restResponse.setLimit(offset);
-            }
-        } else {
-            if (responseCode == 404) throw new RESTNotFoundException("Not Found!");
-            if (responseCode == 405) throw new RESTException("Method Not Allowed!");
-
-            restResponse.setOk(false);
-
-            List<RESTError> errors = new ArrayList<>();
-            JSONArray errorsJson = jsonObj.getJSONArray("errors");
-            for (int i = 0; i < errorsJson.length(); i++) {
-                JSONObject errorJson = errorsJson.getJSONObject(i);
-                errors.add(new RESTError(errorJson));
-            }
-            restResponse.setErrors(errors);
-        }
-
-        return restResponse;
+        return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString);
     }
 
-    private RESTResponse doPost(String url, RequestBody requestBody) throws JSONException {
+    private RESTResponse doPost(String url, RequestBody requestBody) throws JSONException, RESTException, RESTNotFoundException {
         Request request = new Request.Builder()
                 .url(url)
                 .put(requestBody)
@@ -162,59 +138,22 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
             throw new RESTException("Stub");
         }
 
-        int responseCode = response.code();
-
-        String string;
+        String responseBodyString;
         try {
             ResponseBody body = response.body();
             if (body == null) {
                 throw new RESTException("Stub");
             } else {
-                string = body.string();
+                responseBodyString = body.string();
             }
         } catch (IOException e) {
             throw new RESTException("Stub");
         }
 
-        JSONObject jsonObj = new JSONObject(string);
-
-        String status = (String) jsonObj.get("status");
-
-        RESTResponse restResponse = new RESTResponse(status, responseCode);
-
-        if (response.isSuccessful()) {
-            restResponse.setOk(true);
-
-            JSONObject data = jsonObj.getJSONObject("data");
-            restResponse.setData(data);
-
-            if (jsonObj.has("limit")) {
-                Integer limit = (Integer) jsonObj.get("limit");
-                restResponse.setLimit(limit);
-            }
-
-            if (jsonObj.has("offset")) {
-                Integer offset = (Integer) jsonObj.get("offset");
-                restResponse.setLimit(offset);
-            }
-        } else {
-            if (responseCode == 404) throw new RESTNotFoundException("Not Found");
-
-            restResponse.setOk(false);
-
-            List<RESTError> errors = new ArrayList<>();
-            JSONArray errorsJson = jsonObj.getJSONArray("errors");
-            for (int i = 0; i < errorsJson.length(); i++) {
-                JSONObject errorJson = errorsJson.getJSONObject(i);
-                errors.add(new RESTError(errorJson));
-            }
-            restResponse.setErrors(errors);
-        }
-
-        return restResponse;
+        return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString);
     }
 
-    private RESTResponse doPut(String url, RequestBody requestBody) throws JSONException {
+    private RESTResponse doPut(String url, RequestBody requestBody) throws JSONException, RESTException, RESTNotFoundException {
         Request request = new Request.Builder()
                 .url(url)
                 .put(requestBody)
@@ -231,59 +170,22 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
             throw new RESTException("Stub");
         }
 
-        int responseCode = response.code();
-
-        String string;
+        String responseBodyString;
         try {
             ResponseBody body = response.body();
             if (body == null) {
                 throw new RESTException("Stub");
             } else {
-                string = body.string();
+                responseBodyString = body.string();
             }
         } catch (IOException e) {
             throw new RESTException("Stub");
         }
 
-        JSONObject jsonObj = new JSONObject(string);
-
-        String status = (String) jsonObj.get("status");
-
-        RESTResponse restResponse = new RESTResponse(status, responseCode);
-
-        if (response.isSuccessful()) {
-            restResponse.setOk(true);
-
-            JSONObject data = jsonObj.getJSONObject("data");
-            restResponse.setData(data);
-
-            if (jsonObj.has("limit")) {
-                Integer limit = (Integer) jsonObj.get("limit");
-                restResponse.setLimit(limit);
-            }
-
-            if (jsonObj.has("offset")) {
-                Integer offset = (Integer) jsonObj.get("offset");
-                restResponse.setLimit(offset);
-            }
-        } else {
-            if (responseCode == 404) throw new RESTNotFoundException("Not Found");
-
-            restResponse.setOk(false);
-
-            List<RESTError> errors = new ArrayList<>();
-            JSONArray errorsJson = jsonObj.getJSONArray("errors");
-            for (int i = 0; i < errorsJson.length(); i++) {
-                JSONObject errorJson = errorsJson.getJSONObject(i);
-                errors.add(new RESTError(errorJson));
-            }
-            restResponse.setErrors(errors);
-        }
-
-        return restResponse;
+        return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString);
     }
 
-    private RESTResponse doDelete(String url, RequestBody requestBody) throws JSONException {
+    private RESTResponse doDelete(String url, RequestBody requestBody) throws JSONException, RESTException, RESTNotFoundException {
         Request request = new Request.Builder()
                 .url(url)
                 .delete(requestBody)
@@ -300,31 +202,36 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
             throw new RESTException("Stub");
         }
 
-        int responseCode = response.code();
-
-        String string;
+        String responseBodyString;
         try {
             ResponseBody body = response.body();
             if (body == null) {
                 throw new RESTException("Stub");
             } else {
-                string = body.string();
+                responseBodyString = body.string();
             }
         } catch (IOException e) {
             throw new RESTException("Stub");
         }
 
-        JSONObject jsonObj = new JSONObject(string);
+        return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString);
+    }
+
+    private RESTResponse parseResponse(int responseCode, boolean isOk, String responseBodyString) throws JSONException, RESTException, RESTNotFoundException {
+        JSONObject jsonObj = new JSONObject(responseBodyString);
 
         String status = (String) jsonObj.get("status");
 
         RESTResponse restResponse = new RESTResponse(status, responseCode);
 
-        if (response.isSuccessful()) {
-            restResponse.setOk(true);
+        restResponse.setOk(isOk);
 
-            JSONObject data = jsonObj.getJSONObject("data");
-            restResponse.setData(data);
+        if (isOk) {
+
+            if (jsonObj.has("data")) {
+                JSONObject data = jsonObj.getJSONObject("data");
+                restResponse.setData(data);
+            }
 
             if (jsonObj.has("limit")) {
                 Integer limit = (Integer) jsonObj.get("limit");
@@ -337,8 +244,7 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
             }
         } else {
             if (responseCode == 404) throw new RESTNotFoundException("Not Found");
-
-            restResponse.setOk(false);
+            if (responseCode == 405) throw new RESTException("Method Not Allowed!");
 
             List<RESTError> errors = new ArrayList<>();
             JSONArray errorsJson = jsonObj.getJSONArray("errors");

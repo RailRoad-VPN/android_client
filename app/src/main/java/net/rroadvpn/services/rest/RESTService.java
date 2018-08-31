@@ -45,7 +45,7 @@ public class RESTService implements RESTServiceI {
 
         RESTResponse apiResponse = null;
         try {
-            apiResponse = new RESTCallAsync(this.client, this.gson).execute("GET", url).get();
+            apiResponse = new RESTCallAsync(this.client).execute("GET", url).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -67,7 +67,7 @@ public class RESTService implements RESTServiceI {
         RequestBody requestBody = prepareRequestBody(data);
         RESTResponse apiResponse = null;
         try {
-            apiResponse = new RESTCallAsync(this.client, this.gson).execute("PUT", url, requestBody).get();
+            apiResponse = new RESTCallAsync(this.client).execute("PUT", url, requestBody).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -89,7 +89,7 @@ public class RESTService implements RESTServiceI {
         RequestBody requestBody = prepareRequestBody(data);
         RESTResponse apiResponse = null;
         try {
-            apiResponse = new RESTCallAsync(this.client, this.gson).execute("POST", url, requestBody).get();
+            apiResponse = new RESTCallAsync(this.client).execute("POST", url, requestBody).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -109,7 +109,7 @@ public class RESTService implements RESTServiceI {
         RequestBody requestBody = prepareRequestBody(data);
         RESTResponse apiResponse = null;
         try {
-            apiResponse = new RESTCallAsync(this.client, this.gson).execute("DELETE", url, requestBody).get();
+            apiResponse = new RESTCallAsync(this.client).execute("DELETE", url, requestBody).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
