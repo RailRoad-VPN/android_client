@@ -2,13 +2,16 @@ package net.rroadvpn.model.rest;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RESTResponse {
     public Boolean isOk;
     public String status;
     public Integer code;
-    public JSONArray headers;
+    public Map<String, List<String>> headers;
     public Object data;
     public List<RESTError> errors;
     public Integer limit;
@@ -43,12 +46,29 @@ public class RESTResponse {
         this.code = code;
     }
 
-    public JSONArray getHeaders() {
+    public Map<String, List<String>> getHeaders() {
         return headers;
     }
 
-    public void setHeaders(JSONArray headers) {
+    public void setHeaders(Map<String, List<String>> headers) {
         this.headers = headers;
+    }
+
+    public void addHeader(String key, String value) {
+        if (this.headers == null) {
+            this.headers = new HashMap<>();
+        }
+
+        List<String> values;
+        if (this.headers.containsKey(key)) {
+            values = this.headers.get(key);
+            values.add(value);
+        } else {
+            values = new ArrayList<>();
+            values.add(value);
+        }
+
+        this.headers.put(key, values);
     }
 
     public Object getData() {

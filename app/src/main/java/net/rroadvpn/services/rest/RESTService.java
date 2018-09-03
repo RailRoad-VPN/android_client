@@ -70,7 +70,7 @@ public class RESTService implements RESTServiceI {
         RequestBody requestBody = prepareRequestBody(data);
         RESTResponse apiResponse;
         try {
-            apiResponse = new RESTCallAsync(this.client).execute("PUT", url, requestBody).get();
+            apiResponse = new RESTCallAsync(this.client).execute("PUT", url, this.headers, requestBody).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
             throw new RESTException("execution exception", e);
@@ -94,7 +94,7 @@ public class RESTService implements RESTServiceI {
         RequestBody requestBody = prepareRequestBody(data);
         RESTResponse apiResponse;
         try {
-            apiResponse = new RESTCallAsync(this.client).execute("POST", url, requestBody).get();
+            apiResponse = new RESTCallAsync(this.client).execute("POST", url, this.headers, requestBody).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
             throw new RESTException("execution exception", e);
@@ -116,7 +116,7 @@ public class RESTService implements RESTServiceI {
         RequestBody requestBody = prepareRequestBody(data);
         RESTResponse apiResponse;
         try {
-            apiResponse = new RESTCallAsync(this.client).execute("DELETE", url, requestBody).get();
+            apiResponse = new RESTCallAsync(this.client).execute("DELETE", url, this.headers, requestBody).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
             throw new RESTException("execution exception", e);

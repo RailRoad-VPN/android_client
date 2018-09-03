@@ -14,8 +14,11 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -34,11 +37,14 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
     protected RESTResponse doInBackground(Object... params) {
         String method = (String) params[0];
         String url = (String) params[1];
+        Map<String, String> headersSrc = (Map<String, String>) params[2];
+        Headers headersTgt = Headers.of(headersSrc);
+
         RequestBody requestBody;
         switch (method) {
             case "GET":
                 try {
-                    return this.doGet(url);
+                    return this.doGet(url, headersTgt);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     throw new RESTException(e);
@@ -47,9 +53,9 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                     throw new RESTException(e);
                 }
             case "POST":
-                requestBody = (RequestBody) params[2];
+                requestBody = (RequestBody) params[3];
                 try {
-                    return this.doPost(url, requestBody);
+                    return this.doPost(url, headersTgt, requestBody);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     throw new RESTException(e);
@@ -58,9 +64,9 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                     throw new RESTException(e);
                 }
             case "PUT":
-                requestBody = (RequestBody) params[2];
+                requestBody = (RequestBody) params[3];
                 try {
-                    return this.doPut(url, requestBody);
+                    return this.doPut(url, headersTgt, requestBody);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     throw new RESTException(e);
@@ -69,9 +75,9 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                     throw new RESTException(e);
                 }
             case "DELETE":
-                requestBody = (RequestBody) params[2];
+                requestBody = (RequestBody) params[3];
                 try {
-                    return this.doDelete(url, requestBody);
+                    return this.doDelete(url, headersTgt, requestBody);
                 } catch (JSONException e) {
                     e.printStackTrace();
                     throw new RESTException(e);
@@ -84,9 +90,10 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
         }
     }
 
-    private RESTResponse doGet(String url) throws JSONException, RESTException {
+    private RESTResponse doGet(String url, Headers headers) throws JSONException, RESTException {
         Request request = new Request.Builder()
                 .url(url)
+                .headers(headers)
                 .get()
                 .build();
 
@@ -113,12 +120,14 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
             throw new RESTException("Stub");
         }
 
-        return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString);
+        return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString, response.headers());
     }
 
-    private RESTResponse doPost(String url, RequestBody requestBody) throws JSONException, RESTException {
+    private RESTResponse doPost(String url, Headers headers, RequestBody requestBody)
+            throws JSONException, RESTException {
         Request request = new Request.Builder()
                 .url(url)
+                .headers(headers)
                 .post(requestBody)
                 .build();
 
@@ -145,12 +154,14 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
             throw new RESTException("Stub");
         }
 
-        return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString);
+        return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString, response.headers());
     }
 
-    private RESTResponse doPut(String url, RequestBody requestBody) throws JSONException, RESTException {
+    private RESTResponse doPut(String url, Headers headers, RequestBody requestBody)
+            throws JSONException, RESTException {
         Request request = new Request.Builder()
                 .url(url)
+                .headers(headers)
                 .put(requestBody)
                 .build();
 
@@ -177,12 +188,15 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
             throw new RESTException("Stub");
         }
 
-        return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString);
+        return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString,
+                response.headers());
     }
 
-    private RESTResponse doDelete(String url, RequestBody requestBody) throws JSONException, RESTException {
+    private RESTResponse doDelete(String url, Headers headers, RequestBody requestBody)
+            throws JSONException, RESTException {
         Request request = new Request.Builder()
                 .url(url)
+                .headers(headers)
                 .delete(requestBody)
                 .build();
 
@@ -209,10 +223,12 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
             throw new RESTException("Stub");
         }
 
-        return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString);
+        return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString,
+                response.headers());
     }
 
-    private RESTResponse parseResponse(int responseCode, boolean isOk, String responseBodyString) throws JSONException {
+    private RESTResponse parseResponse(int responseCode, boolean isOk, String responseBodyString,
+                                       Headers headers) throws JSONException {
         JSONObject jsonObj = new JSONObject(responseBodyString);
 
         String status = (String) jsonObj.get("status");
@@ -245,6 +261,10 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
             }
             restResponse.setErrors(errors);
         }
+
+        Map<String, List<String>> headersMap = headers.toMultimap();
+
+        restResponse.setHeaders(headersMap);
 
         return restResponse;
     }
