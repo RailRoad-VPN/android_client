@@ -10,14 +10,14 @@ public class User {
     private String createdDate;
     private Boolean isEnabled;
 
-    public User (String uuid, String email, String createdDate, Boolean isEnabled) {
+    public User(String uuid, String email, String createdDate, Boolean isEnabled) {
         this.uuid = uuid;
         this.email = email;
         this.createdDate = createdDate;
         this.isEnabled = isEnabled;
     }
 
-    public User (JSONObject userJson) throws JSONException {
+    public User(JSONObject userJson) throws JSONException {
         this.uuid = userJson.getString("uuid");
         this.email = userJson.getString("email");
         this.createdDate = userJson.getString("created_date");

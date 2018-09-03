@@ -3,8 +3,6 @@ package net.rroadvpn.services.rest;
 import android.os.AsyncTask;
 import android.os.NetworkOnMainThreadException;
 
-import com.google.gson.Gson;
-
 import net.rroadvpn.exception.RESTException;
 import net.rroadvpn.exception.RESTNotFoundException;
 import net.rroadvpn.model.rest.RESTError;
@@ -36,66 +34,63 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
     protected RESTResponse doInBackground(Object... params) {
         String method = (String) params[0];
         String url = (String) params[1];
-
+        RequestBody requestBody;
         switch (method) {
             case "GET":
                 try {
                     return this.doGet(url);
                 } catch (JSONException e) {
-                    // TODO
                     e.printStackTrace();
+                    throw new RESTException("");
                 } catch (RESTNotFoundException e) {
-                    // TODO
                     e.printStackTrace();
+                    throw new RESTException("");
                 } catch (RESTException e) {
-                    // TODO
                     e.printStackTrace();
+                    throw new RESTException("");
                 }
-            case "POST": {
-                RequestBody requestBody = (RequestBody) params[2];
+            case "POST":
+                requestBody = (RequestBody) params[2];
                 try {
                     return this.doPost(url, requestBody);
                 } catch (JSONException e) {
-                    // TODO
                     e.printStackTrace();
+                    throw new RESTException("");
                 } catch (RESTNotFoundException e) {
-                    // TODO
                     e.printStackTrace();
+                    throw new RESTException("");
                 } catch (RESTException e) {
-                    // TODO
                     e.printStackTrace();
+                    throw new RESTException("");
                 }
-            }
-            case "PUT": {
-                RequestBody requestBody = (RequestBody) params[2];
+            case "PUT":
+                requestBody = (RequestBody) params[2];
                 try {
                     return this.doPut(url, requestBody);
                 } catch (JSONException e) {
-                    // TODO
                     e.printStackTrace();
+                    throw new RESTException("");
                 } catch (RESTNotFoundException e) {
-                    // TODO
                     e.printStackTrace();
+                    throw new RESTException("");
                 } catch (RESTException e) {
-                    // TODO
                     e.printStackTrace();
+                    throw new RESTException("");
                 }
-            }
-            case "DELETE": {
-                RequestBody requestBody = (RequestBody) params[2];
+            case "DELETE":
+                requestBody = (RequestBody) params[2];
                 try {
                     return this.doDelete(url, requestBody);
                 } catch (JSONException e) {
-                    // TODO
                     e.printStackTrace();
+                    throw new RESTException("");
                 } catch (RESTNotFoundException e) {
-                    // TODO
                     e.printStackTrace();
+                    throw new RESTException("");
                 } catch (RESTException e) {
-                    // TODO
                     e.printStackTrace();
+                    throw new RESTException("");
                 }
-            }
             default:
                 throw new IllegalArgumentException();
         }

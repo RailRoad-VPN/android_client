@@ -2,9 +2,9 @@ package net.rroadvpn.activities;
 
 
 import android.content.Intent;
+import android.widget.Toast;
 
 import net.rroadvpn.exception.UserServiceException;
-import net.rroadvpn.model.User;
 import net.rroadvpn.openvpn.LaunchVPN;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.VpnProfile;
@@ -28,10 +28,28 @@ public class NewMainActivity extends BaseActivity {
         String userServiceURL = apiURL + "/api/" + apiVer + "/" + usersAPIResourceName;
 
         UsersService usersService = new UsersService(userServiceURL);
+
+//test get user by pin
+//        try {
+//            User user = usersService.getUserByPinCode(7087);
+//            System.out.println(user.getEmail());
+//        } catch (UserServiceException e) {
+//            Toast.makeText(getBaseContext(), "wrong pin?", Toast.LENGTH_SHORT).show();
+//            e.printStackTrace();
+//        }
+//test get user by uuid
+//        try {
+//            User user = usersService.getUserByUuid("cf402144-0c02-4b97-98f2-73f7b56160cf");
+//            System.out.println(user.getEmail());
+//        } catch (UserServiceException e) {
+//            Toast.makeText(getBaseContext(), "wrong uuid", Toast.LENGTH_SHORT).show();
+//            e.printStackTrace();
+//        }
+//test post userDevice
         try {
-            User userByPinCode = usersService.getUserByPinCode(3261);
-            System.out.println(userByPinCode.getEmail());
+            usersService.postUserDevice("cf402144-0c02-4b97-98f2-73f7b56160cf");
         } catch (UserServiceException e) {
+            Toast.makeText(getBaseContext(), "bad post", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }

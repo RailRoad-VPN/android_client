@@ -4,27 +4,27 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RESTError {
-    public Integer code;
+    public String code;
     public String message;
     public String developer_message;
 
-    public RESTError(Integer code, String message, String developer_message) {
+    public RESTError(String code, String message, String developer_message) {
         this.code = code;
         this.message = message;
         this.developer_message = developer_message;
     }
 
     public RESTError(JSONObject errorJson) throws JSONException {
-        this.code = errorJson.getInt("code");
+        this.code = errorJson.getString("code");
         this.message = errorJson.getString("message");
         this.developer_message = errorJson.getString("developer_message");
     }
 
-    public Integer getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(Integer code) {
+    public void setCode(String code) {
         this.code = code;
     }
 
