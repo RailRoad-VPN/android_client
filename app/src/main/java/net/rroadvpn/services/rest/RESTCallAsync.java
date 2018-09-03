@@ -41,13 +41,10 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                     return this.doGet(url);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    throw new RESTException("");
-                } catch (RESTNotFoundException e) {
-                    e.printStackTrace();
-                    throw new RESTException("");
+                    throw new RESTException(e);
                 } catch (RESTException e) {
                     e.printStackTrace();
-                    throw new RESTException("");
+                    throw new RESTException(e);
                 }
             case "POST":
                 requestBody = (RequestBody) params[2];
@@ -55,13 +52,10 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                     return this.doPost(url, requestBody);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    throw new RESTException("");
-                } catch (RESTNotFoundException e) {
-                    e.printStackTrace();
-                    throw new RESTException("");
+                    throw new RESTException(e);
                 } catch (RESTException e) {
                     e.printStackTrace();
-                    throw new RESTException("");
+                    throw new RESTException(e);
                 }
             case "PUT":
                 requestBody = (RequestBody) params[2];
@@ -69,13 +63,10 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                     return this.doPut(url, requestBody);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    throw new RESTException("");
-                } catch (RESTNotFoundException e) {
-                    e.printStackTrace();
-                    throw new RESTException("");
+                    throw new RESTException(e);
                 } catch (RESTException e) {
                     e.printStackTrace();
-                    throw new RESTException("");
+                    throw new RESTException(e);
                 }
             case "DELETE":
                 requestBody = (RequestBody) params[2];
@@ -83,20 +74,17 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                     return this.doDelete(url, requestBody);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    throw new RESTException("");
-                } catch (RESTNotFoundException e) {
-                    e.printStackTrace();
-                    throw new RESTException("");
+                    throw new RESTException(e);
                 } catch (RESTException e) {
                     e.printStackTrace();
-                    throw new RESTException("");
+                    throw new RESTException(e);
                 }
             default:
                 throw new IllegalArgumentException();
         }
     }
 
-    private RESTResponse doGet(String url) throws JSONException, RESTException, RESTNotFoundException {
+    private RESTResponse doGet(String url) throws JSONException, RESTException {
         Request request = new Request.Builder()
                 .url(url)
                 .get()
@@ -128,7 +116,39 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
         return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString);
     }
 
-    private RESTResponse doPost(String url, RequestBody requestBody) throws JSONException, RESTException, RESTNotFoundException {
+    private RESTResponse doPost(String url, RequestBody requestBody) throws JSONException, RESTException {
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        Response response;
+        try {
+            response = this.client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RESTException("Stub");
+        } catch (NetworkOnMainThreadException e) {
+            e.printStackTrace();
+            throw new RESTException("Stub");
+        }
+
+        String responseBodyString;
+        try {
+            ResponseBody body = response.body();
+            if (body == null) {
+                throw new RESTException("Stub");
+            } else {
+                responseBodyString = body.string();
+            }
+        } catch (IOException e) {
+            throw new RESTException("Stub");
+        }
+
+        return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString);
+    }
+
+    private RESTResponse doPut(String url, RequestBody requestBody) throws JSONException, RESTException {
         Request request = new Request.Builder()
                 .url(url)
                 .put(requestBody)
@@ -160,39 +180,7 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
         return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString);
     }
 
-    private RESTResponse doPut(String url, RequestBody requestBody) throws JSONException, RESTException, RESTNotFoundException {
-        Request request = new Request.Builder()
-                .url(url)
-                .put(requestBody)
-                .build();
-
-        Response response;
-        try {
-            response = this.client.newCall(request).execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RESTException("Stub");
-        } catch (NetworkOnMainThreadException e) {
-            e.printStackTrace();
-            throw new RESTException("Stub");
-        }
-
-        String responseBodyString;
-        try {
-            ResponseBody body = response.body();
-            if (body == null) {
-                throw new RESTException("Stub");
-            } else {
-                responseBodyString = body.string();
-            }
-        } catch (IOException e) {
-            throw new RESTException("Stub");
-        }
-
-        return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString);
-    }
-
-    private RESTResponse doDelete(String url, RequestBody requestBody) throws JSONException, RESTException, RESTNotFoundException {
+    private RESTResponse doDelete(String url, RequestBody requestBody) throws JSONException, RESTException {
         Request request = new Request.Builder()
                 .url(url)
                 .delete(requestBody)
@@ -224,7 +212,7 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
         return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString);
     }
 
-    private RESTResponse parseResponse(int responseCode, boolean isOk, String responseBodyString) throws JSONException, RESTException, RESTNotFoundException {
+    private RESTResponse parseResponse(int responseCode, boolean isOk, String responseBodyString) throws JSONException {
         JSONObject jsonObj = new JSONObject(responseBodyString);
 
         String status = (String) jsonObj.get("status");
