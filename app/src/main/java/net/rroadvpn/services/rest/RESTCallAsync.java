@@ -42,10 +42,13 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                 try {
                     return this.doGet(url);
                 } catch (JSONException e) {
+                    // TODO
                     e.printStackTrace();
                 } catch (RESTNotFoundException e) {
+                    // TODO
                     e.printStackTrace();
                 } catch (RESTException e) {
+                    // TODO
                     e.printStackTrace();
                 }
             case "POST": {
@@ -53,10 +56,13 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                 try {
                     return this.doPost(url, requestBody);
                 } catch (JSONException e) {
+                    // TODO
                     e.printStackTrace();
                 } catch (RESTNotFoundException e) {
+                    // TODO
                     e.printStackTrace();
                 } catch (RESTException e) {
+                    // TODO
                     e.printStackTrace();
                 }
             }
@@ -65,10 +71,13 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                 try {
                     return this.doPut(url, requestBody);
                 } catch (JSONException e) {
+                    // TODO
                     e.printStackTrace();
                 } catch (RESTNotFoundException e) {
+                    // TODO
                     e.printStackTrace();
                 } catch (RESTException e) {
+                    // TODO
                     e.printStackTrace();
                 }
             }
@@ -77,10 +86,13 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                 try {
                     return this.doDelete(url, requestBody);
                 } catch (JSONException e) {
+                    // TODO
                     e.printStackTrace();
                 } catch (RESTNotFoundException e) {
+                    // TODO
                     e.printStackTrace();
                 } catch (RESTException e) {
+                    // TODO
                     e.printStackTrace();
                 }
             }
@@ -227,7 +239,6 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
         restResponse.setOk(isOk);
 
         if (isOk) {
-
             if (jsonObj.has("data")) {
                 JSONObject data = jsonObj.getJSONObject("data");
                 restResponse.setData(data);
@@ -242,10 +253,7 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                 Integer offset = (Integer) jsonObj.get("offset");
                 restResponse.setLimit(offset);
             }
-        } else {
-            if (responseCode == 404) throw new RESTNotFoundException("Not Found");
-            if (responseCode == 405) throw new RESTException("Method Not Allowed!");
-
+        } else if (jsonObj.has("errors")) {
             List<RESTError> errors = new ArrayList<>();
             JSONArray errorsJson = jsonObj.getJSONArray("errors");
             for (int i = 0; i < errorsJson.length(); i++) {

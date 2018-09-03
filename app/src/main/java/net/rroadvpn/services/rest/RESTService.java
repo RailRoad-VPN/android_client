@@ -3,6 +3,7 @@ package net.rroadvpn.services.rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import net.rroadvpn.exception.RESTException;
 import net.rroadvpn.model.rest.RESTResponse;
 
 import java.text.DateFormat;
@@ -48,8 +49,10 @@ public class RESTService implements RESTServiceI {
             apiResponse = new RESTCallAsync(this.client).execute("GET", url).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
+            throw new RESTException("execution exception", e);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            throw new RESTException("interrupted exception", e);
         }
         return apiResponse;
     }
@@ -65,13 +68,15 @@ public class RESTService implements RESTServiceI {
         }
 
         RequestBody requestBody = prepareRequestBody(data);
-        RESTResponse apiResponse = null;
+        RESTResponse apiResponse;
         try {
             apiResponse = new RESTCallAsync(this.client).execute("PUT", url, requestBody).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
+            throw new RESTException("execution exception", e);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            throw new RESTException("interrupted exception", e);
         }
         return apiResponse;
     }
@@ -87,13 +92,15 @@ public class RESTService implements RESTServiceI {
         }
 
         RequestBody requestBody = prepareRequestBody(data);
-        RESTResponse apiResponse = null;
+        RESTResponse apiResponse;
         try {
             apiResponse = new RESTCallAsync(this.client).execute("POST", url, requestBody).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
+            throw new RESTException("execution exception", e);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            throw new RESTException("interrupted exception", e);
         }
         return apiResponse;
     }
@@ -107,13 +114,15 @@ public class RESTService implements RESTServiceI {
             this.headers.putAll(headers);
         }
         RequestBody requestBody = prepareRequestBody(data);
-        RESTResponse apiResponse = null;
+        RESTResponse apiResponse;
         try {
             apiResponse = new RESTCallAsync(this.client).execute("DELETE", url, requestBody).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
+            throw new RESTException("execution exception", e);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            throw new RESTException("interrupted exception", e);
         }
         return apiResponse;
     }
