@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import net.rroadvpn.exception.RESTException;
 import net.rroadvpn.model.rest.RESTResponse;
+import net.rroadvpn.services.PreferencesService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,6 +23,7 @@ import okhttp3.RequestBody;
 
 public class RESTService implements RESTServiceI {
 
+    protected PreferencesService preferencesService;
     private Map<String, String> headers = new HashMap<>();
     private String serviceURL;
 
@@ -30,7 +32,8 @@ public class RESTService implements RESTServiceI {
     private OkHttpClient client = new OkHttpClient();
     private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm'Z'").create();
 
-    public RESTService(String serviceURL) {
+    public RESTService(PreferencesService preferencesService, String serviceURL) {
+        this.preferencesService = preferencesService;
         this.serviceURL = serviceURL;
     }
 
@@ -46,7 +49,7 @@ public class RESTService implements RESTServiceI {
 
         RESTResponse apiResponse = null;
         try {
-            apiResponse = new RESTCallAsync(this.client).execute("GET", url).get();
+            apiResponse = new RESTCallAsync(this.client).execute("GET", url, this.headers).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
             throw new RESTException("execution exception", e);

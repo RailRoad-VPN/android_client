@@ -1,6 +1,7 @@
 package net.rroadvpn.services;
 
 import net.rroadvpn.exception.UserServiceException;
+import net.rroadvpn.model.Preferences;
 import net.rroadvpn.model.User;
 import net.rroadvpn.model.rest.RESTResponse;
 import net.rroadvpn.services.rest.RESTService;
@@ -10,12 +11,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class UsersService extends RESTService {
 
-    public UsersService(String serviceURL) {
-        super(serviceURL);
+    public UsersService(PreferencesService preferencesService, String serviceURL) {
+        super(preferencesService, serviceURL);
     }
 
     public User getUserByPinCode(Integer pincode) throws UserServiceException {
@@ -29,7 +32,9 @@ public class UsersService extends RESTService {
             if (valueObj instanceof JSONObject) {
                 JSONObject data = (JSONObject) valueObj;
                 try {
-                    return new User(data);
+                    User user = new User(data);
+                    this.preferencesService.save(Preferences.USER_UUID, user.getUuid());
+                    return user;
                 } catch (JSONException e) {
                     e.printStackTrace();
                     return null;
@@ -69,23 +74,29 @@ public class UsersService extends RESTService {
 
     }
 
-    public void postUserDevice(String uuid) throws UserServiceException {
+    public void createUserDevice(String uuid) throws UserServiceException {
         String url = String.format("%s/%s/devices", this.getServiceURL(), String.valueOf(uuid));
 
-//todo generate UUID of device
         String deviceUuid = String.valueOf(UUID.randomUUID());
-
+        this.preferencesService.save(Preferences.DEVICE_UUID, deviceUuid);
+        
         HashMap<String, Object> userDevice = new HashMap<String, Object>();
-        userDevice.put("user_guid", uuid);
+        userDevice.put("user_uuid", uuid);
         userDevice.put("device_id", deviceUuid);
         userDevice.put("platform_id", 2);
         userDevice.put("vpn_type_id", 1);
-        userDevice.put("location", "test_android");
+        userDevice.put("is_active", true);
+        userDevice.put("location", "test_android2");
 
         RESTResponse ur = this.post(url, userDevice, null);
 
-        if (!ur.getOk()) {
-           throw new UserServiceException("bad post");
+        for (Map.Entry<String, List<String>> entry : ur.getHeaders().entrySet())
+        {
+          System.out.println(entry.getKey() + " - " + entry.getValue());
+          if (entry.getKey().toLowerCase().equals("x-device-token")){
+              this.preferencesService.save(Preferences.DEVICE_TOKEN, entry.getValue().get(0));
+              break;
+          }
         }
     }
 }

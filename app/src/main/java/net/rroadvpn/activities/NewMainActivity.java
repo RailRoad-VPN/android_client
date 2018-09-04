@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import net.rroadvpn.exception.UserServiceException;
+import net.rroadvpn.model.Preferences;
+import net.rroadvpn.model.User;
 import net.rroadvpn.openvpn.LaunchVPN;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.VpnProfile;
@@ -12,6 +14,7 @@ import net.rroadvpn.openvpn.activities.BaseActivity;
 import net.rroadvpn.openvpn.activities.DisconnectVPN;
 import net.rroadvpn.openvpn.core.ProfileManager;
 import net.rroadvpn.openvpn.core.VpnStatus;
+import net.rroadvpn.services.PreferencesService;
 import net.rroadvpn.services.UsersService;
 
 public class NewMainActivity extends BaseActivity {
@@ -27,16 +30,19 @@ public class NewMainActivity extends BaseActivity {
         String usersAPIResourceName = "users";
         String userServiceURL = apiURL + "/api/" + apiVer + "/" + usersAPIResourceName;
 
-        UsersService usersService = new UsersService(userServiceURL);
+
+        PreferencesService preferencesService = new PreferencesService(this, Preferences.PREF_USER_GLOBAL_KEY);
+        UsersService usersService = new UsersService(preferencesService, userServiceURL);
 
 //test get user by pin
 //        try {
-//            User user = usersService.getUserByPinCode(7087);
+//            User user = usersService.getUserByPinCode(2559);
 //            System.out.println(user.getEmail());
 //        } catch (UserServiceException e) {
 //            Toast.makeText(getBaseContext(), "wrong pin?", Toast.LENGTH_SHORT).show();
 //            e.printStackTrace();
 //        }
+
 //test get user by uuid
 //        try {
 //            User user = usersService.getUserByUuid("cf402144-0c02-4b97-98f2-73f7b56160cf");
@@ -46,12 +52,13 @@ public class NewMainActivity extends BaseActivity {
 //            e.printStackTrace();
 //        }
 //test post userDevice
-        try {
-            usersService.postUserDevice("cf402144-0c02-4b97-98f2-73f7b56160cf");
-        } catch (UserServiceException e) {
-            Toast.makeText(getBaseContext(), "bad post", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+            try {
+                usersService.createUserDevice("cf402144-0c02-4b97-98f2-73f7b56160cf");
+            } catch (UserServiceException e) {
+                Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
     }
 
     private ProfileManager getPM() {

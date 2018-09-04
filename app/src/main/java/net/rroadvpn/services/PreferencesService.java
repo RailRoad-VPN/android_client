@@ -1,0 +1,41 @@
+package net.rroadvpn.services;
+
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.widget.Toast;
+
+public class PreferencesService {
+    private final Context context;
+    private SharedPreferences preferences;
+
+    public PreferencesService(Context context, String preferenceType) {
+        this.context = context;
+        this.preferences = context.getSharedPreferences(preferenceType, Context.MODE_PRIVATE);
+        //todo check null
+    }
+
+    public void save(String prefLabel, String value) {
+        SharedPreferences.Editor ed = this.preferences.edit();
+        ed.putString(prefLabel, value);
+        ed.commit();
+    }
+
+    public void save(String prefLabel, Integer value) {
+        SharedPreferences.Editor ed = this.preferences.edit();
+        ed.putInt(prefLabel, value);
+        ed.commit();
+    }
+
+    public String getString(String prefLabel) {
+        Toast.makeText(this.context, "Text returned", Toast.LENGTH_SHORT).show();
+        return this.preferences.getString(prefLabel, "");
+    }
+
+    public Integer getInteger(String prefLabel) {
+        Toast.makeText(this.context, "Text returned", Toast.LENGTH_SHORT).show();
+        return this.preferences.getInt(prefLabel, -1);
+    }
+
+}
+
