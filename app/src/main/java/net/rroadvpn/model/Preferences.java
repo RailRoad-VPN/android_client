@@ -5,4 +5,7 @@ public final class Preferences {
     public static final String USER_UUID = "user_uuid";
     public static final String DEVICE_UUID = "device_uuid";
     public static final String DEVICE_TOKEN = "device_token";
+
+    public static final Integer DEVICE_PLATFORM_ID = 2;
+    public static final Integer VPN_TYPE_ID = 1;
 }

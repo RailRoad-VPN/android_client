@@ -34,14 +34,17 @@ public class NewMainActivity extends BaseActivity {
         PreferencesService preferencesService = new PreferencesService(this, Preferences.PREF_USER_GLOBAL_KEY);
         UsersService usersService = new UsersService(preferencesService, userServiceURL);
 
+        System.out.println(preferencesService.getString(Preferences.DEVICE_TOKEN));
+        System.out.println(preferencesService.getString(Preferences.USER_UUID));
+        System.out.println(preferencesService.getString(Preferences.DEVICE_UUID));
 //test get user by pin
-//        try {
-//            User user = usersService.getUserByPinCode(2559);
-//            System.out.println(user.getEmail());
-//        } catch (UserServiceException e) {
-//            Toast.makeText(getBaseContext(), "wrong pin?", Toast.LENGTH_SHORT).show();
-//            e.printStackTrace();
-//        }
+        try {
+            User user = usersService.getUserByPinCode(2559);
+            System.out.println(user.getEmail());
+        } catch (UserServiceException e) {
+            Toast.makeText(getBaseContext(), "wrong pin?", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
 
 //test get user by uuid
 //        try {

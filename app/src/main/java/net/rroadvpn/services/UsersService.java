@@ -25,7 +25,13 @@ public class UsersService extends RESTService {
 
         String url = String.format("%s/pincode/%s", this.getServiceURL(), String.valueOf(pincode));
 
-        RESTResponse ur = this.get(url, null);
+        String deviceToken = this.preferencesService.getString(Preferences.DEVICE_UUID);
+        Map<String, String> headers = new HashMap<String, String>();
+        if (!deviceToken.equals("")) {
+            headers.put("x-device-token", deviceToken);
+        }
+
+        RESTResponse ur = this.get(url, headers);
 
         if (ur.getOk()) {
             Object valueObj = ur.getData();
@@ -52,7 +58,13 @@ public class UsersService extends RESTService {
 
         String url = String.format("%s/%s/devices", this.getServiceURL(), String.valueOf(uuid));
 
-        RESTResponse ur = this.get(url, null);
+        String deviceToken = this.preferencesService.getString(Preferences.DEVICE_UUID);
+        Map<String, String> headers = new HashMap<String, String>();
+        if (!deviceToken.equals("")) {
+            headers.put("x-device-token", deviceToken);
+        }
+
+        RESTResponse ur = this.get(url, headers);
 
         if (ur.getOk()) {
             Object valueObj = ur.getData();
@@ -83,13 +95,14 @@ public class UsersService extends RESTService {
         HashMap<String, Object> userDevice = new HashMap<String, Object>();
         userDevice.put("user_uuid", uuid);
         userDevice.put("device_id", deviceUuid);
-        userDevice.put("platform_id", 2);
-        userDevice.put("vpn_type_id", 1);
+        userDevice.put("platform_id", Preferences.DEVICE_PLATFORM_ID);
+        userDevice.put("vpn_type_id", Preferences.VPN_TYPE_ID);
         userDevice.put("is_active", true);
         userDevice.put("location", "test_android2");
 
         RESTResponse ur = this.post(url, userDevice, null);
 
+//TODO mb refactor
         for (Map.Entry<String, List<String>> entry : ur.getHeaders().entrySet())
         {
           System.out.println(entry.getKey() + " - " + entry.getValue());
