@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package net.rroadvpn.activities.InputPinView;
+package net.rroadvpn.activities.pin;
 
 import android.animation.ValueAnimator;
 import android.content.Context;

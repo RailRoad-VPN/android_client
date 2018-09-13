@@ -1,15 +1,13 @@
-package net.rroadvpn.activities.InputPinView;
+package net.rroadvpn.activities.pin;
 
-import android.content.Intent;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.activities.BaseActivity;
@@ -24,7 +22,7 @@ public class InputPinView extends BaseActivity{
 
         setContentView(R.layout.input_pin_view);
 
-        final PinView pinView = findViewById(R.id.secondPinView);
+        final PinView pinView = findViewById(R.id.pinView);
         pinView.setTextColor(
                 ResourcesCompat.getColor(getResources(), R.color.colorAccent, getTheme()));
         pinView.setTextColor(
@@ -64,6 +62,9 @@ public class InputPinView extends BaseActivity{
         pinView.setItemBackground(getResources().getDrawable(R.drawable.item_background));
         pinView.setItemBackgroundResources(R.drawable.item_background);
         pinView.setHideLineWhenFilled(false);
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
     }
 
 }

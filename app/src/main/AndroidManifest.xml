@@ -68,7 +68,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="net.rroadvpn.activities.InputPinView.InputPinView"
+            android:name="net.rroadvpn.activities.pin.InputPinView"
             tools:ignore="ExportedActivity">
         </activity>
 

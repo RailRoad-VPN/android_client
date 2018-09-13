@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import net.rroadvpn.activities.InputPinView.InputPinView;
+import net.rroadvpn.activities.pin.InputPinView;
 import net.rroadvpn.model.Preferences;
 import net.rroadvpn.openvpn.LaunchVPN;
 import net.rroadvpn.openvpn.R;
