@@ -490,5 +490,7 @@
     <string name="button">Button</string>
     <string name="button13">button13</string>
     <string name="Artyr">Artyr</string>
+    <string name="pin_label">PIN:</string>
+    <string name="password_label">Password:</string>
 
 </resources>

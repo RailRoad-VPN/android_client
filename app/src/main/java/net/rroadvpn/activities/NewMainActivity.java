@@ -2,11 +2,12 @@ package net.rroadvpn.activities;
 
 
 import android.content.Intent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
-import net.rroadvpn.exception.UserServiceException;
+import net.rroadvpn.activities.InputPinView.InputPinView;
 import net.rroadvpn.model.Preferences;
-import net.rroadvpn.model.User;
 import net.rroadvpn.openvpn.LaunchVPN;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.VpnProfile;
@@ -38,13 +39,13 @@ public class NewMainActivity extends BaseActivity {
         System.out.println(preferencesService.getString(Preferences.USER_UUID));
         System.out.println(preferencesService.getString(Preferences.DEVICE_UUID));
 //test get user by pin
-        try {
-            User user = usersService.getUserByPinCode(2559);
-            System.out.println(user.getEmail());
-        } catch (UserServiceException e) {
-            Toast.makeText(getBaseContext(), "wrong pin?", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+//        try {
+//            User user = usersService.getUserByPinCode(2559);
+//            System.out.println(user.getEmail());
+//        } catch (UserServiceException e) {
+//            Toast.makeText(getBaseContext(), "wrong pin?", Toast.LENGTH_SHORT).show();
+//            e.printStackTrace();
+//        }
 
 //test get user by uuid
 //        try {
@@ -55,12 +56,23 @@ public class NewMainActivity extends BaseActivity {
 //            e.printStackTrace();
 //        }
 //test post userDevice
-            try {
-                usersService.createUserDevice("cf402144-0c02-4b97-98f2-73f7b56160cf");
-            } catch (UserServiceException e) {
-                Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
+//            try {
+//                usersService.createUserDevice("cf402144-0c02-4b97-98f2-73f7b56160cf");
+//            } catch (UserServiceException e) {
+//                Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//                e.printStackTrace();
+//            }
+        Button button = (Button)findViewById(R.id.fasd);
+        button.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(getBaseContext(), "to another view", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getBaseContext(), InputPinView.class);
+                        startActivity(intent);
+                    }
+                }
+        );
 
     }
 
