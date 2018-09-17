@@ -18,6 +18,6 @@
         android:layout_margin="@dimen/common_padding"
         android:inputType="number"
         android:textColor="@color/text_colors"
-        android:cursorVisible="true" />
+        android:cursorVisible="false" />
 
 </LinearLayout>
