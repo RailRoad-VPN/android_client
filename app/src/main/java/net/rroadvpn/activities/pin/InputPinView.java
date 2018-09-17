@@ -14,7 +14,7 @@ import net.rroadvpn.openvpn.activities.BaseActivity;
 
 import static android.support.constraint.Constraints.TAG;
 
-public class InputPinView extends BaseActivity{
+public class InputPinView extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,8 @@ public class InputPinView extends BaseActivity{
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                System.out.println(s);
+                //IF LENGH - 4 PAST OUR API HERE
             }
         });
         pinView.setItemBackgroundColor(Color.BLACK);
@@ -64,7 +65,31 @@ public class InputPinView extends BaseActivity{
         pinView.setHideLineWhenFilled(false);
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+
+//        imm.showSoftInput(pinView, InputMethodManager.SHOW_FORCED);
+//        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
+//        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+//                imm.showSoftInput(pinView, InputMethodManager.SHOW_FORCED);
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        //        imm.showSoftInput(pinView, InputMethodManager.SHOW_FORCED);
+
+
     }
 
 }
