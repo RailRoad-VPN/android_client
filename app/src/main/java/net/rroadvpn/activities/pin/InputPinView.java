@@ -63,33 +63,16 @@ public class InputPinView extends BaseActivity {
         pinView.setItemBackground(getResources().getDrawable(R.drawable.item_background));
         pinView.setItemBackgroundResources(R.drawable.item_background);
         pinView.setHideLineWhenFilled(false);
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-
-//        imm.showSoftInput(pinView, InputMethodManager.SHOW_FORCED);
-//        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-
-//        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-//                imm.showSoftInput(pinView, InputMethodManager.SHOW_FORCED);
-
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        //        imm.showSoftInput(pinView, InputMethodManager.SHOW_FORCED);
-
-
     }
 
 }
