@@ -7,6 +7,7 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import net.rroadvpn.openvpn.R;
@@ -16,13 +17,15 @@ import static android.support.constraint.Constraints.TAG;
 
 public class InputPinView extends BaseActivity {
 
+    PinView pinView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.input_pin_view);
 
-        final PinView pinView = findViewById(R.id.pinView);
+        pinView = findViewById(R.id.pinView);
         pinView.setTextColor(
                 ResourcesCompat.getColor(getResources(), R.color.colorAccent, getTheme()));
         pinView.setTextColor(
@@ -63,16 +66,36 @@ public class InputPinView extends BaseActivity {
         pinView.setItemBackground(getResources().getDrawable(R.drawable.item_background));
         pinView.setItemBackgroundResources(R.drawable.item_background);
         pinView.setHideLineWhenFilled(false);
+
+        pinView.setFocusableInTouchMode(true);
+        pinView.requestFocus();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+                .hideSoftInputFromWindow(pinView.getWindowToken(), 0);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        pinView.postDelayed(() -> {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(pinView, 0);
+        }, 300);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+                .hideSoftInputFromWindow(pinView.getWindowToken(), 0);
+    }
 }
