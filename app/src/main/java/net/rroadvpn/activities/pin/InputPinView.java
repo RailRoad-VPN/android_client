@@ -9,19 +9,34 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
+import net.rroadvpn.exception.UserServiceException;
+import net.rroadvpn.model.Preferences;
+import net.rroadvpn.model.User;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.activities.BaseActivity;
+import net.rroadvpn.services.PreferencesService;
+import net.rroadvpn.services.UsersService;
 
 import static android.support.constraint.Constraints.TAG;
 
 public class InputPinView extends BaseActivity {
-
+    PreferencesService preferencesService;
+    UsersService usersService;
     PinView pinView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.preferencesService = new PreferencesService(this, Preferences.PREF_USER_GLOBAL_KEY);
+        String apiURL = "http://internal.novicorp.com:61885";
+        String apiVer = "v1";
+
+        String usersAPIResourceName = "users";
+        String userServiceURL = apiURL + "/api/" + apiVer + "/" + usersAPIResourceName;
+        this.usersService = new UsersService(preferencesService, userServiceURL);
 
         setContentView(R.layout.input_pin_view);
 
@@ -59,7 +74,26 @@ public class InputPinView extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 System.out.println(s);
-                //IF LENGH - 4 PAST OUR API HERE
+                if (s.length() == 4) {
+                    try {
+                        User user = usersService.getUserByPinCode(Integer.valueOf(s.toString()));
+                        System.out.println(user.getEmail());
+                    } catch (UserServiceException e) {
+                        Toast.makeText(getBaseContext(), "wrong pin?", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
+                    String userUuid = preferencesService.getString(Preferences.USER_UUID);
+                    //test post userDevice
+                    try {
+                        usersService.createUserDevice(userUuid);
+                    } catch (UserServiceException e) {
+                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
+                    System.out.println(preferencesService.getString(Preferences.DEVICE_TOKEN));
+                }
             }
         });
         pinView.setItemBackgroundColor(Color.BLACK);
