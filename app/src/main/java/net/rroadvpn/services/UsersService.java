@@ -106,12 +106,13 @@ public class UsersService extends RESTService {
         if (xDeviceTokenList.size() > 0) {
             this.preferencesService.save(Preferences.DEVICE_TOKEN, xDeviceTokenList.get(0));
         }
-//        for (Map.Entry<String, List<String>> entry : ur.getHeaders().entrySet()) {
-//          System.out.println(entry.getKey() + " - " + entry.getValue());
-//          if (entry.getKey().toLowerCase().equals("x-device-token")){
-//              this.preferencesService.save(Preferences.DEVICE_TOKEN, entry.getValue().get(0));
-//              break;
-//          }
-//        }
     }
+
+//TODO complete this
+//    public String getRandomServerUuid(String userUuid) {
+//        String url = String.format("%s/%s/servers?random", this.getServiceURL(), String.valueOf(userUuid));
+//        HashMap<String, Object> userDevice = new HashMap<String, Object>();
+//
+//
+//    }
 }
