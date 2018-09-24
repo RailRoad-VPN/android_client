@@ -1,6 +1,7 @@
 package net.rroadvpn.activities.pin;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
@@ -11,6 +12,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import net.rroadvpn.activities.NewMainActivity2;
 import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.model.Preferences;
 import net.rroadvpn.model.User;
@@ -87,12 +89,12 @@ public class InputPinView extends BaseActivity {
                     //test post userDevice
                     try {
                         usersService.createUserDevice(userUuid);
+                        Intent intent = new Intent(getBaseContext(), NewMainActivity2.class);
+                        startActivity(intent);
                     } catch (UserServiceException e) {
                         Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
-
-                    System.out.println(preferencesService.getString(Preferences.DEVICE_TOKEN));
                 }
             }
         });
