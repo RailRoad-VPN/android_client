@@ -114,13 +114,7 @@ public class NewMainActivity2 extends BaseActivity {
                 System.out.println("Update user device begin");
                 this.us.updateUserDevice(this.userUuid, this.preferencesService.getString(Preferences.USER_DEVICE_UUID), virtualIP, "1.1.1.1");
                 System.out.println("Create connection begin");
-                this.us.createConnection(
-                        this.serverUuid,
-                        this.preferencesService.getString(Preferences.USER_DEVICE_UUID),
-                        virtualIP,
-                        "1.1.1.1",
-                        true,
-                        "t@t.t");
+                this.us.createConnection(this.serverUuid,virtualIP,"1.1.1.1","t@t.t");
             } catch (UserServiceException e) {
                 e.printStackTrace();
             }
