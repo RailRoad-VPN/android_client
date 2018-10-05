@@ -57,4 +57,8 @@ public class Test {
 
         return d;
     }
+
+    private static void putUserDevice (){
+
+    }
 }

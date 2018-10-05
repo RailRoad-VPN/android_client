@@ -1,5 +1,8 @@
 package net.rroadvpn.services.rest;
 
+import android.os.AsyncTask;
+import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -15,6 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.FormBody;
 import okhttp3.MediaType;
@@ -29,12 +33,18 @@ public class RESTService implements RESTServiceI {
 
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
-    private OkHttpClient client = new OkHttpClient();
+    private OkHttpClient client;
     private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm'Z'").create();
 
     public RESTService(PreferencesService preferencesService, String serviceURL) {
         this.preferencesService = preferencesService;
         this.serviceURL = serviceURL;
+
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.connectTimeout(30, TimeUnit.SECONDS);
+        builder.readTimeout(30, TimeUnit.SECONDS);
+        builder.writeTimeout(30, TimeUnit.SECONDS);
+        this.client = builder.build();
     }
 
     @Override
@@ -73,7 +83,9 @@ public class RESTService implements RESTServiceI {
         RequestBody requestBody = prepareRequestBody(data);
         RESTResponse apiResponse;
         try {
-            apiResponse = new RESTCallAsync(this.client).execute("PUT", url, this.headers, requestBody).get();
+            RESTCallAsync restCallAsync = new RESTCallAsync(this.client);
+            AsyncTask<Object, Void, RESTResponse> put = restCallAsync.execute("PUT", url, this.headers, requestBody);
+            apiResponse = put.get();
         } catch (ExecutionException e) {
             e.printStackTrace();
             throw new RESTException("execution exception", e);

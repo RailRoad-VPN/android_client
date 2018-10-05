@@ -229,6 +229,7 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
 
     private RESTResponse parseResponse(int responseCode, boolean isOk, String responseBodyString,
                                        Headers headers) throws JSONException {
+        System.out.println("!\nthis is response:\n" + responseBodyString);
         JSONObject jsonObj = new JSONObject(responseBodyString);
 
         String status = (String) jsonObj.get("status");
@@ -253,6 +254,7 @@ class RESTCallAsync extends AsyncTask<Object, Void, RESTResponse> {
                 restResponse.setLimit(offset);
             }
         } else if (jsonObj.has("errors")) {
+            System.out.println("!\n!\n!\n!\n!!!HALT API_ERROR!!!\n" + responseBodyString + "!!!HALT API_ERROR!!!\n!\n!\n!");
             List<RESTError> errors = new ArrayList<>();
             JSONArray errorsJson = jsonObj.getJSONArray("errors");
             for (int i = 0; i < errorsJson.length(); i++) {

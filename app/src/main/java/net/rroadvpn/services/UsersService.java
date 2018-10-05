@@ -1,5 +1,7 @@
 package net.rroadvpn.services;
 
+import android.widget.Toast;
+
 import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.model.Preferences;
 import net.rroadvpn.model.User;
@@ -10,19 +12,26 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
+import java.util.TimeZone;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentNavigableMap;
 
 public class UsersService extends RESTService {
     private Utilities utilities;
     private String deviceToken;
+    private String deviceId;
 
     public UsersService(PreferencesService preferencesService, String serviceURL) {
         super(preferencesService, serviceURL);
-        this.deviceToken = this.preferencesService.getString(Preferences.DEVICE_UUID);
+        this.deviceToken = this.preferencesService.getString(Preferences.DEVICE_TOKEN);
+        this.deviceId = this.preferencesService.getString(Preferences.DEVICE_ID);
         this.utilities = new Utilities();
     }
 
@@ -95,17 +104,15 @@ public class UsersService extends RESTService {
     public void createUserDevice(String userUuid) throws UserServiceException {
         String url = String.format("%s/%s/devices", this.getServiceURL(), String.valueOf(userUuid));
 
-
-        String deviceUuid = String.valueOf(UUID.randomUUID());
-        this.deviceToken = deviceUuid;
-        this.preferencesService.save(Preferences.DEVICE_UUID, deviceUuid);
+        String deviceId = String.valueOf(utilities.getRandomInt(100000, 999999));
+        this.preferencesService.save(Preferences.DEVICE_ID, deviceId);
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("x-auth-token", this.utilities.generateAuthToken());
 
 
         HashMap<String, Object> userDevice = new HashMap<String, Object>();
         userDevice.put("user_uuid", userUuid);
-        userDevice.put("device_id", deviceUuid);
+        userDevice.put("device_id", deviceId);
         userDevice.put("platform_id", Preferences.DEVICE_PLATFORM_ID);
         userDevice.put("vpn_type_id", Preferences.VPN_TYPE_ID);
         userDevice.put("is_active", true);
@@ -116,6 +123,14 @@ public class UsersService extends RESTService {
         List<String> xDeviceTokenList = ur.getHeaders().get("x-device-token");
         if (xDeviceTokenList.size() > 0) {
             this.preferencesService.save(Preferences.DEVICE_TOKEN, xDeviceTokenList.get(0));
+            this.deviceToken = xDeviceTokenList.get(0);
+        }
+
+        List<String> userDeviceLocation = ur.getHeaders().get("location");
+        if (ur.getHeaders().get("Location").size() > 0) {
+            String location = userDeviceLocation.get(0);
+            String userDeviceUuid = location.substring(location.lastIndexOf("/") + 1);
+            this.preferencesService.save(Preferences.USER_DEVICE_UUID, userDeviceUuid);
         }
     }
 
@@ -180,6 +195,79 @@ public class UsersService extends RESTService {
             throw new UserServiceException("get vpn config failed");
         }
         return null;
+    }
+
+    public void updateUserDevice(String userUuid, String userDeviceUuid, String virtualIp, String deviceIp) throws UserServiceException {
+        String url = String.format("%s/%s/devices/%s", this.getServiceURL(), userUuid, userDeviceUuid);
+
+        Map<String, String> headers = new HashMap<String, String>();
+        if (!this.deviceToken.equals("")) {
+            headers.put("x-device-token", deviceToken);
+        }
+        headers.put("x-auth-token", this.utilities.generateAuthToken());
+
+
+        HashMap<String, Object> userDevice = new HashMap<String, Object>();
+        userDevice.put("uuid", userDeviceUuid);
+        userDevice.put("user_uuid", userUuid);
+        userDevice.put("virtual_ip", virtualIp);
+        userDevice.put("device_ip", deviceIp);
+        userDevice.put("is_active", true);
+        userDevice.put("location", "updated_test_android2");
+        userDevice.put("device_id", this.deviceId);
+        userDevice.put("platform_id", Preferences.DEVICE_PLATFORM_ID);
+        userDevice.put("vpn_type_id", Preferences.VPN_TYPE_ID);
+        userDevice.put("modify_reason", "set virtual_ip");
+
+        RESTResponse ur = this.put(url, userDevice, headers);
+    }
+
+    public void createConnection(String serverUuid, String virtualIp, String deviceIp, String email) {
+
+        String url = String.format("%s/%s/connections", this.getServiceURL().replace("users", "vpns/servers"), serverUuid);
+        System.out.println(url);
+
+        Map<String, String> headers = new HashMap<String, String>();
+        if (!this.deviceToken.equals("")) {
+            headers.put("x-device-token", deviceToken);
+        }
+        headers.put("x-auth-token", this.utilities.generateAuthToken());
+
+
+        HashMap<String, Object> server = new HashMap<>();
+
+        server.put("uuid", serverUuid);
+        server.put("type", "openvpn");
+
+
+        HashMap<String, Object> users = new HashMap<String, Object>();
+        HashMap<String, Object> user = new HashMap<String, Object>();
+
+        user.put("email", email);
+        user.put("device_ip", deviceIp);
+        user.put("virtual_ip", virtualIp);
+        user.put("bytes_i", 0);
+        user.put("bytes_o", 0);
+        user.put("device_id", this.deviceId);
+
+        System.out.println("DEVICE_ID " + this.deviceId + "\n VIRTUAL_IP " + virtualIp);
+
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+        df.setTimeZone(tz);
+        String nowAsISO = df.format(new Date());
+        user.put("connected_since", nowAsISO);
+
+        users.put(email, user);
+
+        HashMap<String, Object> connection = new HashMap<String, Object>();
+
+        connection.put("server", server);
+        connection.put("users", users);
+
+        RESTResponse ur = this.post(url, connection, headers);
+
+
     }
 
 
