@@ -489,7 +489,8 @@
     <string name="extauth_not_configured">External Authneticator not configured</string>
     <string name="button">Button</string>
     <string name="button13">button13</string>
-    <string name="Artyr">Artyr</string>
+    <string name="btn_text1">Connect/Disconnect</string>
+    <string name="btn_text2">TestAPI</string>
     <string name="pin_label">PIN:</string>
     <string name="password_label">Password:</string>
 

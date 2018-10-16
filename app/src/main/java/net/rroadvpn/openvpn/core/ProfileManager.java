@@ -132,7 +132,7 @@ public class ProfileManager {
     }
 
     public static boolean isTempProfile() {
-        return mLastConnectedVpn != null && mLastConnectedVpn  == tmpprofile;
+        return mLastConnectedVpn != null && mLastConnectedVpn == tmpprofile;
     }
 
     public void saveProfile(Context context, VpnProfile profile) {
@@ -173,9 +173,9 @@ public class ProfileManager {
         vlist.add(TEMPORARY_PROFILE_FILENAME);
 
         for (String vpnentry : vlist) {
-            ObjectInputStream vpnfile=null;
+            ObjectInputStream vpnfile = null;
             try {
-                 vpnfile = new ObjectInputStream(context.openFileInput(vpnentry + ".vp"));
+                vpnfile = new ObjectInputStream(context.openFileInput(vpnentry + ".vp"));
                 VpnProfile vp = ((VpnProfile) vpnfile.readObject());
 
                 // Sanity check
@@ -194,7 +194,7 @@ public class ProfileManager {
                 if (!vpnentry.equals(TEMPORARY_PROFILE_FILENAME))
                     VpnStatus.logException("Loading VPN List", e);
             } finally {
-                if (vpnfile!=null) {
+                if (vpnfile != null) {
                     try {
                         vpnfile.close();
                     } catch (IOException e) {
@@ -259,7 +259,7 @@ public class ProfileManager {
     public static void updateLRU(Context c, VpnProfile profile) {
         profile.mLastUsed = System.currentTimeMillis();
         // LRU does not change the profile, no need for the service to refresh
-        if (profile!=tmpprofile)
+        if (profile != tmpprofile)
             saveProfile(c, profile, false, false);
     }
 }

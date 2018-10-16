@@ -2,10 +2,17 @@ package net.rroadvpn.activities;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.net.VpnService;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -15,8 +22,9 @@ import net.rroadvpn.model.VPNAppPreferences;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.VpnProfile;
 import net.rroadvpn.openvpn.activities.BaseActivity;
-import net.rroadvpn.openvpn.activities.DisconnectVPN;
 import net.rroadvpn.openvpn.core.ConnectionStatus;
+import net.rroadvpn.openvpn.core.IOpenVPNServiceInternal;
+import net.rroadvpn.openvpn.core.OpenVPNService;
 import net.rroadvpn.openvpn.core.Preferences;
 import net.rroadvpn.openvpn.core.ProfileManager;
 import net.rroadvpn.openvpn.core.VPNLaunchHelper;
@@ -43,6 +51,19 @@ public class NewMainActivity2 extends BaseActivity {
     // TODO
     private VpnProfile mSelectedProfile;
 
+    private IOpenVPNServiceInternal mService;
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            mService = IOpenVPNServiceInternal.Stub.asInterface(service);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mService = null;
+        }
+
+    };
 
     private static final int VPN_SERVICE_INTENT_PERMISSION = 70;
 
@@ -62,24 +83,74 @@ public class NewMainActivity2 extends BaseActivity {
 
         this.us = new UsersService(preferencesService, userServiceURL);
 
-        Button button = (Button) findViewById(R.id.fasd);
+        Button button = (Button) findViewById(R.id.connect_to_vpn);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getBaseContext(), "to another view", Toast.LENGTH_SHORT).show();
-                try {
-                    serverUuid = us.getRandomServerUuid(userUuid);
-                    String vpnConfig = us.getVpnConfigByUuid(userUuid, serverUuid);
-                    System.out.println("MY CONFIG" + vpnConfig);
-                    prepareToConnectVPN(vpnConfig);
-                } catch (UserServiceException e) {
-                    e.printStackTrace();
+                System.out.println(VpnStatus.isVPNActive());
+                if (VpnStatus.isVPNActive()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NewMainActivity2.this);
+                    builder.setTitle("А ТЫ УВЕРЕН?");
+                    builder.setMessage("ОТКЛЮЧЕНИЕ ВОДЫ");
+                    builder.setNegativeButton("Я ССЫЛКЛО", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            System.out.println("#####################################################  NEGATIVE BUTTON!!!!");
+                        }
+                    });
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            System.out.println("#####################################################  POSITIVE BUTTON!!!!");
+                            ProfileManager.setConntectedVpnProfileDisconnected(getBaseContext());
+                            if (mService != null) {
+                                try {
+                                    mService.stopVPN(false);
+//                                    getNewRandomVPNServer();
+                                } catch (RemoteException e) {
+                                    VpnStatus.logException(e);
+                                }
+                            }
+                        }
+                    });
+                    builder.setNeutralButton("RECONNECT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            System.out.println("#####################################################  RECONNECT BUTTON!!!!");
+                        }
+                    });
+                    builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialogInterface) {
+                            System.out.println("#####################################################  CANCEL BUTTON!!!!");
+                        }
+                    });
+                    builder.show();
+                } else {
+                    getNewRandomVPNServer();
                 }
-
 
             }
         });
 
+    }
+
+
+    private void getNewRandomVPNServer() {
+        try {
+            serverUuid = us.getRandomServerUuid(userUuid);
+            // TODO проверить наличие профиля в ПрофильМенеджере и если нет то получать через API
+            String vpnConfig = us.getVpnConfigByUuid(userUuid, serverUuid);
+            System.out.println("MY CONFIG" + vpnConfig);
+            prepareToConnectVPN(vpnConfig);
+        } catch (UserServiceException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean checkProfileExisting(String serverUuid) {
+        // TODO
+        return false;
     }
 
     private ProfileManager getPM() {
@@ -125,13 +196,12 @@ public class NewMainActivity2 extends BaseActivity {
         Toast.makeText(getBaseContext(), "YOUR VIRTUAL IP IS: " + virtualIP, Toast.LENGTH_LONG).show();
 
         try {
+            //TODO cut second UsersService init
             String apiURL = "http://rroadvpn.net:61885";
             String apiVer = "v1";
 
             String usersAPIResourceName = "users";
             String userServiceURL = apiURL + "/api/" + apiVer + "/" + usersAPIResourceName;
-
-            setContentView(R.layout.new_main_activity2);
 
             this.preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
             this.userUuid = preferencesService.getString(VPNAppPreferences.USER_UUID);
@@ -167,7 +237,7 @@ public class NewMainActivity2 extends BaseActivity {
             this.mSelectedProfile = profile;
 
             EXTRA_KEY = profile.getUUID().toString();
-                
+
         } catch (OpenVPNProfileException e) {
             e.printStackTrace();
             return;
@@ -228,5 +298,13 @@ public class NewMainActivity2 extends BaseActivity {
                 System.out.println("ActivityNotFoundException PIZDEC!!!!!!!!!!!");
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = new Intent(this, OpenVPNService.class);
+        intent.setAction(OpenVPNService.START_SERVICE);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 }

@@ -28,12 +28,10 @@ public class PreferencesService {
     }
 
     public String getString(String prefLabel) {
-        Toast.makeText(this.context, "Text returned", Toast.LENGTH_SHORT).show();
         return this.preferences.getString(prefLabel, "");
     }
 
     public Integer getInteger(String prefLabel) {
-        Toast.makeText(this.context, "Text returned", Toast.LENGTH_SHORT).show();
         return this.preferences.getInt(prefLabel, -1);
     }
 

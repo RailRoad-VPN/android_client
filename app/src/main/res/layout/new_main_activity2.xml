@@ -5,10 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <Button
-        android:id="@+id/fasd"
+        android:id="@+id/connect_to_vpn"
         android:layout_width="match_parent"
-        android:layout_height="369dp"
-        android:text="@string/Artyr" />
+        android:layout_height="wrap_content"
+        android:text="@string/btn_text1" />
+
+    <Button
+        android:id="@+id/test_api"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_text2" />
 </LinearLayout>
 
