@@ -2,21 +2,12 @@ package net.rroadvpn.activities;
 
 
 import android.content.Intent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
 
 import net.rroadvpn.activities.pin.InputPinView;
-import net.rroadvpn.model.Preferences;
-import net.rroadvpn.openvpn.LaunchVPN;
+import net.rroadvpn.model.VPNAppPreferences;
 import net.rroadvpn.openvpn.R;
-import net.rroadvpn.openvpn.VpnProfile;
 import net.rroadvpn.openvpn.activities.BaseActivity;
-import net.rroadvpn.openvpn.activities.DisconnectVPN;
-import net.rroadvpn.openvpn.core.ProfileManager;
-import net.rroadvpn.openvpn.core.VpnStatus;
 import net.rroadvpn.services.PreferencesService;
-import net.rroadvpn.services.UsersService;
 
 public class NewMainActivity extends BaseActivity {
 
@@ -28,9 +19,9 @@ public class NewMainActivity extends BaseActivity {
 
         setContentView(R.layout.new_main_activity);
 
-        PreferencesService preferencesService = new PreferencesService(this, Preferences.PREF_USER_GLOBAL_KEY);
+        PreferencesService preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
 
-        String device_token = preferencesService.getString(Preferences.DEVICE_TOKEN);
+        String device_token = preferencesService.getString(VPNAppPreferences.DEVICE_TOKEN);
 
         if (device_token.equals("")) {
             Intent intent = new Intent(getBaseContext(), InputPinView.class);

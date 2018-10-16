@@ -1,6 +1,6 @@
 package net.rroadvpn.model;
 
-public final class Preferences {
+public final class VPNAppPreferences {
     public static final String PREF_USER_GLOBAL_KEY = "user_details";
     public static final String USER_UUID = "user_uuid";
     public static final String DEVICE_ID = "device_id";

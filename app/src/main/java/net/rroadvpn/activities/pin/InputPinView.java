@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import net.rroadvpn.activities.NewMainActivity2;
 import net.rroadvpn.exception.UserServiceException;
-import net.rroadvpn.model.Preferences;
+import net.rroadvpn.model.VPNAppPreferences;
 import net.rroadvpn.model.User;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.activities.BaseActivity;
@@ -32,10 +32,9 @@ public class InputPinView extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.preferencesService = new PreferencesService(this, Preferences.PREF_USER_GLOBAL_KEY);
-        String apiURL = "http://internal.novicorp.com:61885";
+        this.preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
+        String apiURL = "http://rroadvpn.net:61885";
         String apiVer = "v1";
-
         String usersAPIResourceName = "users";
         String userServiceURL = apiURL + "/api/" + apiVer + "/" + usersAPIResourceName;
         this.usersService = new UsersService(preferencesService, userServiceURL);
@@ -85,7 +84,7 @@ public class InputPinView extends BaseActivity {
                         e.printStackTrace();
                     }
 
-                    String userUuid = preferencesService.getString(Preferences.USER_UUID);
+                    String userUuid = preferencesService.getString(VPNAppPreferences.USER_UUID);
                     //test post userDevice
                     try {
                         usersService.createUserDevice(userUuid);
