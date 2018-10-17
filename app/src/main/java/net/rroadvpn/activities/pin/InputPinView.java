@@ -33,10 +33,8 @@ public class InputPinView extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         this.preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
-        String apiURL = "http://rroadvpn.net:61885";
-        String apiVer = "v1";
-        String usersAPIResourceName = "users";
-        String userServiceURL = apiURL + "/api/" + apiVer + "/" + usersAPIResourceName;
+        String userServiceURL = VPNAppPreferences.getUserServiceURL( "users");
+
         this.usersService = new UsersService(preferencesService, userServiceURL);
 
         setContentView(R.layout.input_pin_view);

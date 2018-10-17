@@ -50,6 +50,7 @@ public class UsersService extends RESTService {
                 try {
                     User user = new User(data);
                     this.preferencesService.save(VPNAppPreferences.USER_UUID, user.getUuid());
+                    this.preferencesService.save(VPNAppPreferences.USER_EMAIL, user.getEmail());
                     return user;
                 } catch (JSONException e) {
                     e.printStackTrace();

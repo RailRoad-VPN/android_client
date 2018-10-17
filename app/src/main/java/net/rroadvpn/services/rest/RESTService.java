@@ -10,6 +10,8 @@ import net.rroadvpn.exception.RESTException;
 import net.rroadvpn.model.rest.RESTResponse;
 import net.rroadvpn.services.PreferencesService;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,6 +46,7 @@ public class RESTService implements RESTServiceI {
         builder.connectTimeout(30, TimeUnit.SECONDS);
         builder.readTimeout(30, TimeUnit.SECONDS);
         builder.writeTimeout(30, TimeUnit.SECONDS);
+        builder.retryOnConnectionFailure(true);
         this.client = builder.build();
     }
 

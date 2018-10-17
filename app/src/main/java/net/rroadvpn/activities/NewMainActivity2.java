@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.net.VpnService;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.view.View;
@@ -69,11 +70,8 @@ public class NewMainActivity2 extends BaseActivity {
 
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String apiURL = "http://rroadvpn.net:61885";
-        String apiVer = "v1";
 
-        String usersAPIResourceName = "users";
-        String userServiceURL = apiURL + "/api/" + apiVer + "/" + usersAPIResourceName;
+        String userServiceURL = VPNAppPreferences.getUserServiceURL( "users");
 
         setContentView(R.layout.new_main_activity2);
 
@@ -83,8 +81,8 @@ public class NewMainActivity2 extends BaseActivity {
 
         this.us = new UsersService(preferencesService, userServiceURL);
 
-        Button button = (Button) findViewById(R.id.connect_to_vpn);
-        button.setOnClickListener(new View.OnClickListener() {
+        Button connecToVPNBtn = (Button) findViewById(R.id.connect_to_vpn);
+        connecToVPNBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 System.out.println(VpnStatus.isVPNActive());
@@ -130,6 +128,37 @@ public class NewMainActivity2 extends BaseActivity {
                     getNewRandomVPNServer();
                 }
 
+            }
+        });
+
+        Button testAPIBtn = (Button) findViewById(R.id.test_api);
+        testAPIBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    String randomServerUuid = us.getRandomServerUuid(userUuid);
+                } catch (UserServiceException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    String randomServerUuid = us.getRandomServerUuid(userUuid);
+                } catch (UserServiceException e) {
+                    e.printStackTrace();
+                }
+
+//                Handler handler = new Handler();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        try {
+//                            String randomServerUuid = us.getRandomServerUuid(userUuid);
+//                            us.createUserDevice(userUuid);
+//                        } catch (UserServiceException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                }, 20000);
             }
         });
 
@@ -197,28 +226,24 @@ public class NewMainActivity2 extends BaseActivity {
 
         try {
             //TODO cut second UsersService init
-            String apiURL = "http://rroadvpn.net:61885";
-            String apiVer = "v1";
 
-            String usersAPIResourceName = "users";
-            String userServiceURL = apiURL + "/api/" + apiVer + "/" + usersAPIResourceName;
+            String userServiceURL = VPNAppPreferences.getUserServiceURL( "users");
 
             this.preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
             this.userUuid = preferencesService.getString(VPNAppPreferences.USER_UUID);
 
-
             this.us = new UsersService(preferencesService, userServiceURL);
 
-            //todo email, device_ip
+            //todo device_ip
             System.out.println("Update user device begin");
             this.us.updateUserDevice(this.userUuid, this.preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID), virtualIP, "1.1.1.1");
+
+            String email = this.preferencesService.getString(VPNAppPreferences.USER_EMAIL);
             System.out.println("Create connection begin");
-            this.us.createConnection(this.serverUuid, virtualIP, "1.1.1.1", "t@t.t");
+            this.us.createConnection(this.serverUuid, virtualIP, "1.1.1.1", email);
         } catch (UserServiceException e) {
             e.printStackTrace();
         }
-
-        Toast.makeText(getBaseContext(), "PUT COMPLETED SUCCESSFULLY!", Toast.LENGTH_SHORT).show();
     }
 
     public void prepareToConnectVPN(String configBase64) {
