@@ -26,9 +26,11 @@ public class NewMainActivity extends BaseActivity {
         if (device_token.equals("")) {
             Intent intent = new Intent(getBaseContext(), InputPinView.class);
             startActivityForResult(intent, REQUIRE_PIN);
+            finish();
         } else {
             Intent intent = new Intent(getBaseContext(), NewMainActivity2.class);
             startActivityForResult(intent, START_VPN);
+            finish();
         }
 
 

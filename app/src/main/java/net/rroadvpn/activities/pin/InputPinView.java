@@ -3,13 +3,21 @@ package net.rroadvpn.activities.pin;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import net.rroadvpn.activities.NewMainActivity2;
@@ -21,6 +29,8 @@ import net.rroadvpn.openvpn.activities.BaseActivity;
 import net.rroadvpn.services.PreferencesService;
 import net.rroadvpn.services.UsersService;
 
+import java.util.Objects;
+
 import static android.support.constraint.Constraints.TAG;
 
 public class InputPinView extends BaseActivity {
@@ -31,6 +41,7 @@ public class InputPinView extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(this.getActionBar()).hide();
 
         this.preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
         String userServiceURL = VPNAppPreferences.getUserServiceURL( "users");
@@ -86,12 +97,13 @@ public class InputPinView extends BaseActivity {
                     //test post userDevice
                     try {
                         usersService.createUserDevice(userUuid);
-                        Intent intent = new Intent(getBaseContext(), NewMainActivity2.class);
-                        startActivity(intent);
                     } catch (UserServiceException e) {
                         Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
+                    Intent intent = new Intent(getBaseContext(), NewMainActivity2.class);
+                    startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -102,6 +114,26 @@ public class InputPinView extends BaseActivity {
 
         pinView.setFocusableInTouchMode(true);
         pinView.requestFocus();
+
+        SpannableString ss = new SpannableString(getString(R.string.enter_a_pin_or_sign_up));
+        ClickableSpan clickableSpan = new ClickableSpan() {
+            @Override
+            public void onClick(View textView) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+                startActivity(browserIntent);
+            }
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+            }
+        };
+        ss.setSpan(clickableSpan, 15, 22, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        TextView textView = (TextView) findViewById(R.id.pin_tip);
+        textView.setText(ss);
+        textView.setMovementMethod(LinkMovementMethod.getInstance());
+        textView.setHighlightColor(Color.TRANSPARENT);
     }
 
     @Override

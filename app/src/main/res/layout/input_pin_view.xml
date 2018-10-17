@@ -1,23 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:context="net.rroadvpn.activities.pin.InputPinView">
+    android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="@string/welcome"
+        android:textAlignment="center"
+        android:textSize="36sp" />
+    <TextView
+        android:id="@+id/pin_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/welcome"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:text="@string/enter_a_pin_or_sign_up" />
 
     <net.rroadvpn.activities.pin.PinView
         android:id="@+id/pinView"
         style="@style/PinWidget.PinView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/common_padding"
+        android:layout_height="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="144dp"
+        android:cursorVisible="false"
         android:inputType="number"
-        android:textColor="@color/text_colors"
-        android:cursorVisible="false" />
+        android:textAlignment="center"
+        android:textColor="@color/text_colors" />
 
-</LinearLayout>
+
+
+</RelativeLayout>

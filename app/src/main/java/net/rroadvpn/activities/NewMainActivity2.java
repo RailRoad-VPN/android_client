@@ -81,6 +81,10 @@ public class NewMainActivity2 extends BaseActivity {
 
         this.us = new UsersService(preferencesService, userServiceURL);
 
+        Intent intent = new Intent(this, OpenVPNService.class);
+        intent.setAction(OpenVPNService.START_SERVICE);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+
         Button connecToVPNBtn = (Button) findViewById(R.id.connect_to_vpn);
         connecToVPNBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -328,8 +332,11 @@ public class NewMainActivity2 extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Intent intent = new Intent(this, OpenVPNService.class);
-        intent.setAction(OpenVPNService.START_SERVICE);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unbindService(mConnection);
     }
 }

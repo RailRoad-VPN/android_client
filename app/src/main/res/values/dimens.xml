@@ -17,7 +17,8 @@
     <dimen name="switchbar_pad">16dp</dimen>
     <dimen name="vpn_setting_padding">16dp</dimen>
 
-    <dimen name="pv_pin_view_item_size">48dp</dimen>
+    <!--<dimen name="pv_pin_view_item_size">48dp</dimen>-->
+    <dimen name="pv_pin_view_item_size">60dp</dimen>
     <dimen name="pv_pin_view_item_radius">5dp</dimen>
     <dimen name="pv_pin_view_item_spacing">5dp</dimen>
     <dimen name="pv_pin_view_item_line_width">2dp</dimen>
