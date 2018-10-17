@@ -44,7 +44,7 @@ public class InputPinView extends BaseActivity {
         Objects.requireNonNull(this.getActionBar()).hide();
 
         this.preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
-        String userServiceURL = VPNAppPreferences.getUserServiceURL( "users");
+        String userServiceURL = VPNAppPreferences.getUserServiceURL("users");
 
         this.usersService = new UsersService(preferencesService, userServiceURL);
 
@@ -79,6 +79,9 @@ public class InputPinView extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d(TAG, "onTextChanged() called with: s = [" + s + "], start = [" + start + "], before = [" + before + "], count = [" + count + "]");
+                if (start == 3 && before == 1) {
+                    pinView.setItemBackgroundColor(getResources().getColor(R.color.line_selected));
+                }
             }
 
             @Override
@@ -89,8 +92,12 @@ public class InputPinView extends BaseActivity {
                         User user = usersService.getUserByPinCode(Integer.valueOf(s.toString()));
                         System.out.println(user.getEmail());
                     } catch (UserServiceException e) {
-                        Toast.makeText(getBaseContext(), "wrong pin?", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(), "Wrong pin", Toast.LENGTH_LONG).show();
+                        pinView.setItemBackgroundColor(getResources().getColor(R.color.wrong_pin));
+
+
                         e.printStackTrace();
+                        return;
                     }
 
                     String userUuid = preferencesService.getString(VPNAppPreferences.USER_UUID);
@@ -122,6 +129,7 @@ public class InputPinView extends BaseActivity {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
                 startActivity(browserIntent);
             }
+
             @Override
             public void updateDrawState(TextPaint ds) {
                 super.updateDrawState(ds);
