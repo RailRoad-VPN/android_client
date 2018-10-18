@@ -87,9 +87,9 @@ public class NewMainActivity2 extends BaseActivity {
 
         this.us = new UsersService(preferencesService, userServiceURL);
 
-        ImageButton connecToVPNBtn = (ImageButton) findViewById(R.id.connect_to_vpn);
+        ImageButton connectToVPNBtn = findViewById(R.id.connect_to_vpn);
 
-        connecToVPNBtn.setOnClickListener(new View.OnClickListener() {
+        connectToVPNBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
