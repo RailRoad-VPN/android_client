@@ -1,6 +1,6 @@
-This file documents the support in OpenVPN for Android 4.0 and up.
+This file documents the support in RailRoad VPN 4.0 and up.
 
-This support is primarily used in the "OpenVPN for Android" app
+This support is primarily used in the "RailRoad VPN" app
 (https://github.com/schwabe/ics-openvpn). For building see the developer
 README: https://github.com/schwabe/ics-openvpn/blob/master/doc/README.txt
 
@@ -85,7 +85,7 @@ call the VPNService's establish() method to receive a fd which in
 turn is send to the OpenVPN process as ancillary message to the
 "needok 'OPENTUN' ok' response.
 
-The OpenVPN for Android UI extensively uses other features that
+The RailRoad VPN UI extensively uses other features that
 are not specific to Android but are rarely used on other platform.
 For example using SIGUSR1 and management-hold to restart, pause,
 continue the VPN on network changes or the external key management

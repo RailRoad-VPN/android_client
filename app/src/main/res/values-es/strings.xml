@@ -275,7 +275,7 @@ hacia/de Móvil)</string>
   <string name="tls_remote_deprecated">tls-remote (OBSOLETO)</string>
   <string name="help_translate">Tu puedes ayudar a traducir visitando http://crowdin.net/project/ics-openvpn/invite</string>
   <string name="prompt">%1$s intentos de controlar %2$s</string>
-  <string name="remote_warning">Al proceder, le estás proporcionando permiso a la aplicación para controlar completamente OpenVPN for Android e interceptar todo el tráfico de la red.<b>NO aceptar a menos que confíes en la aplicación.</b> De otro modo, corres el riesgo de que tus datos se vean comprometidos por software malicioso.\"</string>
+  <string name="remote_warning">Al proceder, le estás proporcionando permiso a la aplicación para controlar completamente RailRoad VPN e interceptar todo el tráfico de la red.<b>NO aceptar a menos que confíes en la aplicación.</b> De otro modo, corres el riesgo de que tus datos se vean comprometidos por software malicioso.\"</string>
   <string name="remote_trust">Confío en esta aplicación.</string>
   <string name="no_external_app_allowed">La aplicación no permite usar API externo</string>
   <string name="allowed_apps">Aplicaciones autorizadas: %s</string>
@@ -295,7 +295,7 @@ hacia/de Móvil)</string>
   <string name="vpnbehaviour">Comportamiento de VPN</string>
   <string name="allow_vpn_changes">Permitir cambios a los perfiles VPN</string>
   <string name="hwkeychain">Tecla Física:</string>
-  <string name="permission_icon_app">Ícono de la aplicación intentando usar OpenVPN for Android</string>
+  <string name="permission_icon_app">Ícono de la aplicación intentando usar RailRoad VPN</string>
   <string name="faq_vpndialog43">"Empezando con Android 4.3, la confirmación de VPN está protegida contra \"aplicaciones superpuestas\". Esto resulta en que la ventana de diálogo no reaccione a los toques de pantalla. Si tienes una aplicación que sea superpuesta, es lo que puede ocasionar este problema. Si encuentras una aplicación ofensiva, contactar al autor de la misma. Este problema afecta a todas las aplicaciones VPN en Android 4.3 y superior. Ver también &lt;a href=\"http://code.google.com/p/ics-openvpn/issues/detail?id=185\"&gt;Issue 185&lt;a&gt; para más detalles"</string>
   <string name="faq_vpndialog43_title">Ventana de diálogo de confirmación VPN en Android 4.3 y superior</string>
   <string name="donatePlayStore">Alternativamente usted puede enviar una donación con el Play Store:</string>

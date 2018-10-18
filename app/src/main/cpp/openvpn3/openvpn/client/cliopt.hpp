@@ -363,7 +363,7 @@ namespace openvpn {
 #endif
 #if defined(OPENVPN_PLATFORM_ANDROID) && !defined(NO_ROUTE_EXCLUDE_EMULATION)
 	    // Android VPN API doesn't support excluded routes, so we must emulate them
-        // OpenVPN for Android does this on its own, so we allow to disable this here
+        // RailRoad VPN does this on its own, so we allow to disable this here
         tunconf->eer_factory.reset(new EmulateExcludeRouteFactoryImpl(false));
 #endif
 	    if (config.tun_persist)

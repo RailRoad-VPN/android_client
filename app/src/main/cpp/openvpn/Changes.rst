@@ -136,7 +136,7 @@ keying-material-exporter
 Android platform support
     Support for running on Android using Android's VPNService API has been added.
     See doc/android.txt for more details. This support is primarily used in
-    the OpenVPN for Android app (https://github.com/schwabe/ics-openvpn)
+    the RailRoad VPN app (https://github.com/schwabe/ics-openvpn)
 
 AIX platform support
     AIX platform support has been added. The support only includes tap

@@ -28,8 +28,8 @@ interface IOpenVPNAPIService {
 	Intent prepare (in String packagename);
 	
 	/** Used to trigger to the Android VPN permission dialog (VPNService.prepare()) in advance,
-	 * if this return null OpenVPN for ANdroid already has the permissions otherwise you can start the returned Intent
-	 * to let OpenVPN for Android request the permission */
+	 * if this return null RailRoad VPN already has the permissions otherwise you can start the returned Intent
+	 * to let RailRoad VPN request the permission */
 	Intent prepareVPNService ();
 
 	/* Disconnect the VPN */
@@ -56,7 +56,7 @@ interface IOpenVPNAPIService {
 
 	/** Request a socket to be protected as a VPN socket would be. Useful for creating
 	  * a helper socket for an app controlling OpenVPN
-	  * Before calling this function you should make sure OpenVPN for Android may actually
+	  * Before calling this function you should make sure RailRoad VPN may actually
 	  * this function by checking if prepareVPNService returns null; */
 	boolean protectSocket(in ParcelFileDescriptor fd);
 
