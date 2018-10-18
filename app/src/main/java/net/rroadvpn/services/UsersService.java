@@ -131,6 +131,8 @@ public class UsersService extends RESTService {
     }
 
     public String getRandomServerUuid(String userUuid) throws UserServiceException {
+        System.out.println("getRandomServerUuid method");
+
         String url = String.format("%s/%s/servers?random", this.getServiceURL(), String.valueOf(userUuid));
         Map<String, String> headers = new HashMap<String, String>();
 
@@ -161,6 +163,8 @@ public class UsersService extends RESTService {
     }
 
     public String getVpnConfigByUuid(String userUuid, String serverUuid) throws UserServiceException {
+        System.out.println(String.format("getRandomServerUuid method with parameters userUuid: %s, serverUuid: %s", userUuid, serverUuid));
+
         String url = String.format("%s/%s/servers/%s/configurations?vpn_type_id=%s&platform_id=%s",
                 this.getServiceURL(), userUuid, serverUuid, VPNAppPreferences.VPN_TYPE_ID,
                 VPNAppPreferences.DEVICE_PLATFORM_ID);

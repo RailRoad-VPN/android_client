@@ -10,16 +10,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.VpnService;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.model.VPNAppPreferences;
+import net.rroadvpn.model.rest.RESTResponse;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.VpnProfile;
 import net.rroadvpn.openvpn.activities.BaseActivity;
@@ -34,6 +38,8 @@ import net.rroadvpn.services.PreferencesService;
 import net.rroadvpn.services.UsersService;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+
 
 public class NewMainActivity2 extends BaseActivity {
     private UsersService us;
@@ -71,7 +77,7 @@ public class NewMainActivity2 extends BaseActivity {
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String userServiceURL = VPNAppPreferences.getUserServiceURL( "users");
+        String userServiceURL = VPNAppPreferences.getUserServiceURL("users");
 
         setContentView(R.layout.new_main_activity2);
 
@@ -81,14 +87,16 @@ public class NewMainActivity2 extends BaseActivity {
 
         this.us = new UsersService(preferencesService, userServiceURL);
 
-        Intent intent = new Intent(this, OpenVPNService.class);
-        intent.setAction(OpenVPNService.START_SERVICE);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        ImageButton connecToVPNBtn = (ImageButton) findViewById(R.id.connect_to_vpn);
 
-        Button connecToVPNBtn = (Button) findViewById(R.id.connect_to_vpn);
         connecToVPNBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+//                connecToVPNBtn.setBackgroundResource(R.drawable.black_yellow_semaphore_animation);
+//                ((AnimationDrawable) connecToVPNBtn.getBackground()).start();
+
+
                 System.out.println(VpnStatus.isVPNActive());
                 if (VpnStatus.isVPNActive()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(NewMainActivity2.this);
@@ -106,9 +114,10 @@ public class NewMainActivity2 extends BaseActivity {
                             System.out.println("#####################################################  POSITIVE BUTTON!!!!");
                             ProfileManager.setConntectedVpnProfileDisconnected(getBaseContext());
                             if (mService != null) {
+
                                 try {
                                     mService.stopVPN(false);
-//                                    getNewRandomVPNServer();
+                                    reInitUserServiceCrutch();
                                 } catch (RemoteException e) {
                                     VpnStatus.logException(e);
                                 }
@@ -170,6 +179,7 @@ public class NewMainActivity2 extends BaseActivity {
 
 
     private void getNewRandomVPNServer() {
+        System.out.println("getNewRandomVPNServer method");
         try {
             serverUuid = us.getRandomServerUuid(userUuid);
             // TODO проверить наличие профиля в ПрофильМенеджере и если нет то получать через API
@@ -230,14 +240,7 @@ public class NewMainActivity2 extends BaseActivity {
 
         try {
             //TODO cut second UsersService init
-
-            String userServiceURL = VPNAppPreferences.getUserServiceURL( "users");
-
-            this.preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
-            this.userUuid = preferencesService.getString(VPNAppPreferences.USER_UUID);
-
-            this.us = new UsersService(preferencesService, userServiceURL);
-
+            reInitUserServiceCrutch();
             //todo device_ip
             System.out.println("Update user device begin");
             this.us.updateUserDevice(this.userUuid, this.preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID), virtualIP, "1.1.1.1");
@@ -251,12 +254,16 @@ public class NewMainActivity2 extends BaseActivity {
     }
 
     public void prepareToConnectVPN(String configBase64) {
+        System.out.println("prepareToConnectVPN");
+
+        System.out.println("decode config from bas64");
         byte[] decoded = android.util.Base64.decode(configBase64, android.util.Base64.DEFAULT);
 
         OpenVPNProfileManager openVPNProfileManager = new OpenVPNProfileManager(decoded);
 
         VpnProfile profile;
         try {
+            System.out.println("work with profile");
             profile = openVPNProfileManager.getVPNProfile();
             ProfileManager pm = getPM();
             pm.addProfile(profile);
@@ -329,11 +336,27 @@ public class NewMainActivity2 extends BaseActivity {
         }
     }
 
+    protected void reInitUserServiceCrutch() {
+        //TODO cut second UsersService init
+
+        String userServiceURL = VPNAppPreferences.getUserServiceURL("users");
+
+        this.preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
+        this.userUuid = preferencesService.getString(VPNAppPreferences.USER_UUID);
+
+        this.us = new UsersService(preferencesService, userServiceURL);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
 
+        Intent intent = new Intent(this, OpenVPNService.class);
+        intent.setAction(OpenVPNService.START_SERVICE);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
