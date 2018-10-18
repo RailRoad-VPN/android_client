@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import net.rroadvpn.activities.pin.InputPinView;
 import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.model.VPNAppPreferences;
 import net.rroadvpn.model.rest.RESTResponse;
@@ -92,10 +93,8 @@ public class NewMainActivity2 extends BaseActivity {
         connectToVPNBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-//                connecToVPNBtn.setBackgroundResource(R.drawable.black_yellow_semaphore_animation);
-//                ((AnimationDrawable) connecToVPNBtn.getBackground()).start();
-
+                connectToVPNBtn.setBackgroundResource(R.drawable.black_yellow_semaphore_animation);
+                ((AnimationDrawable) connectToVPNBtn.getBackground()).start();
 
                 System.out.println(VpnStatus.isVPNActive());
                 if (VpnStatus.isVPNActive()) {
