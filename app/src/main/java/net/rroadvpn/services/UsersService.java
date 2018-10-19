@@ -162,7 +162,7 @@ public class UsersService extends RESTService {
         return null;
     }
 
-    public String getVpnConfigByUuid(String userUuid, String serverUuid) throws UserServiceException {
+    public String getVPNConfigurationByUserAndServer(String userUuid, String serverUuid) throws UserServiceException {
         System.out.println(String.format("getRandomServerUuid method with parameters userUuid: %s, serverUuid: %s", userUuid, serverUuid));
 
         String url = String.format("%s/%s/servers/%s/configurations?vpn_type_id=%s&platform_id=%s",
@@ -179,22 +179,12 @@ public class UsersService extends RESTService {
         RESTResponse ur = this.get(url, headers);
 
         if (ur.getStatus().equals("success")) {
-            Object valueObj = ur.getData();
-            if (valueObj instanceof JSONObject) {
-                JSONObject data = (JSONObject) valueObj;
-                try {
-                    return data.getString("configuration");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return null;
-                }
-            } else if (valueObj instanceof JSONArray) {
-                throw new UserServiceException("got more than one vpn config");
+            JSONObject valueObj = (JSONObject) ur.getData();
+            if (valueObj.has("configuration")) {
+                return valueObj.optString("configuration");
             }
-        } else {
-            throw new UserServiceException("get vpn config failed");
         }
-        return null;
+        throw new UserServiceException("get vpn config failed");
     }
 
     public void updateUserDevice(String userUuid, String userDeviceUuid, String virtualIp, String deviceIp) throws UserServiceException {
