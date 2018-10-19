@@ -1,21 +1,29 @@
 package net.rroadvpn.services.rest;
 
 import android.os.AsyncTask;
+import android.os.NetworkOnMainThreadException;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import net.rroadvpn.exception.RESTException;
+import net.rroadvpn.model.rest.RESTError;
 import net.rroadvpn.model.rest.RESTResponse;
 import net.rroadvpn.services.PreferencesService;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
@@ -23,9 +31,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class RESTService implements RESTServiceI {
 
@@ -60,17 +72,43 @@ public class RESTService implements RESTServiceI {
             this.headers.putAll(headers);
         }
 
-        RESTResponse apiResponse = null;
+        Headers headersTgt = Headers.of(this.headers);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .headers(headersTgt)
+                .get()
+                .build();
+
+        Response response;
         try {
-            apiResponse = new RESTCallAsync(this.client).execute("GET", url, this.headers).get();
-        } catch (ExecutionException e) {
+            response = this.client.newCall(request).execute();
+        } catch (IOException e) {
             e.printStackTrace();
-            throw new RESTException("execution exception", e);
-        } catch (InterruptedException e) {
+            throw new RESTException("Stub");
+        } catch (NetworkOnMainThreadException e) {
             e.printStackTrace();
-            throw new RESTException("interrupted exception", e);
+            throw new RESTException("Stub");
         }
-        return apiResponse;
+
+        String responseBodyString;
+        try {
+            ResponseBody body = response.body();
+            if (body == null) {
+                throw new RESTException("Stub");
+            } else {
+                responseBodyString = body.string();
+            }
+        } catch (IOException e) {
+            throw new RESTException("Stub");
+        }
+
+        try {
+            return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString, response.headers());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new RESTException("Stub");
+        }
     }
 
     @Override
@@ -84,19 +122,43 @@ public class RESTService implements RESTServiceI {
         }
 
         RequestBody requestBody = prepareRequestBody(data);
-        RESTResponse apiResponse;
+        Headers headersTgt = Headers.of(this.headers);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .headers(headersTgt)
+                .put(requestBody)
+                .build();
+
+        Response response;
         try {
-            RESTCallAsync restCallAsync = new RESTCallAsync(this.client);
-            AsyncTask<Object, Void, RESTResponse> put = restCallAsync.execute("PUT", url, this.headers, requestBody);
-            apiResponse = put.get();
-        } catch (ExecutionException e) {
+            response = this.client.newCall(request).execute();
+        } catch (IOException e) {
             e.printStackTrace();
-            throw new RESTException("execution exception", e);
-        } catch (InterruptedException e) {
+            throw new RESTException("Stub");
+        } catch (NetworkOnMainThreadException e) {
             e.printStackTrace();
-            throw new RESTException("interrupted exception", e);
+            throw new RESTException("Stub");
         }
-        return apiResponse;
+
+        String responseBodyString;
+        try {
+            ResponseBody body = response.body();
+            if (body == null) {
+                throw new RESTException("Stub");
+            } else {
+                responseBodyString = body.string();
+            }
+        } catch (IOException e) {
+            throw new RESTException("Stub");
+        }
+
+        try {
+            return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString, response.headers());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new RESTException("Stub");
+        }
     }
 
     @Override
@@ -110,17 +172,43 @@ public class RESTService implements RESTServiceI {
         }
 
         RequestBody requestBody = prepareRequestBody(data);
-        RESTResponse apiResponse;
+        Headers headersTgt = Headers.of(this.headers);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .headers(headersTgt)
+                .post(requestBody)
+                .build();
+
+        Response response;
         try {
-            apiResponse = new RESTCallAsync(this.client).execute("POST", url, this.headers, requestBody).get();
-        } catch (ExecutionException e) {
+            response = this.client.newCall(request).execute();
+        } catch (IOException e) {
             e.printStackTrace();
-            throw new RESTException("execution exception", e);
-        } catch (InterruptedException e) {
+            throw new RESTException("Stub");
+        } catch (NetworkOnMainThreadException e) {
             e.printStackTrace();
-            throw new RESTException("interrupted exception", e);
+            throw new RESTException("Stub");
         }
-        return apiResponse;
+
+        String responseBodyString;
+        try {
+            ResponseBody body = response.body();
+            if (body == null) {
+                throw new RESTException("Stub");
+            } else {
+                responseBodyString = body.string();
+            }
+        } catch (IOException e) {
+            throw new RESTException("Stub");
+        }
+
+        try {
+            return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString, response.headers());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new RESTException("Stub");
+        }
     }
 
     @Override
@@ -132,17 +220,43 @@ public class RESTService implements RESTServiceI {
             this.headers.putAll(headers);
         }
         RequestBody requestBody = prepareRequestBody(data);
-        RESTResponse apiResponse;
+        Headers headersTgt = Headers.of(this.headers);
+
+        Request request = new Request.Builder()
+                .url(url)
+                .headers(headersTgt)
+                .delete(requestBody)
+                .build();
+
+        Response response;
         try {
-            apiResponse = new RESTCallAsync(this.client).execute("DELETE", url, this.headers, requestBody).get();
-        } catch (ExecutionException e) {
+            response = this.client.newCall(request).execute();
+        } catch (IOException e) {
             e.printStackTrace();
-            throw new RESTException("execution exception", e);
-        } catch (InterruptedException e) {
+            throw new RESTException("Stub");
+        } catch (NetworkOnMainThreadException e) {
             e.printStackTrace();
-            throw new RESTException("interrupted exception", e);
+            throw new RESTException("Stub");
         }
-        return apiResponse;
+
+        String responseBodyString;
+        try {
+            ResponseBody body = response.body();
+            if (body == null) {
+                throw new RESTException("Stub");
+            } else {
+                responseBodyString = body.string();
+            }
+        } catch (IOException e) {
+            throw new RESTException("Stub");
+        }
+
+        try {
+            return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString, response.headers());
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new RESTException("Stub");
+        }
     }
 
     private RequestBody prepareRequestBody(Map<String, Object> data) {
@@ -171,6 +285,50 @@ public class RESTService implements RESTServiceI {
         }
 
         return formBodyBuilder.build();
+    }
+
+    private RESTResponse parseResponse(int responseCode, boolean isOk, String responseBodyString,
+                                       Headers headers) throws JSONException {
+        System.out.println("!\nthis is response:\n" + responseBodyString);
+        JSONObject jsonObj = new JSONObject(responseBodyString);
+
+        String status = (String) jsonObj.get("status");
+
+        RESTResponse restResponse = new RESTResponse(status, responseCode);
+
+        restResponse.setOk(isOk);
+
+        if (isOk) {
+            if (jsonObj.has("data")) {
+                JSONObject data = jsonObj.getJSONObject("data");
+                restResponse.setData(data);
+            }
+
+            if (jsonObj.has("limit")) {
+                Integer limit = (Integer) jsonObj.get("limit");
+                restResponse.setLimit(limit);
+            }
+
+            if (jsonObj.has("offset")) {
+                Integer offset = (Integer) jsonObj.get("offset");
+                restResponse.setLimit(offset);
+            }
+        } else if (jsonObj.has("errors")) {
+            System.out.println("!\n!\n!\n!\n!!!HALT API_ERROR!!!\n" + responseBodyString + "!!!HALT API_ERROR!!!\n!\n!\n!");
+            List<RESTError> errors = new ArrayList<>();
+            JSONArray errorsJson = jsonObj.getJSONArray("errors");
+            for (int i = 0; i < errorsJson.length(); i++) {
+                JSONObject errorJson = errorsJson.getJSONObject(i);
+                errors.add(new RESTError(errorJson));
+            }
+            restResponse.setErrors(errors);
+        }
+
+        Map<String, List<String>> headersMap = headers.toMultimap();
+
+        restResponse.setHeaders(headersMap);
+
+        return restResponse;
     }
 
     public Map<String, String> getHeaders() {
