@@ -1,4 +1,4 @@
 package net.rroadvpn.activities;
 
-class OpenVPNProfileException extends Exception {
+public class OpenVPNProfileException extends Exception {
 }

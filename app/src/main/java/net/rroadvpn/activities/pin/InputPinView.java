@@ -22,20 +22,16 @@ import android.widget.Toast;
 
 import net.rroadvpn.activities.NewMainActivity2;
 import net.rroadvpn.exception.UserServiceException;
-import net.rroadvpn.model.VPNAppPreferences;
-import net.rroadvpn.model.User;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.activities.BaseActivity;
-import net.rroadvpn.services.PreferencesService;
-import net.rroadvpn.services.UsersService;
+import net.rroadvpn.services.UserVPNPolicy;
 
 import java.util.Objects;
 
 import static android.support.constraint.Constraints.TAG;
 
 public class InputPinView extends BaseActivity {
-    PreferencesService preferencesService;
-    UsersService usersService;
+    private UserVPNPolicy userVPNPolicy;
     PinView pinView;
 
     @Override
@@ -43,14 +39,11 @@ public class InputPinView extends BaseActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(this.getActionBar()).hide();
 
-        this.preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
-        String userServiceURL = VPNAppPreferences.getUserServiceURL("users");
-
-        this.usersService = new UsersService(preferencesService, userServiceURL);
+        this.userVPNPolicy = new UserVPNPolicy(this);
 
         setContentView(R.layout.input_pin_view);
 
-        pinView = findViewById(R.id.pinView);
+        pinView = (PinView) findViewById(R.id.pinView);
         pinView.setTextColor(
                 ResourcesCompat.getColor(getResources(), R.color.colorAccent, getTheme()));
         pinView.setTextColor(
@@ -89,21 +82,16 @@ public class InputPinView extends BaseActivity {
                 System.out.println(s);
                 if (s.length() == 4) {
                     try {
-                        User user = usersService.getUserByPinCode(Integer.valueOf(s.toString()));
-                        System.out.println(user.getEmail());
+                        userVPNPolicy.checkPinCode(Integer.valueOf(s.toString()));
                     } catch (UserServiceException e) {
                         Toast.makeText(getBaseContext(), "Wrong pin", Toast.LENGTH_LONG).show();
                         pinView.setItemBackgroundColor(getResources().getColor(R.color.wrong_pin));
-
-
                         e.printStackTrace();
                         return;
                     }
 
-                    String userUuid = preferencesService.getString(VPNAppPreferences.USER_UUID);
-                    //test post userDevice
                     try {
-                        usersService.createUserDevice(userUuid);
+                        userVPNPolicy.createUserDevice();
                     } catch (UserServiceException e) {
                         Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         e.printStackTrace();

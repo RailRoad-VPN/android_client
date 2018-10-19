@@ -18,12 +18,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class UsersService extends RESTService {
+public class UsersAPIService extends RESTService {
     private Utilities utilities;
     private String deviceToken;
     private String deviceId;
 
-    public UsersService(PreferencesService preferencesService, String serviceURL) {
+    public UsersAPIService(PreferencesService preferencesService, String serviceURL) {
         super(preferencesService, serviceURL);
         this.deviceToken = this.preferencesService.getString(VPNAppPreferences.DEVICE_TOKEN);
         this.deviceId = this.preferencesService.getString(VPNAppPreferences.DEVICE_ID);
