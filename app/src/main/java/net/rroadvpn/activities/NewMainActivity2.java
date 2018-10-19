@@ -7,6 +7,7 @@ import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.AsyncTask;
 import android.os.RemoteException;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,8 @@ import net.rroadvpn.openvpn.activities.BaseActivity;
 import net.rroadvpn.openvpn.core.VpnStatus;
 import net.rroadvpn.services.OpenVPNControlService;
 import net.rroadvpn.services.UserVPNPolicy;
+
+import static net.rroadvpn.services.OpenVPNControlService.VPN_SERVICE_INTENT_PERMISSION;
 
 
 public class NewMainActivity2 extends BaseActivity {
@@ -54,8 +57,6 @@ public class NewMainActivity2 extends BaseActivity {
 //
 //    };
 
-    private static final int VPN_SERVICE_INTENT_PERMISSION = 70;
-
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -88,12 +89,24 @@ public class NewMainActivity2 extends BaseActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             System.out.println("#####################################################  POSITIVE BUTTON!!!!");
 //                            ProfileManager.setConntectedVpnProfileDisconnected(getBaseContext());
-                            try {
-                                ovcs.disonnectFromVPN();
-                                userVPNPolicy.afterDisconnectVPN();
-                            } catch (RemoteException e) {
-                                e.printStackTrace();
-                            }
+                            AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
+                                @Override
+                                protected Void doInBackground(Void... voids) {
+                                    try {
+                                        ovcs.disonnectFromVPN();
+                                    } catch (RemoteException e) {
+                                        e.printStackTrace();
+                                    }
+                                    userVPNPolicy.afterDisconnectVPN();
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Void result) {
+                                    findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.ic_red_semaphore);
+                                }
+                            }.execute();
+
                         }
                     });
                     builder.setNeutralButton("RECONNECT", new DialogInterface.OnClickListener() {
@@ -160,10 +173,21 @@ public class NewMainActivity2 extends BaseActivity {
     }
 
     private void connectToVPN(){
-        String vpnConfig = userVPNPolicy.getNewRandomVPNServer();
-        ovcs.prepareToConnectVPN(vpnConfig);
-        ovcs.connectToVPN();
-        userVPNPolicy.afterConnectedToVPN();
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                String vpnConfig = userVPNPolicy.getNewRandomVPNServer();
+                ovcs.prepareToConnectVPN(vpnConfig);
+                ovcs.connectToVPN();
+                userVPNPolicy.afterConnectedToVPN();
+                return null;
+            }
+            @Override
+            protected void onPostExecute(Void result) {
+                findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.ic_green_semaphore);
+            }
+        }.execute();
+
     }
 
 

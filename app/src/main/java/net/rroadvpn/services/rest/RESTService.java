@@ -204,7 +204,8 @@ public class RESTService implements RESTServiceI {
         }
 
         try {
-            return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString, response.headers());
+            return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString,
+                    response.headers());
         } catch (JSONException e) {
             e.printStackTrace();
             throw new RESTException("Stub");

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
@@ -81,24 +82,51 @@ public class InputPinView extends BaseActivity {
             public void afterTextChanged(Editable s) {
                 System.out.println(s);
                 if (s.length() == 4) {
-                    try {
-                        userVPNPolicy.checkPinCode(Integer.valueOf(s.toString()));
-                    } catch (UserServiceException e) {
-                        Toast.makeText(getBaseContext(), "Wrong pin", Toast.LENGTH_LONG).show();
-                        pinView.setItemBackgroundColor(getResources().getColor(R.color.wrong_pin));
-                        e.printStackTrace();
-                        return;
-                    }
+                    new AsyncTask<Void, Void, Boolean>() {
+                        private int errorCode = -1;
 
-                    try {
-                        userVPNPolicy.createUserDevice();
-                    } catch (UserServiceException e) {
-                        Toast.makeText(getBaseContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-                    Intent intent = new Intent(getBaseContext(), NewMainActivity2.class);
-                    startActivity(intent);
-                    finish();
+                        @Override
+                        protected Boolean doInBackground(Void... voids) {
+                            try {
+                                userVPNPolicy.checkPinCode(Integer.valueOf(s.toString()));
+                            } catch (UserServiceException e) {
+                                e.printStackTrace();
+                                errorCode = 1;
+                                return false;
+                            }
+
+                            try {
+                                userVPNPolicy.createUserDevice();
+                            } catch (UserServiceException e) {
+                                e.printStackTrace();
+                                errorCode = 2;
+                                return false;
+                            }
+                            return true;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Boolean isOk) {
+                            if (isOk) {
+                                Intent intent = new Intent(getBaseContext(), NewMainActivity2.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                switch (errorCode) {
+                                    case 1:
+                                        Toast.makeText(getBaseContext(), "Wrong pin", Toast.LENGTH_LONG).show();
+                                        pinView.setItemBackgroundColor(getResources().getColor(R.color.wrong_pin));
+                                        break;
+                                    case 2:
+                                        Toast.makeText(getBaseContext(), "Did not create device", Toast.LENGTH_LONG).show();
+                                        break;
+                                    default:
+                                        Toast.makeText(getBaseContext(), "System Error. HALT!", Toast.LENGTH_LONG).show();
+                                        break;
+                                }
+                            }
+                        }
+                    }.execute();
                 }
             }
         });

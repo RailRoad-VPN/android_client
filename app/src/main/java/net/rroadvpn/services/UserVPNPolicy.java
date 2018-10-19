@@ -40,38 +40,12 @@ public class UserVPNPolicy {
     }
 
     public void createUserDevice() throws UserServiceException {
-        try {
-            new AsyncTask<Void, Void, Void>() {
-                UserServiceException error;
-
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    try {
-                        us.createUserDevice(userUuid);
-                    } catch (UserServiceException e) {
-                        error = new UserServiceException("");
-                    }
-                    return null;
-                }
-
-            }.execute().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-
+        us.createUserDevice(userUuid);
     }
-
-    public void connectToVPNAfterGivenPermission() {
-
-    }
-
 
     public void afterDisconnectVPN() {
         reInitUserServiceCrutch();
-        //todo delete connection
+        us.deleteConnection();
     }
 
 
@@ -100,7 +74,7 @@ public class UserVPNPolicy {
 
         System.out.println("WHILE ENDED");
         String virtualIP = status.split(",")[1];
-        Toast.makeText(this.ctx, "YOUR VIRTUAL IP IS: " + virtualIP, Toast.LENGTH_LONG).show();
+//        Toast.makeText(this.ctx, "YOUR VIRTUAL IP IS: " + virtualIP, Toast.LENGTH_LONG).show();
 
         try {
             //TODO cut second UsersService init

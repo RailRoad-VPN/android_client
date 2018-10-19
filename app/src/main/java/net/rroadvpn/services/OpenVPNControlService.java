@@ -34,7 +34,7 @@ public class OpenVPNControlService {
     public static final String EXTRA_NAME = "net.rroadvpn.openvpn.shortcutProfileName";
     public static final Boolean EXTRA_HIDELOG = false;
     public static final String CLEARLOG = "clearlogconnect";
-    private static final int VPN_SERVICE_INTENT_PERMISSION = 70;
+    public static final int VPN_SERVICE_INTENT_PERMISSION = 70;
 
     private IOpenVPNServiceInternal mService;
     private ServiceConnection mConnection = new ServiceConnection() {

@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class UsersAPIService extends RESTService {
+public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     private Utilities utilities;
     private String deviceToken;
     private String deviceId;
@@ -261,4 +261,7 @@ public class UsersAPIService extends RESTService {
     }
 
 
+    public void deleteConnection() {
+
+    }
 }
