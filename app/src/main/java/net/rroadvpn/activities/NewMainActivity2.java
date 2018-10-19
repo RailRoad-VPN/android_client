@@ -85,10 +85,9 @@ public class NewMainActivity2 extends BaseActivity {
         this.preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
         this.userUuid = preferencesService.getString(VPNAppPreferences.USER_UUID);
 
-
         this.us = new UsersService(preferencesService, userServiceURL);
 
-        ImageButton connectToVPNBtn = findViewById(R.id.connect_to_vpn);
+        ImageButton connectToVPNBtn = (ImageButton) findViewById(R.id.connect_to_vpn);
 
         connectToVPNBtn.setOnClickListener(new View.OnClickListener() {
             @Override
