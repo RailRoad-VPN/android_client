@@ -25,6 +25,7 @@ import net.rroadvpn.activities.NewMainActivity2;
 import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.activities.BaseActivity;
+import net.rroadvpn.services.RroadLogger;
 import net.rroadvpn.services.UserVPNPolicy;
 
 import java.util.Objects;
@@ -80,7 +81,7 @@ public class InputPinView extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                System.out.println(s);
+                RroadLogger.writeLog(s);
                 if (s.length() == 4) {
                     new AsyncTask<Void, Void, Boolean>() {
                         private int errorCode = -1;

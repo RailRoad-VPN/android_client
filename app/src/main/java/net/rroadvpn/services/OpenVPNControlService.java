@@ -70,16 +70,16 @@ public class OpenVPNControlService {
     }
 
     public void prepareToConnectVPN(String configBase64) {
-        System.out.println("prepareToConnectVPN");
+        RroadLogger.writeLog("prepareToConnectVPN");
 
-        System.out.println("decode config from bas64");
+        RroadLogger.writeLog("decode config from bas64");
         byte[] decoded = android.util.Base64.decode(configBase64, android.util.Base64.DEFAULT);
 
         OpenVPNProfileManager openVPNProfileManager = new OpenVPNProfileManager(decoded);
 
         VpnProfile profile;
         try {
-            System.out.println("work with profile");
+            RroadLogger.writeLog("work with profile");
             profile = openVPNProfileManager.getVPNProfile();
             ProfileManager pm = getPM();
             pm.addProfile(profile);
