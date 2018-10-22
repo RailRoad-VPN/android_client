@@ -20,8 +20,6 @@ import net.rroadvpn.services.OpenVPNControlService;
 import net.rroadvpn.services.RroadLogger;
 import net.rroadvpn.services.UserVPNPolicy;
 
-import java.util.logging.Logger;
-
 import static net.rroadvpn.services.OpenVPNControlService.VPN_SERVICE_INTENT_PERMISSION;
 
 
