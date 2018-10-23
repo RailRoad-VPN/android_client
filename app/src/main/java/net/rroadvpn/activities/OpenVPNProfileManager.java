@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 
 import net.rroadvpn.openvpn.VpnProfile;
 import net.rroadvpn.openvpn.core.ConfigParser;
-import net.rroadvpn.services.RroadLogger;
 
 public class OpenVPNProfileManager {
 
@@ -30,7 +29,7 @@ public class OpenVPNProfileManager {
             this.vpnProfile = cp.convertProfile();
             return this.vpnProfile;
         } catch (IOException | ConfigParser.ConfigParseError e) {
-            RroadLogger.writeLog(e.getLocalizedMessage());
+           System.out.println(e.getLocalizedMessage());
             throw new OpenVPNProfileException();
         }
     }

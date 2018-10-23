@@ -131,7 +131,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     }
 
     public String getRandomServerUuid(String userUuid) throws UserServiceException {
-        RroadLogger.writeLog("getRandomServerUuid method");
+       System.out.println("getRandomServerUuid method");
 
         String url = String.format("%s/%s/servers?random", this.getServiceURL(), String.valueOf(userUuid));
         Map<String, String> headers = new HashMap<String, String>();
@@ -163,7 +163,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     }
 
     public String getVPNConfigurationByUserAndServer(String userUuid, String serverUuid) throws UserServiceException {
-        RroadLogger.writeLog(String.format("getRandomServerUuid method with parameters userUuid: %s, serverUuid: %s", userUuid, serverUuid));
+       System.out.println(String.format("getRandomServerUuid method with parameters userUuid: %s, serverUuid: %s", userUuid, serverUuid));
 
         String url = String.format("%s/%s/servers/%s/configurations?vpn_type_id=%s&platform_id=%s",
                 this.getServiceURL(), userUuid, serverUuid, VPNAppPreferences.VPN_TYPE_ID,
@@ -215,7 +215,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     public void createConnection(String serverUuid, String virtualIp, String deviceIp, String email) throws UserServiceException {
 
         String url = String.format("%s/%s/connections", this.getServiceURL().replace("users", "vpns/servers"), serverUuid);
-        RroadLogger.writeLog(url);
+       System.out.println(url);
 
         Map<String, String> headers = new HashMap<String, String>();
         if (!this.deviceToken.equals("")) {
@@ -240,7 +240,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         user.put("bytes_o", 0);
         user.put("device_id", this.deviceId);
 
-        RroadLogger.writeLog("DEVICE_ID " + this.deviceId + "\n VIRTUAL_IP " + virtualIp);
+       System.out.println("DEVICE_ID " + this.deviceId + "\n VIRTUAL_IP " + virtualIp);
 
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset

@@ -1,8 +1,6 @@
 package net.rroadvpn.services.rest;
 
-import android.os.AsyncTask;
 import android.os.NetworkOnMainThreadException;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,14 +9,12 @@ import net.rroadvpn.exception.RESTException;
 import net.rroadvpn.model.rest.RESTError;
 import net.rroadvpn.model.rest.RESTResponse;
 import net.rroadvpn.services.PreferencesService;
-import net.rroadvpn.services.RroadLogger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +24,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.FormBody;
@@ -291,7 +286,7 @@ public class RESTService implements RESTServiceI {
 
     private RESTResponse parseResponse(int responseCode, boolean isOk, String responseBodyString,
                                        Headers headers) throws JSONException {
-        RroadLogger.writeLog("!\nthis is response:\n" + responseBodyString);
+       System.out.println("!\nthis is response:\n" + responseBodyString);
         JSONObject jsonObj = new JSONObject(responseBodyString);
 
         String status = (String) jsonObj.get("status");
@@ -316,7 +311,7 @@ public class RESTService implements RESTServiceI {
                 restResponse.setLimit(offset);
             }
         } else if (jsonObj.has("errors")) {
-            RroadLogger.writeLog("!\n!\n!\n!\n!!!HALT API_ERROR!!!\n" + responseBodyString + "!!!HALT API_ERROR!!!\n!\n!\n!");
+           System.out.println("!\n!\n!\n!\n!!!HALT API_ERROR!!!\n" + responseBodyString + "!!!HALT API_ERROR!!!\n!\n!\n!");
             List<RESTError> errors = new ArrayList<>();
             JSONArray errorsJson = jsonObj.getJSONArray("errors");
             for (int i = 0; i < errorsJson.length(); i++) {

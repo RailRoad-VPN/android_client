@@ -1,7 +1,5 @@
 package android.support.v4n.app;
 
-import net.rroadvpn.services.RroadLogger;
-
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Random;
@@ -16,20 +14,20 @@ public class Test {
     public static void generateAuthToken() {
         String uuid = UUID.randomUUID().toString().replace("-", "");
         int r = getRandomInt(1, uuid.length());
-        RroadLogger.writeLog("Random number: " + r);
+       System.out.println("Random number: " + r);
         Long unixTime = System.currentTimeMillis() / 1000;
-        RroadLogger.writeLog("Unixtime: " + unixTime);
-        RroadLogger.writeLog(unixTime.doubleValue());
+       System.out.println("Unixtime: " + unixTime);
+       System.out.println(unixTime.doubleValue());
         Double unixTime1 =  (unixTime.doubleValue()) / r;
-        RroadLogger.writeLog("Unixtime devided float: " + unixTime1);
+       System.out.println("Unixtime devided float: " + unixTime1);
 
         DecimalFormat df = new DecimalFormat("#.##########");
         df.setRoundingMode(RoundingMode.CEILING);
 
         String unixtimeRounded = df.format(unixTime1);
-        RroadLogger.writeLog("Unixtime Rounded double value: " + String.valueOf(unixtimeRounded));
+       System.out.println("Unixtime Rounded double value: " + String.valueOf(unixtimeRounded));
         int unixtimeRoundedLength = unixtimeRounded.length();
-        RroadLogger.writeLog("Unixtime Rounded double value len: " + String.valueOf(unixtimeRoundedLength));
+       System.out.println("Unixtime Rounded double value len: " + String.valueOf(unixtimeRoundedLength));
 
         String unixtimeRoundedLengthStr;
         if (unixtimeRoundedLength < 10) {
@@ -37,7 +35,7 @@ public class Test {
         } else {
             unixtimeRoundedLengthStr = String.valueOf(unixtimeRoundedLength);
         }
-        RroadLogger.writeLog("Unixtime Rounded double value string len: " + String.valueOf(unixtimeRoundedLengthStr));
+       System.out.println("Unixtime Rounded double value string len: " + String.valueOf(unixtimeRoundedLengthStr));
 
         String rStr;
         if (r < 10) {
@@ -45,12 +43,12 @@ public class Test {
         } else {
             rStr = String.valueOf(r);
         }
-        RroadLogger.writeLog("Random number string len: " + String.valueOf(rStr));
+       System.out.println("Random number string len: " + String.valueOf(rStr));
 
         String leftToken = uuid.substring(0, r);
         String rightToken = uuid.substring(r, uuid.length());
         String token = String.format("%s%s%s%s%s", rStr, unixtimeRoundedLengthStr, leftToken, unixtimeRounded, rightToken);
-        RroadLogger.writeLog("TOKEN: " + String.valueOf(token));
+       System.out.println("TOKEN: " + String.valueOf(token));
     }
 
     private static int getRandomInt(int min, int max) {

@@ -25,7 +25,6 @@ import net.rroadvpn.openvpn.R;
 
 import net.rroadvpn.openvpn.fragments.GeneralSettings;
 import net.rroadvpn.openvpn.fragments.SendDumpFragment;
-import net.rroadvpn.services.RroadLogger;
 
 
 public class MainActivity extends BaseActivity {
@@ -116,7 +115,7 @@ public class MainActivity extends BaseActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		RroadLogger.writeLog(data);
+		System.out.println(data);
 
 
 	}

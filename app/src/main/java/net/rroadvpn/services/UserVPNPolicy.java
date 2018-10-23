@@ -34,7 +34,7 @@ public class UserVPNPolicy {
 
     public void checkPinCode(Integer pinCode) throws UserServiceException {
         User user = us.getUserByPinCode(pinCode);
-        RroadLogger.writeLog(user.getEmail());
+       System.out.println(user.getEmail());
 
         this.userUuid = preferencesService.getString(VPNAppPreferences.USER_UUID);
     }
@@ -50,12 +50,12 @@ public class UserVPNPolicy {
 
 
     public String getNewRandomVPNServer() {
-        RroadLogger.writeLog("getNewRandomVPNServer method");
+       System.out.println("getNewRandomVPNServer method");
         try {
             this.serverUuid = us.getRandomServerUuid(userUuid);
             // TODO проверить наличие профиля в ПрофильМенеджере и если нет то получать через API
             String vpnConfig = us.getVPNConfigurationByUserAndServer(userUuid, serverUuid);
-            RroadLogger.writeLog("MY CONFIG" + vpnConfig);
+           System.out.println("MY CONFIG" + vpnConfig);
             return vpnConfig;
         } catch (UserServiceException e) {
             e.printStackTrace();
@@ -64,15 +64,15 @@ public class UserVPNPolicy {
     }
 
     public void afterConnectedToVPN() {
-        RroadLogger.writeLog("#####################################################  MAIN!!!!" + VpnStatus.getLastCleanLogMessage(this.ctx));
+       System.out.println("#####################################################  MAIN!!!!" + VpnStatus.getLastCleanLogMessage(this.ctx));
         String status = VpnStatus.getLastCleanLogMessage(this.ctx);
 
         while (!status.contains("Connected: SUCCESS")) {
-//                RroadLogger.writeLog("openVPN log:" + VpnStatus.getLastCleanLogMessage(this.ctx));
+//               System.out.println("openVPN log:" + VpnStatus.getLastCleanLogMessage(this.ctx));
             status = VpnStatus.getLastCleanLogMessage(this.ctx);
         }
 
-        RroadLogger.writeLog("WHILE ENDED");
+       System.out.println("WHILE ENDED");
         String virtualIP = status.split(",")[1];
 //        Toast.makeText(this.ctx, "YOUR VIRTUAL IP IS: " + virtualIP, Toast.LENGTH_LONG).show();
 
@@ -80,11 +80,11 @@ public class UserVPNPolicy {
             //TODO cut second UsersService init
             reInitUserServiceCrutch();
             //todo device_ip
-            RroadLogger.writeLog("Update user device begin");
+           System.out.println("Update user device begin");
             this.us.updateUserDevice(this.userUuid, this.preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID), virtualIP, "1.1.1.1");
 
             String email = this.preferencesService.getString(VPNAppPreferences.USER_EMAIL);
-            RroadLogger.writeLog("Create connection begin");
+           System.out.println("Create connection begin");
             this.us.createConnection(this.serverUuid, virtualIP, "1.1.1.1", email);
         } catch (UserServiceException e) {
             e.printStackTrace();

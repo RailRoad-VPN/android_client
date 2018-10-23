@@ -17,8 +17,10 @@ import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.activities.BaseActivity;
 import net.rroadvpn.openvpn.core.VpnStatus;
 import net.rroadvpn.services.OpenVPNControlService;
-import net.rroadvpn.services.RroadLogger;
 import net.rroadvpn.services.UserVPNPolicy;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static net.rroadvpn.services.OpenVPNControlService.VPN_SERVICE_INTENT_PERMISSION;
 
@@ -74,7 +76,7 @@ public class NewMainActivity2 extends BaseActivity {
                 connectToVPNBtn.setBackgroundResource(R.drawable.black_yellow_semaphore_animation);
                 ((AnimationDrawable) connectToVPNBtn.getBackground()).start();
 
-                RroadLogger.writeLog(VpnStatus.isVPNActive());
+               System.out.println(VpnStatus.isVPNActive());
                 if (ovcs.isVPNActive()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(NewMainActivity2.this);
                     builder.setTitle("А ТЫ УВЕРЕН?");
@@ -82,13 +84,13 @@ public class NewMainActivity2 extends BaseActivity {
                     builder.setNegativeButton("Я ССЫЛКЛО", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            RroadLogger.writeLog("#####################################################  NEGATIVE BUTTON!!!!");
+                           System.out.println("#####################################################  NEGATIVE BUTTON!!!!");
                         }
                     });
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            RroadLogger.writeLog("#####################################################  POSITIVE BUTTON!!!!");
+                           System.out.println("#####################################################  POSITIVE BUTTON!!!!");
 //                            ProfileManager.setConntectedVpnProfileDisconnected(getBaseContext());
                             AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
                                 @Override
@@ -113,13 +115,13 @@ public class NewMainActivity2 extends BaseActivity {
                     builder.setNeutralButton("RECONNECT", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            RroadLogger.writeLog("#####################################################  RECONNECT BUTTON!!!!");
+                           System.out.println("#####################################################  RECONNECT BUTTON!!!!");
                         }
                     });
                     builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialogInterface) {
-                            RroadLogger.writeLog("#####################################################  CANCEL BUTTON!!!!");
+                           System.out.println("#####################################################  CANCEL BUTTON!!!!");
                         }
                     });
                     builder.show();
@@ -131,7 +133,7 @@ public class NewMainActivity2 extends BaseActivity {
                             // Shame on you Sony! At least one user reported that
                             // an official Sony Xperia Arc S image triggers this exception
                             VpnStatus.logError("ActivityNotFoundException PIZDEC!!!!!");
-                            RroadLogger.writeLog("ActivityNotFoundException PIZDEC!!!!!!!!!!!");
+                           System.out.println("ActivityNotFoundException PIZDEC!!!!!!!!!!!");
                         }
                     } else {
                         connectToVPN();
@@ -144,8 +146,12 @@ public class NewMainActivity2 extends BaseActivity {
         testAPIBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Logger log = LoggerFactory.getLogger(NewMainActivity2.class);
+                Logger log2 = LoggerFactory.getLogger("asdf");
 
-                RroadLogger.writeLog("test log file");
+                log2.info("hello world");
+                log.info("log2");
+//               System.out.println("test log file");
 //                try {
 //                    String randomServerUuid = us.getRandomServerUuid(userUuid);
 //                } catch (UserServiceException e) {
@@ -219,4 +225,6 @@ public class NewMainActivity2 extends BaseActivity {
         super.onDestroy();
         ovcs.unBindService();
     }
+
+
 }
