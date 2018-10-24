@@ -52,7 +52,7 @@ public class ICSOpenVPNApplication extends Application {
         StrictMode.VmPolicy policy = new StrictMode.VmPolicy.Builder()
                 .detectAll()
                 .penaltyLog()
-                .penaltyDeath()
+//                .penaltyDeath()
                 .build();
         StrictMode.setVmPolicy(policy);
 

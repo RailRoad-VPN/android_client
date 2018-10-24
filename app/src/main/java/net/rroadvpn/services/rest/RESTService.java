@@ -13,6 +13,8 @@ import net.rroadvpn.services.PreferencesService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -44,11 +46,14 @@ public class RESTService implements RESTServiceI {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     private OkHttpClient client;
+    private Logger log;
     private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm'Z'").create();
 
     public RESTService(PreferencesService preferencesService, String serviceURL) {
         this.preferencesService = preferencesService;
         this.serviceURL = serviceURL;
+        this.log = LoggerFactory.getLogger("RESTService");
+
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.connectTimeout(30, TimeUnit.SECONDS);
@@ -286,7 +291,8 @@ public class RESTService implements RESTServiceI {
 
     private RESTResponse parseResponse(int responseCode, boolean isOk, String responseBodyString,
                                        Headers headers) throws JSONException {
-       System.out.println("!\nthis is response:\n" + responseBodyString);
+        System.out.println("!\nthis is response:\n" + responseBodyString);
+        log.debug("parseResponse started. This is responce before parsing:\n" + responseBodyString);
         JSONObject jsonObj = new JSONObject(responseBodyString);
 
         String status = (String) jsonObj.get("status");
@@ -296,6 +302,7 @@ public class RESTService implements RESTServiceI {
         restResponse.setOk(isOk);
 
         if (isOk) {
+            log.info("Response success");
             if (jsonObj.has("data")) {
                 JSONObject data = jsonObj.getJSONObject("data");
                 restResponse.setData(data);
@@ -311,7 +318,7 @@ public class RESTService implements RESTServiceI {
                 restResponse.setLimit(offset);
             }
         } else if (jsonObj.has("errors")) {
-           System.out.println("!\n!\n!\n!\n!!!HALT API_ERROR!!!\n" + responseBodyString + "!!!HALT API_ERROR!!!\n!\n!\n!");
+            log.error("reponseBodyString has API error. HALT API ERROR:\n" + responseBodyString + "HALT API ERROR");
             List<RESTError> errors = new ArrayList<>();
             JSONArray errorsJson = jsonObj.getJSONArray("errors");
             for (int i = 0; i < errorsJson.length(); i++) {

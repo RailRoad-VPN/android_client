@@ -9,6 +9,8 @@ import net.rroadvpn.services.rest.RESTService;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,6 +24,8 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     private Utilities utilities;
     private String deviceToken;
     private String deviceId;
+    private Logger log = LoggerFactory.getLogger("UsersAPIService");
+
 
     public UsersAPIService(PreferencesService preferencesService, String serviceURL) {
         super(preferencesService, serviceURL);
@@ -31,6 +35,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     }
 
     public User getUserByPinCode(Integer pincode) throws UserServiceException {
+        log.info("getUserByPinCode method entered");
 
         String url = String.format("%s/pincode/%s", this.getServiceURL(), String.valueOf(pincode));
 
@@ -66,6 +71,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     }
 
     public User getUserByUuid(String uuid) throws UserServiceException {
+        log.info("getUserByUuid method entered");
 
         String url = String.format("%s/%s/devices", this.getServiceURL(), String.valueOf(uuid));
 
@@ -98,6 +104,8 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     }
 
     public void createUserDevice(String userUuid) throws UserServiceException {
+        log.info("createUserDevice method entered");
+
         String url = String.format("%s/%s/devices", this.getServiceURL(), String.valueOf(userUuid));
 
         String deviceId = String.valueOf(utilities.getRandomInt(100000, 999999));
@@ -131,7 +139,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     }
 
     public String getRandomServerUuid(String userUuid) throws UserServiceException {
-       System.out.println("getRandomServerUuid method");
+        log.info("getRandomServerUuid method entered");
 
         String url = String.format("%s/%s/servers?random", this.getServiceURL(), String.valueOf(userUuid));
         Map<String, String> headers = new HashMap<String, String>();
@@ -163,7 +171,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     }
 
     public String getVPNConfigurationByUserAndServer(String userUuid, String serverUuid) throws UserServiceException {
-       System.out.println(String.format("getRandomServerUuid method with parameters userUuid: %s, serverUuid: %s", userUuid, serverUuid));
+        log.info("getRandomServerUuid method entered");
 
         String url = String.format("%s/%s/servers/%s/configurations?vpn_type_id=%s&platform_id=%s",
                 this.getServiceURL(), userUuid, serverUuid, VPNAppPreferences.VPN_TYPE_ID,
@@ -188,6 +196,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     }
 
     public void updateUserDevice(String userUuid, String userDeviceUuid, String virtualIp, String deviceIp) throws UserServiceException {
+        log.info("updateUserDevice method entered");
         String url = String.format("%s/%s/devices/%s", this.getServiceURL(), userUuid, userDeviceUuid);
 
         Map<String, String> headers = new HashMap<String, String>();
@@ -213,9 +222,10 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     }
 
     public void createConnection(String serverUuid, String virtualIp, String deviceIp, String email) throws UserServiceException {
+        log.info("createConnection method entered");
 
         String url = String.format("%s/%s/connections", this.getServiceURL().replace("users", "vpns/servers"), serverUuid);
-       System.out.println(url);
+        System.out.println(url);
 
         Map<String, String> headers = new HashMap<String, String>();
         if (!this.deviceToken.equals("")) {
@@ -240,7 +250,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         user.put("bytes_o", 0);
         user.put("device_id", this.deviceId);
 
-       System.out.println("DEVICE_ID " + this.deviceId + "\n VIRTUAL_IP " + virtualIp);
+        System.out.println("DEVICE_ID " + this.deviceId + "\n VIRTUAL_IP " + virtualIp);
 
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset

@@ -1,13 +1,45 @@
 <configuration>
-  <appender class="ch.qos.logback.classic.android.LogcatAppender" name="logcat">
-    <tagEncoder>
-      <pattern>%logger{12}</pattern>
-    </tagEncoder>
-    <encoder>
-      <pattern>[%-20thread] %msg</pattern>
-    </encoder>
-  </appender>
-  <root level="DEBUG">
-    <appender-ref ref="logcat"/>
-  </root>
+    <property name="LOG_DIR" value="/sdcard/Android/data/files" />
+
+    <!-- Create a logcat appender -->
+    <appender name="logcat" class="ch.qos.logback.classic.android.LogcatAppender">
+        <encoder>
+            <pattern>%msg</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Create a file appender for INFO-level messages -->
+    <appender name="InfoLog" class="ch.qos.logback.core.FileAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+        <file>${LOG_DIR}/info.log</file>
+
+        <encoder>
+            <pattern>%date [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--<logger name="net.rroadvpn.activities.NewMainActivity2" level="INFO">-->
+    <!--<appender-ref ref="InfoLog" />-->
+    <!--</logger>-->
+
+    <!-- Write INFO (and higher-level) messages to logcat -->
+    <root level="INFO">
+        <appender-ref ref="logcat" />
+        <appender-ref ref="InfoLog" />
+    </root>
+
+    <root level="DEBUG">
+        <appender-ref ref="logcat" />
+    </root>
+
+    <root level="TRACE">
+        <appender-ref ref="logcat" />
+    </root>
+    <root level="ERROR">
+        <appender-ref ref="logcat" />
+    </root>
 </configuration>

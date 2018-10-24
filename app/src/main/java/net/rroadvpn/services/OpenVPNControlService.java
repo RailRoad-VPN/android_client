@@ -10,6 +10,7 @@ import android.net.VpnService;
 import android.os.IBinder;
 import android.os.RemoteException;
 
+import net.rroadvpn.activities.NewMainActivity2;
 import net.rroadvpn.activities.OpenVPNProfileException;
 import net.rroadvpn.activities.OpenVPNProfileManager;
 import net.rroadvpn.exception.OpenVPNControlServiceException;
@@ -22,6 +23,9 @@ import net.rroadvpn.openvpn.core.Preferences;
 import net.rroadvpn.openvpn.core.ProfileManager;
 import net.rroadvpn.openvpn.core.VPNLaunchHelper;
 import net.rroadvpn.openvpn.core.VpnStatus;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -36,6 +40,7 @@ public class OpenVPNControlService {
     public static final String CLEARLOG = "clearlogconnect";
     public static final int VPN_SERVICE_INTENT_PERMISSION = 70;
 
+    private Logger log = LoggerFactory.getLogger(OpenVPNControlService.class);
     private IOpenVPNServiceInternal mService;
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -60,26 +65,27 @@ public class OpenVPNControlService {
     }
 
     public void bindService() {
+        log.debug("bindService method entered");
         Intent intent = new Intent(ctx, OpenVPNService.class);
         intent.setAction(OpenVPNService.START_SERVICE);
         ctx.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
-    public void unBindService(){
+    public void unBindService() {
+        log.debug("unBindService method entered");
         ctx.unbindService(mConnection);
     }
 
     public void prepareToConnectVPN(String configBase64) {
-       System.out.println("prepareToConnectVPN");
+        log.info("prepareToConnectVPN method entered");
 
-       System.out.println("decode config from bas64");
         byte[] decoded = android.util.Base64.decode(configBase64, android.util.Base64.DEFAULT);
 
         OpenVPNProfileManager openVPNProfileManager = new OpenVPNProfileManager(decoded);
 
         VpnProfile profile;
         try {
-           System.out.println("work with profile");
+            log.debug("Working with profile");
             profile = openVPNProfileManager.getVPNProfile();
             ProfileManager pm = getPM();
             pm.addProfile(profile);
@@ -137,6 +143,7 @@ public class OpenVPNControlService {
     }
 
     public Intent vpnPreparePermissionIntent() {
+        log.info("vpnPreparePermissionIntent method entered");
 
         VpnStatus.updateStateString("USER_VPN_PERMISSION", "", R.string.state_user_vpn_permission,
                 ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
@@ -145,6 +152,8 @@ public class OpenVPNControlService {
     }
 
     public void connectToVPN() {
+        log.info("connectToVPN method entered");
+
         SharedPreferences prefs2 = Preferences.getDefaultSharedPreferences(this.ctx);
         boolean showLogWindow = prefs2.getBoolean("showlogwindow", true);
 
@@ -152,7 +161,8 @@ public class OpenVPNControlService {
         VPNLaunchHelper.startOpenVpn(mSelectedProfile, this.ctx);
     }
 
-    public void disonnectFromVPN() throws RemoteException {
+    public void disconnectFromVPN() throws RemoteException {
+        log.info("connectToVPN method entered");
         mService.stopVPN(false);
     }
 
