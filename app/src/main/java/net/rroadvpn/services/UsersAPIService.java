@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     private Utilities utilities;
     private String deviceToken;
     private String deviceId;
-    private Logger log = LoggerFactory.getLogger("UsersAPIService");
+    private Logger log = LoggerFactory.getLogger(UsersAPIService.class);
 
 
     public UsersAPIService(PreferencesService preferencesService, String serviceURL) {
@@ -35,7 +36,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     }
 
     public User getUserByPinCode(Integer pincode) throws UserServiceException {
-        log.info("getUserByPinCode method entered");
+        log.info("getUserByPinCode method enter");
 
         String url = String.format("%s/pincode/%s", this.getServiceURL(), String.valueOf(pincode));
 
@@ -56,9 +57,13 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
                     User user = new User(data);
                     this.preferencesService.save(VPNAppPreferences.USER_UUID, user.getUuid());
                     this.preferencesService.save(VPNAppPreferences.USER_EMAIL, user.getEmail());
+                    log.info("getUserByPinCode method exit");
                     return user;
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    log.error(String.format("Message: %s\nStackTrace: %s"
+                            , e.getMessage()
+                            , Arrays.toString(e.getStackTrace())
+                    ));
                     return null;
                 }
             } else if (valueObj instanceof JSONArray) {
@@ -67,11 +72,12 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         } else {
             throw new UserServiceException("user is not OK");
         }
+        log.info("getUserByPinCode method exit");
         return null;
     }
 
     public User getUserByUuid(String uuid) throws UserServiceException {
-        log.info("getUserByUuid method entered");
+        log.info("getUserByUuid method enter");
 
         String url = String.format("%s/%s/devices", this.getServiceURL(), String.valueOf(uuid));
 
@@ -90,7 +96,10 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
                 try {
                     return new User(data);
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    log.error(String.format("Message: %s\nStackTrace: %s"
+                            , e.getMessage()
+                            , Arrays.toString(e.getStackTrace())
+                    ));
                     return null;
                 }
             } else if (valueObj instanceof JSONArray) {
@@ -104,7 +113,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     }
 
     public void createUserDevice(String userUuid) throws UserServiceException {
-        log.info("createUserDevice method entered");
+        log.info("createUserDevice method enter");
 
         String url = String.format("%s/%s/devices", this.getServiceURL(), String.valueOf(userUuid));
 
@@ -136,10 +145,11 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
             String userDeviceUuid = location.substring(location.lastIndexOf("/") + 1);
             this.preferencesService.save(VPNAppPreferences.USER_DEVICE_UUID, userDeviceUuid);
         }
+        log.info("createUserDevice method exit");
     }
 
     public String getRandomServerUuid(String userUuid) throws UserServiceException {
-        log.info("getRandomServerUuid method entered");
+        log.info("getRandomServerUuid method enter");
 
         String url = String.format("%s/%s/servers?random", this.getServiceURL(), String.valueOf(userUuid));
         Map<String, String> headers = new HashMap<String, String>();
@@ -156,9 +166,14 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
             if (valueObj instanceof JSONObject) {
                 JSONObject data = (JSONObject) valueObj;
                 try {
-                    return data.getString("uuid");
+                    String serverUuid = data.getString("uuid");
+                    log.info("getRandomServerUuid method exit");
+                    return serverUuid;
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    log.error(String.format("Message: %s\nStackTrace: %s"
+                            , e.getMessage()
+                            , Arrays.toString(e.getStackTrace())
+                    ));
                     return null;
                 }
             } else if (valueObj instanceof JSONArray) {
@@ -171,7 +186,10 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     }
 
     public String getVPNConfigurationByUserAndServer(String userUuid, String serverUuid) throws UserServiceException {
-        log.info("getRandomServerUuid method entered");
+        log.info(String
+                .format("getVPNConfigurationByUserAndServer method enter. userUuid = %s; serverUuid = %s"
+                        , userUuid, serverUuid)
+        );
 
         String url = String.format("%s/%s/servers/%s/configurations?vpn_type_id=%s&platform_id=%s",
                 this.getServiceURL(), userUuid, serverUuid, VPNAppPreferences.VPN_TYPE_ID,
@@ -189,14 +207,17 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         if (ur.getStatus().equals("success")) {
             JSONObject valueObj = (JSONObject) ur.getData();
             if (valueObj.has("configuration")) {
-                return valueObj.optString("configuration");
+                String configuration = valueObj.optString("configuration");
+                log.info("getVPNConfigurationByUserAndServer method exit");
+                return configuration;
+
             }
         }
         throw new UserServiceException("get vpn config failed");
     }
 
     public void updateUserDevice(String userUuid, String userDeviceUuid, String virtualIp, String deviceIp) throws UserServiceException {
-        log.info("updateUserDevice method entered");
+        log.info("updateUserDevice method enter");
         String url = String.format("%s/%s/devices/%s", this.getServiceURL(), userUuid, userDeviceUuid);
 
         Map<String, String> headers = new HashMap<String, String>();
@@ -219,10 +240,11 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         userDevice.put("modify_reason", "set virtual_ip");
 
         RESTResponse ur = this.put(url, userDevice, headers);
+        log.info("updateUserDevice method exit");
     }
 
     public void createConnection(String serverUuid, String virtualIp, String deviceIp, String email) throws UserServiceException {
-        log.info("createConnection method entered");
+        log.info("createConnection method enter");
 
         String url = String.format("%s/%s/connections", this.getServiceURL().replace("users", "vpns/servers"), serverUuid);
         System.out.println(url);
@@ -250,7 +272,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         user.put("bytes_o", 0);
         user.put("device_id", this.deviceId);
 
-        System.out.println("DEVICE_ID " + this.deviceId + "\n VIRTUAL_IP " + virtualIp);
+        log.debug("DEVICE_ID " + this.deviceId + "\n VIRTUAL_IP " + virtualIp);
 
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
@@ -267,7 +289,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
 
         RESTResponse ur = this.post(url, connection, headers);
 
-
+        log.info("updateUserDevice method exit");
     }
 
 

@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class OpenVPNControlService {
     //TODO CUT Context
@@ -65,19 +66,21 @@ public class OpenVPNControlService {
     }
 
     public void bindService() {
-        log.debug("bindService method entered");
+        log.debug("bindService method enter");
         Intent intent = new Intent(ctx, OpenVPNService.class);
         intent.setAction(OpenVPNService.START_SERVICE);
         ctx.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        log.debug("bindService method exit");
     }
 
     public void unBindService() {
-        log.debug("unBindService method entered");
+        log.debug("unBindService method enter");
         ctx.unbindService(mConnection);
+        log.debug("unBindService method exit");
     }
 
     public void prepareToConnectVPN(String configBase64) {
-        log.info("prepareToConnectVPN method entered");
+        log.info("prepareToConnectVPN method enter");
 
         byte[] decoded = android.util.Base64.decode(configBase64, android.util.Base64.DEFAULT);
 
@@ -97,7 +100,10 @@ public class OpenVPNControlService {
             EXTRA_KEY = profile.getUUID().toString();
 
         } catch (OpenVPNProfileException e) {
-            e.printStackTrace();
+            log.error(String.format("Message: %s\nStackTrace: %s"
+                    , e.getMessage()
+                    , Arrays.toString(e.getStackTrace())
+            ));
             return;
         }
 
@@ -140,30 +146,36 @@ public class OpenVPNControlService {
                 VpnStatus.logException("SU command", e);
             }
         }
+        log.info("prepareToConnectVPN method exit");
     }
 
     public Intent vpnPreparePermissionIntent() {
-        log.info("vpnPreparePermissionIntent method entered");
+        log.info("vpnPreparePermissionIntent method enter");
 
         VpnStatus.updateStateString("USER_VPN_PERMISSION", "", R.string.state_user_vpn_permission,
                 ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
 
+        log.info("vpnPreparePermissionIntent method exit");
         return VpnService.prepare(this.ctx);
     }
 
     public void connectToVPN() {
-        log.info("connectToVPN method entered");
+        log.info("connectToVPN method enter");
 
         SharedPreferences prefs2 = Preferences.getDefaultSharedPreferences(this.ctx);
         boolean showLogWindow = prefs2.getBoolean("showlogwindow", true);
 
         ProfileManager.updateLRU(this.ctx, mSelectedProfile);
         VPNLaunchHelper.startOpenVpn(mSelectedProfile, this.ctx);
+        log.info("connectToVPN method exit");
+
     }
 
     public void disconnectFromVPN() throws RemoteException {
-        log.info("connectToVPN method entered");
+        log.info("connectToVPN method enter");
         mService.stopVPN(false);
+        log.info("connectToVPN method exit");
+
     }
 
     public boolean isVPNActive() {

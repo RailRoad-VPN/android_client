@@ -27,13 +27,19 @@ import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.activities.BaseActivity;
 import net.rroadvpn.services.UserVPNPolicy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 import java.util.Objects;
 
 import static android.support.constraint.Constraints.TAG;
 
 public class InputPinView extends BaseActivity {
     private UserVPNPolicy userVPNPolicy;
-    PinView pinView;
+    private PinView pinView;
+    private Logger log = LoggerFactory.getLogger(InputPinView.class);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +86,8 @@ public class InputPinView extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-               System.out.println(s);
                 if (s.length() == 4) {
+                    log.info(String.format("Pin typed: %s. AsyncTask check pin enter", s.toString()));
                     new AsyncTask<Void, Void, Boolean>() {
                         private int errorCode = -1;
 
@@ -90,7 +96,10 @@ public class InputPinView extends BaseActivity {
                             try {
                                 userVPNPolicy.checkPinCode(Integer.valueOf(s.toString()));
                             } catch (UserServiceException e) {
-                                e.printStackTrace();
+                                log.error(String.format("Message: %s\nStackTrace: %s"
+                                        , e.getMessage()
+                                        , Arrays.toString(e.getStackTrace())
+                                ));
                                 errorCode = 1;
                                 return false;
                             }
@@ -98,7 +107,10 @@ public class InputPinView extends BaseActivity {
                             try {
                                 userVPNPolicy.createUserDevice();
                             } catch (UserServiceException e) {
-                                e.printStackTrace();
+                                log.error(String.format("Message: %s\nStackTrace: %s"
+                                        , e.getMessage()
+                                        , Arrays.toString(e.getStackTrace())
+                                ));
                                 errorCode = 2;
                                 return false;
                             }
@@ -125,6 +137,7 @@ public class InputPinView extends BaseActivity {
                                         break;
                                 }
                             }
+                            log.info(String.format("Pin typed: %s. AsyncTask check pin enter", s.toString()));
                         }
                     }.execute();
                 }

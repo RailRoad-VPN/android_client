@@ -52,7 +52,7 @@ public class RESTService implements RESTServiceI {
     public RESTService(PreferencesService preferencesService, String serviceURL) {
         this.preferencesService = preferencesService;
         this.serviceURL = serviceURL;
-        this.log = LoggerFactory.getLogger("RESTService");
+        this.log = LoggerFactory.getLogger(RESTService.class);
 
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();

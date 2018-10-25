@@ -8,19 +8,30 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
+import android.os.Environment;
+import android.os.Message;
 import android.os.RemoteException;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.activities.BaseActivity;
+import net.rroadvpn.openvpn.core.LogItem;
+import net.rroadvpn.openvpn.core.OpenVPNStatusService;
 import net.rroadvpn.openvpn.core.VpnStatus;
 import net.rroadvpn.services.OpenVPNControlService;
 import net.rroadvpn.services.UserVPNPolicy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
 
 import static net.rroadvpn.services.OpenVPNControlService.VPN_SERVICE_INTENT_PERMISSION;
 
@@ -37,7 +48,7 @@ public class NewMainActivity2 extends BaseActivity {
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        log.info("NewMainActivity2 onCreate started");
+        log.info("NewMainActivity2 onCreate enter");
         this.ovcs = new OpenVPNControlService(this);
         this.userVPNPolicy = new UserVPNPolicy(this);
 
@@ -65,7 +76,7 @@ public class NewMainActivity2 extends BaseActivity {
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            log.info("dialogInterface positive button pressed");
+                            log.info("dialogInterface positive button pressed. AsyncTask disconnectFromVPN enter.");
 //                            ProfileManager.setConntectedVpnProfileDisconnected(getBaseContext());
                             AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
                                 @Override
@@ -73,7 +84,7 @@ public class NewMainActivity2 extends BaseActivity {
                                     try {
                                         ovcs.disconnectFromVPN();
                                     } catch (RemoteException e) {
-                                        e.printStackTrace();
+                                        log.error(e.getMessage());
                                     }
                                     userVPNPolicy.afterDisconnectVPN();
                                     return null;
@@ -81,8 +92,8 @@ public class NewMainActivity2 extends BaseActivity {
 
                                 @Override
                                 protected void onPostExecute(Void result) {
-                                    log.info("disconnectFromVPN onPostExecute");
                                     findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.ic_red_semaphore);
+                                    log.info("disconnectFromVPN AsyncTask onPostExecute exit");
                                 }
                             }.execute();
                         }
@@ -121,8 +132,29 @@ public class NewMainActivity2 extends BaseActivity {
         testAPIBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                log.info("test button started");
+                log.info("1");
 
+
+//TODO read from file (DO NOT HARDCODE /sdcard/)
+                StringBuilder text = new StringBuilder();
+                try {
+//                    File sdcard = Environment.getExternalStorageDirectory();
+                    File sdcard = new File("/sdcard/Android/data/files");
+                    File file = new File(sdcard,"rroadVPN_openVPN_log.2018_10_25.log");
+
+                    BufferedReader br = new BufferedReader(new FileReader(file));
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        text.append(line);
+                        text.append('\n');
+                    }
+                    br.close() ;
+//                    log.info(String.valueOf(text));
+                    System.out.println(text);
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+//<<<<<<<<<<<<<<<<<<<<<
 
 //               System.out.println("test log file");
 //                try {
@@ -155,7 +187,7 @@ public class NewMainActivity2 extends BaseActivity {
     }
 
     private void connectToVPN() {
-        log.info("connectToVPN started");
+        log.info("connectToVPN enter.  AsyncTask connectToVPN enter.");
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... voids) {
@@ -168,11 +200,11 @@ public class NewMainActivity2 extends BaseActivity {
 
             @Override
             protected void onPostExecute(Void result) {
-                log.info("connectToVPN onPostExecute");
                 findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.ic_green_semaphore);
+                log.info("AsyncTask connectToVPN onPostExecute exit.");
             }
         }.execute();
-
+        log.info("connectToVPN exit");
     }
 
     @Override

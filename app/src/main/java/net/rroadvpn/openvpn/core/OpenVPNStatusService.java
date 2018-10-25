@@ -21,8 +21,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
+import net.rroadvpn.activities.NewMainActivity2;
 import net.rroadvpn.openvpn.core.IServiceStatus;
 import net.rroadvpn.openvpn.core.IStatusCallbacks;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by arne on 08.11.16.
@@ -183,6 +187,8 @@ public class OpenVPNStatusService extends Service implements VpnStatus.LogListen
     private static final int SEND_NEW_CONNECTED_VPN = 103;
 
     private static class OpenVPNStatusHandler extends Handler {
+        private Logger log = LoggerFactory.getLogger(OpenVPNStatusHandler.class);
+
         WeakReference<OpenVPNStatusService> service = null;
 
         private void setService(OpenVPNStatusService statusService) {
@@ -205,17 +211,21 @@ public class OpenVPNStatusService extends Service implements VpnStatus.LogListen
 
                     switch (msg.what) {
                         case SEND_NEW_LOGITEM:
+                            log.info(String.valueOf(msg.obj));
                             broadcastItem.newLogItem((LogItem) msg.obj);
                             break;
                         case SEND_NEW_BYTECOUNT:
                             Pair<Long, Long> inout = (Pair<Long, Long>) msg.obj;
+                            log.info(String.valueOf(inout.first + ";" + inout.second));
                             broadcastItem.updateByteCount(inout.first, inout.second);
                             break;
                         case SEND_NEW_STATE:
+                            log.info(String.valueOf(msg.obj));
                             sendUpdate(broadcastItem, (UpdateMessage) msg.obj);
                             break;
 
                         case SEND_NEW_CONNECTED_VPN:
+                            log.info(String.valueOf(msg.obj));
                             broadcastItem.connectedVPN((String) msg.obj);
                             break;
                     }

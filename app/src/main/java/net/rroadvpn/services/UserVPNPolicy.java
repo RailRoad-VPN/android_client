@@ -15,6 +15,8 @@ import net.rroadvpn.openvpn.core.VpnStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
+
 
 //import java.util.concurrent.ExecutionException;
 
@@ -25,7 +27,7 @@ public class UserVPNPolicy {
     private String userUuid;
     private Context ctx;
     private PreferencesService preferencesService;
-    private Logger log = LoggerFactory.getLogger("UserVPNPolicy");
+    private Logger log = LoggerFactory.getLogger(UserVPNPolicy.class);
 
 
     public UserVPNPolicy(Context ctx) {
@@ -39,7 +41,7 @@ public class UserVPNPolicy {
     }
 
     public void checkPinCode(Integer pinCode) throws UserServiceException {
-        log.info("checkPinCode method entered. Pin:" + String.valueOf(pinCode));
+        log.info("checkPinCode method enter. Pin:" + String.valueOf(pinCode));
         User user = us.getUserByPinCode(pinCode);
         log.debug("email:" + user.getEmail() +
                 ", userUuid:" + user.getUuid() +
@@ -50,33 +52,39 @@ public class UserVPNPolicy {
     }
 
     public void createUserDevice() throws UserServiceException {
-        log.info("createUserDevice method entered");
+        log.info("createUserDevice method enter");
         us.createUserDevice(userUuid);
+        log.info("createUserDevice method exit");
     }
 
     public void afterDisconnectVPN() {
-        log.info("afterDisconnectVPN method entered");
+        log.info("afterDisconnectVPN method enter");
         reInitUserServiceCrutch();
         us.deleteConnection();
+        log.info("afterDisconnectVPN method exit");
     }
 
 
     public String getNewRandomVPNServer() {
-        log.info("getNewRandomVPNServer method entered");
+        log.info("getNewRandomVPNServer method enter");
         try {
             this.serverUuid = us.getRandomServerUuid(userUuid);
             // TODO проверить наличие профиля в ПрофильМенеджере и если нет то получать через API
             String vpnConfig = us.getVPNConfigurationByUserAndServer(userUuid, serverUuid);
             log.debug("MY CONFIG" + vpnConfig);
+            log.info("getNewRandomVPNServer method exit");
             return vpnConfig;
         } catch (UserServiceException e) {
-            e.printStackTrace();
+            log.error(String.format("Message: %s\nStackTrace: %s"
+                    , e.getMessage()
+                    , Arrays.toString(e.getStackTrace())
+            ));
         }
         return null;
     }
 
     public void afterConnectedToVPN() {
-        log.info("afterConnectedToVPN method entered");
+        log.info("afterConnectedToVPN method enter");
 
         String status = VpnStatus.getLastCleanLogMessage(this.ctx);
 
@@ -99,17 +107,22 @@ public class UserVPNPolicy {
             System.out.println("Create connection begin");
             this.us.createConnection(this.serverUuid, virtualIP, "1.1.1.1", email);
         } catch (UserServiceException e) {
-            e.printStackTrace();
+            log.error(String.format("Message: %s\nStackTrace: %s"
+                    , e.getMessage()
+                    , Arrays.toString(e.getStackTrace())
+            ));
         }
+        log.info("afterConnectedToVPN method exit");
     }
 
     private void reInitUserServiceCrutch() {
-        log.info("reInitUserServiceCrutch method entered");
+        log.info("reInitUserServiceCrutch method enter");
         String userServiceURL = VPNAppPreferences.getUserServiceURL("users");
 
         this.preferencesService = new PreferencesService(this.ctx, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
         this.userUuid = preferencesService.getString(VPNAppPreferences.USER_UUID);
 
         this.us = new UsersAPIService(preferencesService, userServiceURL);
+        log.info("reInitUserServiceCrutch method exit");
     }
 }
