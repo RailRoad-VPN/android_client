@@ -293,7 +293,54 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     }
 
 
-    public void deleteConnection() {
+    public void deleteConnection(String serverUuid, String email) {
+        log.info("deleteConnection method enter");
+
+        String url = String.format("%s/%s/connections", this.getServiceURL().replace("users", "vpns/servers"), serverUuid);
+
+        Map<String, String> headers = new HashMap<String, String>();
+        if (!this.deviceToken.equals("")) {
+            headers.put("x-device-token", deviceToken);
+        }
+        headers.put("x-auth-token", this.utilities.generateAuthToken());
+
+
+        HashMap<String, Object> server = new HashMap<>();
+
+        server.put("uuid", serverUuid);
+        server.put("type", "openvpn");
+
+
+        HashMap<String, Object> users = new HashMap<String, Object>();
+        HashMap<String, Object> user = new HashMap<String, Object>();
+
+        user.put("email", email);
+        user.put("bytes_i", 0);
+        user.put("bytes_o", 0);
+        user.put("device_id", this.deviceId);
+
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
+        df.setTimeZone(tz);
+        String nowAsISO = df.format(new Date());
+
+        user.put("connected_since", nowAsISO);
+
+        users.put(email, user);
+
+        HashMap<String, Object> connection = new HashMap<String, Object>();
+
+        connection.put("server", server);
+        connection.put("users", users);
+
+        log.debug(String.format("url: %s\nheaders: %s\nhasmap: %s", url, headers, connection));
+        System.out.println();
+        
+        RESTResponse ur = this.delete(url, connection, headers);
+
+
+        log.info("deleteConnection method exit");
+
 
     }
 }

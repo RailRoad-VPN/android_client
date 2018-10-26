@@ -1,5 +1,5 @@
 package net.rroadvpn.services;
 
 interface UsersAPIServiceI {
-    void deleteConnection();
+    void deleteConnection(String serverUuid, String email);
 }

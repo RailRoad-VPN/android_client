@@ -18,14 +18,22 @@ public class PreferencesService {
     public void save(String prefLabel, String value) {
         SharedPreferences.Editor ed = this.preferences.edit();
         ed.putString(prefLabel, value);
-        ed.commit();
+        ed.apply();
     }
 
     public void save(String prefLabel, Integer value) {
         SharedPreferences.Editor ed = this.preferences.edit();
         ed.putInt(prefLabel, value);
-        ed.commit();
+        ed.apply();
     }
+
+    public void clear(){
+        SharedPreferences.Editor ed = this.preferences.edit();
+        ed.clear();
+        ed.apply();
+    }
+
+
 
     public String getString(String prefLabel) {
         return this.preferences.getString(prefLabel, "");

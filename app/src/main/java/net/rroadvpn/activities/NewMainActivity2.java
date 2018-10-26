@@ -3,9 +3,11 @@ package net.rroadvpn.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -134,27 +136,29 @@ public class NewMainActivity2 extends BaseActivity {
             public void onClick(View view) {
                 log.info("1");
 
+                System.out.println();
 
-//TODO read from file (DO NOT HARDCODE /sdcard/)
-                StringBuilder text = new StringBuilder();
-                try {
-//                    File sdcard = Environment.getExternalStorageDirectory();
-                    File sdcard = new File("/sdcard/Android/data/files");
-                    File file = new File(sdcard,"rroadVPN_openVPN_log.2018_10_25.log");
 
-                    BufferedReader br = new BufferedReader(new FileReader(file));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        text.append(line);
-                        text.append('\n');
-                    }
-                    br.close() ;
-//                    log.info(String.valueOf(text));
-                    System.out.println(text);
-                }catch (IOException e) {
-                    e.printStackTrace();
-                }
-//<<<<<<<<<<<<<<<<<<<<<
+////TODO read from file (DO NOT HARDCODE /sdcard/)
+//                StringBuilder text = new StringBuilder();
+//                try {
+////                    File sdcard = Environment.getExternalStorageDirectory();
+//                    File sdcard = new File("/sdcard/Android/data/files");
+//                    File file = new File(sdcard, "rroadVPN_openVPN_log.2018_10_25.log");
+//
+//                    BufferedReader br = new BufferedReader(new FileReader(file));
+//                    String line;
+//                    while ((line = br.readLine()) != null) {
+//                        text.append(line);
+//                        text.append('\n');
+//                    }
+//                    br.close();
+////                    log.info(String.valueOf(text));
+//                    System.out.println(text);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+////<<<<<<<<<<<<<<<<<<<<<
 
 //               System.out.println("test log file");
 //                try {
