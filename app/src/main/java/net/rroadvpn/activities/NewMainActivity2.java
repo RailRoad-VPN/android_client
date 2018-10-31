@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import net.rroadvpn.activities.pin.InputPinView;
 import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.activities.BaseActivity;
@@ -26,6 +27,7 @@ import net.rroadvpn.openvpn.core.VpnStatus;
 import net.rroadvpn.services.OpenVPNControlService;
 import net.rroadvpn.services.UserVPNPolicy;
 
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +36,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.ExecutionException;
 
 import static net.rroadvpn.services.OpenVPNControlService.VPN_SERVICE_INTENT_PERMISSION;
 
@@ -159,32 +162,40 @@ public class NewMainActivity2 extends BaseActivity {
 //                    e.printStackTrace();
 //                }
 ////<<<<<<<<<<<<<<<<<<<<<
+            }
+        });
 
-//               System.out.println("test log file");
-//                try {
-//                    String randomServerUuid = us.getRandomServerUuid(userUuid);
-//                } catch (UserServiceException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                try {
-//                    String randomServerUuid = us.getRandomServerUuid(userUuid);
-//                } catch (UserServiceException e) {
-//                    e.printStackTrace();
-//                }
 
-//                Handler handler = new Handler();
-//                handler.postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        try {
-//                            String randomServerUuid = us.getRandomServerUuid(userUuid);
-//                            us.createUserDevice(userUuid);
-//                        } catch (UserServiceException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                }, 20000);
+        Button logOut = (Button) findViewById(R.id.log_out);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                log.info("Log out button pressed");
+                AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+                        if (ovcs.isVPNActive()) {
+                            try {
+                                ovcs.disconnectFromVPN();
+//                                userVPNPolicy.afterDisconnectVPN();
+                            } catch (RemoteException e) {
+                                log.error(e.getMessage());
+                                return null;
+                            }
+                        }
+                        userVPNPolicy.reInitUserServiceCrutch();
+                        userVPNPolicy.deleteUserSettings();
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void result) {
+                        findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.ic_red_semaphore);
+                        Intent intent = new Intent(getBaseContext(), InputPinView.class);
+                        startActivity(intent);
+                        log.info("disconnectFromVPN AsyncTask onPostExecute exit");
+                    }
+                }.execute();
             }
         });
 
@@ -206,6 +217,7 @@ public class NewMainActivity2 extends BaseActivity {
             protected void onPostExecute(Void result) {
                 findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.ic_green_semaphore);
                 log.info("AsyncTask connectToVPN onPostExecute exit.");
+
             }
         }.execute();
         log.info("connectToVPN exit");

@@ -27,12 +27,11 @@ public class PreferencesService {
         ed.apply();
     }
 
-    public void clear(){
+    public void clear() {
         SharedPreferences.Editor ed = this.preferences.edit();
         ed.clear();
         ed.apply();
     }
-
 
 
     public String getString(String prefLabel) {

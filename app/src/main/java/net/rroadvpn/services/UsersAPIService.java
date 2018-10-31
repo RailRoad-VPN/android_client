@@ -335,12 +335,30 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
 
         log.debug(String.format("url: %s\nheaders: %s\nhasmap: %s", url, headers, connection));
         System.out.println();
-        
+
         RESTResponse ur = this.delete(url, connection, headers);
 
 
         log.info("deleteConnection method exit");
+    }
+
+    public void deleteUserDevice(String userUuid, String userDeviceUuid) {
+        log.info("deleteUserDevice method enter");
+        String url = String.format("%s/%s/devices/%s", this.getServiceURL(), userUuid, userDeviceUuid);
+
+        Map<String, String> headers = new HashMap<String, String>();
+        if (!this.deviceToken.equals("")) {
+            headers.put("x-device-token", deviceToken);
+        }
+        headers.put("x-auth-token", this.utilities.generateAuthToken());
 
 
+        HashMap<String, Object> userDevice = new HashMap<String, Object>();
+        userDevice.put("uuid", userDeviceUuid);
+        userDevice.put("user_uuid", userUuid);
+        userDevice.put("modify_reason", "log out");
+
+        RESTResponse ur = this.delete(url, userDevice, headers);
+        log.info("deleteUserDevice method exit");
     }
 }

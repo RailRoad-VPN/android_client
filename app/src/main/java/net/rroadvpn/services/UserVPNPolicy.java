@@ -12,6 +12,7 @@ import net.rroadvpn.model.User;
 import net.rroadvpn.model.VPNAppPreferences;
 import net.rroadvpn.openvpn.core.VpnStatus;
 
+import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -119,7 +120,7 @@ public class UserVPNPolicy {
         log.info("afterConnectedToVPN method exit");
     }
 
-    private void reInitUserServiceCrutch() {
+    public void reInitUserServiceCrutch() {
         log.info("reInitUserServiceCrutch method enter");
         String userServiceURL = VPNAppPreferences.getUserServiceURL("users");
 
@@ -129,6 +130,10 @@ public class UserVPNPolicy {
         log.info("reInitUserServiceCrutch method exit");
     }
 
-
-
+    public void deleteUserSettings() {
+        log.info("deleteUserSettings method enter");
+        this.us.deleteUserDevice(user.getUuid(), this.preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID));
+        this.preferencesService.clear();
+        log.info("deleteUserSettings method exit");
+    }
 }
