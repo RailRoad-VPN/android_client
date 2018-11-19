@@ -59,7 +59,12 @@ public class NewMainActivity2 extends BaseActivity {
 
         setContentView(R.layout.new_main_activity2);
 
+
         ImageButton connectToVPNBtn = (ImageButton) findViewById(R.id.connect_to_vpn);
+        if (ovcs.isVPNActive()) {
+            connectToVPNBtn.setBackgroundResource(R.drawable.ic_green_semaphore);
+        }
+
 
         connectToVPNBtn.setOnClickListener(new View.OnClickListener() {
             @Override
