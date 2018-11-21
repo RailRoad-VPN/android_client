@@ -1,6 +1,7 @@
 package net.rroadvpn.activities;
 
 
+import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
@@ -10,12 +11,18 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Message;
 import android.os.RemoteException;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import net.rroadvpn.activities.pin.InputPinView;
 import net.rroadvpn.exception.UserServiceException;
@@ -48,6 +55,27 @@ public class NewMainActivity2 extends BaseActivity {
 
 
     public static String EXTRA_KEY = "net.rroadvpn.openvpn.shortcutProfileUUID";
+    private boolean MENU_VISIBLE = false;
+
+    ImageButton menuBtn;
+    LinearLayout menuLayout;
+
+    private void toggleMenu() {
+        ViewGroup.LayoutParams menuLP = menuLayout.getLayoutParams();
+
+        if (menuLP.width == 0) {
+            DisplayMetrics displayMetrics = getBaseContext().getResources().getDisplayMetrics();
+            float dpWidth = displayMetrics.widthPixels;
+
+            menuLP.width = Math.round(dpWidth/2);
+            MENU_VISIBLE = true;
+        } else {
+            menuLP.width = 0;
+            MENU_VISIBLE = false;
+        }
+
+        menuLayout.setLayoutParams(menuLP);
+    }
 
 
     protected void onCreate(android.os.Bundle savedInstanceState) {
@@ -58,6 +86,42 @@ public class NewMainActivity2 extends BaseActivity {
         this.userVPNPolicy = new UserVPNPolicy(this);
 
         setContentView(R.layout.new_main_activity2);
+
+        this.menuBtn = findViewById(R.id.main_menu_btn);
+        this.menuLayout = findViewById(R.id.main_menu);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            menuLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+        }
+
+        this.menuBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleMenu();
+            }
+        });
+
+        RelativeLayout viewById = findViewById(R.id.main_wrapper);
+        viewById.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (MENU_VISIBLE) {
+                    toggleMenu();
+                }
+            }
+        });
+
+        Button testMenuItem = findViewById(R.id.test_menu_item);
+
+        testMenuItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getBaseContext(), "PIZEDC", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+        /////
 
 
         ImageButton connectToVPNBtn = (ImageButton) findViewById(R.id.connect_to_vpn);

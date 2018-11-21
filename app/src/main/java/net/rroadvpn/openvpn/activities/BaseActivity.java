@@ -22,6 +22,7 @@ public class BaseActivity extends Activity {
         if (isAndroidTV()) {
             requestWindowFeature(Window.FEATURE_OPTIONS_PANEL);
         }
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
     }
 
