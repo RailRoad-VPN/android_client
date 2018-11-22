@@ -44,7 +44,6 @@ public class InputPinView extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Objects.requireNonNull(this.getActionBar()).hide();
 
         this.userVPNPolicy = new UserVPNPolicy(this);
 

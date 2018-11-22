@@ -4,16 +4,13 @@ package net.rroadvpn.activities;
 import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Environment;
-import android.os.Message;
 import android.os.RemoteException;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -25,25 +22,14 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import net.rroadvpn.activities.pin.InputPinView;
-import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.activities.BaseActivity;
-import net.rroadvpn.openvpn.core.LogItem;
-import net.rroadvpn.openvpn.core.OpenVPNStatusService;
 import net.rroadvpn.openvpn.core.VpnStatus;
 import net.rroadvpn.services.OpenVPNControlService;
 import net.rroadvpn.services.UserVPNPolicy;
 
-import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.concurrent.ExecutionException;
 
 import static net.rroadvpn.services.OpenVPNControlService.VPN_SERVICE_INTENT_PERMISSION;
 
@@ -57,26 +43,6 @@ public class NewMainActivity2 extends BaseActivity {
     public static String EXTRA_KEY = "net.rroadvpn.openvpn.shortcutProfileUUID";
     private boolean MENU_VISIBLE = false;
 
-    ImageButton menuBtn;
-    LinearLayout menuLayout;
-
-    private void toggleMenu() {
-        ViewGroup.LayoutParams menuLP = menuLayout.getLayoutParams();
-
-        if (menuLP.width == 0) {
-            DisplayMetrics displayMetrics = getBaseContext().getResources().getDisplayMetrics();
-            float dpWidth = displayMetrics.widthPixels;
-
-            menuLP.width = Math.round(dpWidth/2);
-            MENU_VISIBLE = true;
-        } else {
-            menuLP.width = 0;
-            MENU_VISIBLE = false;
-        }
-
-        menuLayout.setLayoutParams(menuLP);
-    }
-
 
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,42 +53,40 @@ public class NewMainActivity2 extends BaseActivity {
 
         setContentView(R.layout.new_main_activity2);
 
-        this.menuBtn = findViewById(R.id.main_menu_btn);
-        this.menuLayout = findViewById(R.id.main_menu);
+        ImageButton menuBtn = findViewById(R.id.side_menu_btn);
+        RelativeLayout mainLayout = findViewById(R.id.main_wrapper);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            menuLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+            mainLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
         }
 
-        this.menuBtn.setOnClickListener(new View.OnClickListener() {
+        menuBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleMenu();
+                toggleMenu(mainLayout);
             }
         });
 
-        RelativeLayout viewById = findViewById(R.id.main_wrapper);
-        viewById.setOnClickListener(new View.OnClickListener() {
+        mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (MENU_VISIBLE) {
-                    toggleMenu();
+                    toggleMenu(mainLayout);
                 }
             }
         });
 
-        Button testMenuItem = findViewById(R.id.test_menu_item);
+        Button profileButton = findViewById(R.id.side_menu_btn_profile);
 
-        testMenuItem.setOnClickListener(new View.OnClickListener() {
+        profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "PIZEDC", Toast.LENGTH_LONG).show();
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://rroadvpn.net/en/profile"));
+                startActivity(browserIntent);
 
             }
         });
-
-        /////
-
 
         ImageButton connectToVPNBtn = (ImageButton) findViewById(R.id.connect_to_vpn);
         if (ovcs.isVPNActive()) {
@@ -134,8 +98,6 @@ public class NewMainActivity2 extends BaseActivity {
             @Override
             public void onClick(View view) {
                 log.info("connectToVPNBtn button pressed");
-                connectToVPNBtn.setBackgroundResource(R.drawable.black_yellow_semaphore_animation);
-                ((AnimationDrawable) connectToVPNBtn.getBackground()).start();
 
                 if (ovcs.isVPNActive()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(NewMainActivity2.this);
@@ -152,6 +114,8 @@ public class NewMainActivity2 extends BaseActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             log.info("dialogInterface positive button pressed. AsyncTask disconnectFromVPN enter.");
 //                            ProfileManager.setConntectedVpnProfileDisconnected(getBaseContext());
+                            connectToVPNBtn.setBackgroundResource(R.drawable.black_yellow_semaphore_animation);
+                            ((AnimationDrawable) connectToVPNBtn.getBackground()).start();
                             AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
                                 @Override
                                 protected Void doInBackground(Void... voids) {
@@ -186,6 +150,8 @@ public class NewMainActivity2 extends BaseActivity {
                     });
                     builder.show();
                 } else {
+                    connectToVPNBtn.setBackgroundResource(R.drawable.black_yellow_semaphore_animation);
+                    ((AnimationDrawable) connectToVPNBtn.getBackground()).start();
                     if (ovcs.vpnPreparePermissionIntent() != null) {
                         try {
                             startActivityForResult(ovcs.vpnPreparePermissionIntent(), VPN_SERVICE_INTENT_PERMISSION);
@@ -202,40 +168,40 @@ public class NewMainActivity2 extends BaseActivity {
             }
         });
 
-        Button testAPIBtn = (Button) findViewById(R.id.test_api);
-        testAPIBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                log.info("1");
-
-                System.out.println();
-
-
-////TODO read from file (DO NOT HARDCODE /sdcard/)
-//                StringBuilder text = new StringBuilder();
-//                try {
-////                    File sdcard = Environment.getExternalStorageDirectory();
-//                    File sdcard = new File("/sdcard/Android/data/files");
-//                    File file = new File(sdcard, "rroadVPN_openVPN_log.2018_10_25.log");
+//        Button testAPIBtn = (Button) findViewById(R.id.test_api);
+//        testAPIBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                log.info("1");
 //
-//                    BufferedReader br = new BufferedReader(new FileReader(file));
-//                    String line;
-//                    while ((line = br.readLine()) != null) {
-//                        text.append(line);
-//                        text.append('\n');
-//                    }
-//                    br.close();
-////                    log.info(String.valueOf(text));
-//                    System.out.println(text);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-////<<<<<<<<<<<<<<<<<<<<<
-            }
-        });
+//                System.out.println();
+//
+//
+//////TODO read from file (DO NOT HARDCODE /sdcard/)
+////                StringBuilder text = new StringBuilder();
+////                try {
+//////                    File sdcard = Environment.getExternalStorageDirectory();
+////                    File sdcard = new File("/sdcard/Android/data/files");
+////                    File file = new File(sdcard, "rroadVPN_openVPN_log.2018_10_25.log");
+////
+////                    BufferedReader br = new BufferedReader(new FileReader(file));
+////                    String line;
+////                    while ((line = br.readLine()) != null) {
+////                        text.append(line);
+////                        text.append('\n');
+////                    }
+////                    br.close();
+//////                    log.info(String.valueOf(text));
+////                    System.out.println(text);
+////                } catch (IOException e) {
+////                    e.printStackTrace();
+////                }
+//////<<<<<<<<<<<<<<<<<<<<<
+//            }
+//        });
 
 
-        Button logOut = (Button) findViewById(R.id.log_out);
+        Button logOut = (Button) findViewById(R.id.side_menu_btn_log_out);
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -268,6 +234,22 @@ public class NewMainActivity2 extends BaseActivity {
             }
         });
 
+    }
+
+    private void toggleMenu(RelativeLayout mainLayout) {
+        ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams) mainLayout.getLayoutParams();
+        if (margins.leftMargin == 0) {
+            DisplayMetrics displayMetrics = getBaseContext().getResources().getDisplayMetrics();
+            float dpWidth = displayMetrics.widthPixels;
+
+            margins.setMargins(Math.round(dpWidth / 2), 0, -Math.round(dpWidth / 2), 0);
+            MENU_VISIBLE = true;
+        } else {
+            margins.setMargins(0, 0, 0, 0);
+            MENU_VISIBLE = false;
+        }
+
+        mainLayout.setLayoutParams(margins);
     }
 
     private void connectToVPN() {

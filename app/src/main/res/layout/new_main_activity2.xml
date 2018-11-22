@@ -6,10 +6,38 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:id="@+id/side_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@color/side_menu_background"
+        android:orientation="vertical"
+        >
+
+        <Button
+            android:id="@+id/side_menu_btn_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/white"
+            android:text="@string/side_menu_btn_profile" />
+
+        <Button
+            android:id="@+id/side_menu_btn_log_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textColor="@android:color/white"
+            android:text="@string/side_menu_btn_log_out" />
+    </LinearLayout>
+
     <RelativeLayout
         android:id="@+id/main_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/rroad_main_background">
 
         <ImageButton
             android:id="@+id/connect_to_vpn"
@@ -18,28 +46,20 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:background="@drawable/ic_red_semaphore"
-            android:contentDescription="@string/connect_disconnect" />
+            android:contentDescription="@string/connect_disconnect"
+            android:layout_marginTop="70dp"/>
 
-        <Button
-            android:id="@+id/test_api"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/connect_to_vpn"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:text="@string/btn_text2" />
-
-        <Button
-            android:id="@+id/log_out"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/test_api"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:text="@string/btn_log_out" />
+        <!--<Button-->
+            <!--android:id="@+id/test_api"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/connect_to_vpn"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:text="@string/btn_text2" />-->
 
         <ImageButton
-            android:id="@+id/main_menu_btn"
+            android:id="@+id/side_menu_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/vpn_item_settings"
@@ -47,18 +67,4 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/main_menu"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        android:background="@color/colorAccent"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/test_menu_item"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="test_menu_item" />
-    </LinearLayout>
 </RelativeLayout>

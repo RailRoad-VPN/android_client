@@ -498,6 +498,7 @@
     <string name="enter_pin">Enter a pin or Sign Up</string>
     <string name="enter_a_pin_or_sign_up">Enter a pin or Sign Up</string>
     <string name="connect_disconnect">connect/disconnect</string>
-    <string name="btn_log_out">Log out</string>
+    <string name="side_menu_btn_log_out">Log out</string>
+    <string name="side_menu_btn_profile">Profile</string>
 
 </resources>
