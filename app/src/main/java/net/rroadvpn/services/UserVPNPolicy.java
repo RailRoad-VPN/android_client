@@ -65,7 +65,7 @@ public class UserVPNPolicy {
     public void afterDisconnectVPN() {
         log.info("afterDisconnectVPN method enter");
         reInitUserServiceCrutch();
-        us.deleteConnection(serverUuid, user.getEmail());
+//        us.deleteConnection(serverUuid, user.getEmail());
         log.info("afterDisconnectVPN method exit");
     }
 

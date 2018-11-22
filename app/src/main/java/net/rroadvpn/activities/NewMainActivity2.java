@@ -212,7 +212,7 @@ public class NewMainActivity2 extends BaseActivity {
                         if (ovcs.isVPNActive()) {
                             try {
                                 ovcs.disconnectFromVPN();
-//                                userVPNPolicy.afterDisconnectVPN();
+                                userVPNPolicy.afterDisconnectVPN();
                             } catch (RemoteException e) {
                                 log.error(e.getMessage());
                                 return null;
