@@ -42,5 +42,5 @@
 
     <color name="line_colors">#C5CAE9</color>
 
-    <color name="side_menu_background">#000000</color>
+    <color name="side_menu_background">@android:color/holo_orange_light</color>
 </resources>

@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@drawable/pin_cropped">
 
     <TextView
         android:id="@+id/welcome"
@@ -16,7 +17,8 @@
         android:layout_marginTop="50dp"
         android:text="@string/welcome"
         android:textAlignment="center"
-        android:textSize="36sp" />
+        android:textSize="36sp"
+        android:textColor="@android:color/white"/>
     <TextView
         android:id="@+id/pin_tip"
         android:layout_width="wrap_content"
@@ -26,7 +28,8 @@
         android:layout_marginTop="20dp"
         android:textAlignment="center"
         android:textSize="20sp"
-        android:text="@string/enter_a_pin_or_sign_up" />
+        android:text="@string/enter_a_pin_or_sign_up"
+        android:textColor="@android:color/white" />
 
     <net.rroadvpn.activities.pin.PinView
         android:id="@+id/pinView"

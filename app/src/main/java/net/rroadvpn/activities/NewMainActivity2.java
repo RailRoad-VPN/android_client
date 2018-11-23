@@ -15,6 +15,7 @@ import android.os.RemoteException;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -75,6 +76,7 @@ public class NewMainActivity2 extends BaseActivity {
                     toggleMenu(mainLayout);
                 }
             }
+
         });
 
         Button profileButton = findViewById(R.id.side_menu_btn_profile);
@@ -101,9 +103,9 @@ public class NewMainActivity2 extends BaseActivity {
 
                 if (ovcs.isVPNActive()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(NewMainActivity2.this);
-                    builder.setTitle("А ТЫ УВЕРЕН?");
-                    builder.setMessage("ОТКЛЮЧЕНИЕ ВОДЫ");
-                    builder.setNegativeButton("Я ССЫЛКЛО", new DialogInterface.OnClickListener() {
+                    builder.setTitle("Turning off VPN");
+                    builder.setMessage("Are you sure?");
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             log.info("dialogInterface negative button pressed");
@@ -134,12 +136,6 @@ public class NewMainActivity2 extends BaseActivity {
                                     log.info("disconnectFromVPN AsyncTask onPostExecute exit");
                                 }
                             }.execute();
-                        }
-                    });
-                    builder.setNeutralButton("RECONNECT", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            log.info("dialogInterface reconnect button pressed");
                         }
                     });
                     builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -239,12 +235,13 @@ public class NewMainActivity2 extends BaseActivity {
     private void toggleMenu(RelativeLayout mainLayout) {
         ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams) mainLayout.getLayoutParams();
         if (margins.leftMargin == 0) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             DisplayMetrics displayMetrics = getBaseContext().getResources().getDisplayMetrics();
             float dpWidth = displayMetrics.widthPixels;
-
             margins.setMargins(Math.round(dpWidth / 2), 0, -Math.round(dpWidth / 2), 0);
             MENU_VISIBLE = true;
         } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             margins.setMargins(0, 0, 0, 0);
             MENU_VISIBLE = false;
         }

@@ -12,24 +12,81 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
         android:background="@color/side_menu_background"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/side_menu_btn_profile"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:textColor="@android:color/white"
-            android:text="@string/side_menu_btn_profile" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/side_menu_btn_log_out"
+
+        <ImageView
+            android:layout_height="70px"
+            android:layout_width="70px"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/mascot_head"
+            android:contentDescription="Logo">
+
+        </ImageView>
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:textColor="@android:color/white"
-            android:text="@string/side_menu_btn_log_out" />
+            android:layout_marginTop="8dp"
+            android:textSize="18dp"
+            android:textFontWeight="900"
+            android:text="RAILROAD\nNETWORK" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/side_menu_btn_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="start"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/transparent"
+                android:text="@string/side_menu_btn_profile"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
+                android:textColor="@android:color/black"
+
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:background="@android:color/darker_gray" />
+            <Button
+                android:id="@+id/side_menu_btn_log_out"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="start"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:background="@android:color/transparent"
+                android:text="@string/side_menu_btn_log_out"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
+                android:textColor="@android:color/black"
+/>
+
+            <RelativeLayout
+                android:layout_width="100dp"
+                android:layout_height="1px"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:background="@android:color/darker_gray" />
+        </LinearLayout>
     </LinearLayout>
 
     <RelativeLayout
@@ -45,23 +102,26 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
             android:background="@drawable/ic_red_semaphore"
-            android:contentDescription="@string/connect_disconnect"
-            android:layout_marginTop="70dp"/>
+            android:contentDescription="@string/connect_disconnect" />
 
         <!--<Button-->
-            <!--android:id="@+id/test_api"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@+id/connect_to_vpn"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--android:text="@string/btn_text2" />-->
+        <!--android:id="@+id/test_api"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/connect_to_vpn"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:text="@string/btn_text2" />-->
 
         <ImageButton
             android:id="@+id/side_menu_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
             android:background="@drawable/vpn_item_settings"
             android:contentDescription="TODO" />
 

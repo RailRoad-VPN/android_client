@@ -8,8 +8,10 @@ package net.rroadvpn.openvpn.activities;
 import android.app.Activity;
 import android.app.UiModeManager;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Window;
+import android.view.WindowManager;
 
 public class BaseActivity extends Activity {
     private boolean isAndroidTV() {
@@ -23,6 +25,18 @@ public class BaseActivity extends Activity {
             requestWindowFeature(Window.FEATURE_OPTIONS_PANEL);
         }
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
+                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+            );
+        } else {
+            getWindow().setFlags(
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+            );
+        }
         super.onCreate(savedInstanceState);
     }
 
