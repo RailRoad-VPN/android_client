@@ -1,5 +1,6 @@
 package net.rroadvpn.services;
 
+import net.rroadvpn.exception.RESTException;
 import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.model.VPNAppPreferences;
 import net.rroadvpn.model.User;
@@ -117,12 +118,14 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
 
         String url = String.format("%s/%s/devices", this.getServiceURL(), String.valueOf(userUuid));
 
+        log.debug("URL for request: {}", url);
         String deviceId = String.valueOf(utilities.getRandomInt(100000, 999999));
+        log.debug("Save to preference generated device id: {}", deviceId);
         this.preferencesService.save(VPNAppPreferences.DEVICE_ID, deviceId);
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("x-auth-token", this.utilities.generateAuthToken());
 
-
+        log.debug("Prepare data for request");
         HashMap<String, Object> userDevice = new HashMap<String, Object>();
         userDevice.put("user_uuid", userUuid);
         userDevice.put("device_id", deviceId);
@@ -130,17 +133,18 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         userDevice.put("vpn_type_id", VPNAppPreferences.VPN_TYPE_ID);
         userDevice.put("is_active", true);
         userDevice.put("location", "test_android2");
+        log.debug("Prepared: {}", userDevice.toString());
 
         RESTResponse ur = this.post(url, userDevice, headers);
 
         List<String> xDeviceTokenList = ur.getHeaders().get("x-device-token");
-        if (xDeviceTokenList.size() > 0) {
+        if (xDeviceTokenList != null) {
             this.preferencesService.save(VPNAppPreferences.DEVICE_TOKEN, xDeviceTokenList.get(0));
             this.deviceToken = xDeviceTokenList.get(0);
         }
 
-        List<String> userDeviceLocation = ur.getHeaders().get("location");
-        if (ur.getHeaders().get("Location").size() > 0) {
+        List<String> userDeviceLocation = ur.getHeaders().get("Location");
+        if (userDeviceLocation != null) {
             String location = userDeviceLocation.get(0);
             String userDeviceUuid = location.substring(location.lastIndexOf("/") + 1);
             this.preferencesService.save(VPNAppPreferences.USER_DEVICE_UUID, userDeviceUuid);

@@ -46,13 +46,12 @@ public class RESTService implements RESTServiceI {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     private OkHttpClient client;
-    private Logger log;
+    private Logger log = LoggerFactory.getLogger(this.getClass());
     private Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm'Z'").create();
 
     public RESTService(PreferencesService preferencesService, String serviceURL) {
         this.preferencesService = preferencesService;
         this.serviceURL = serviceURL;
-        this.log = LoggerFactory.getLogger(RESTService.class);
 
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
@@ -64,7 +63,7 @@ public class RESTService implements RESTServiceI {
     }
 
     @Override
-    public RESTResponse get(String url, Map<String, String> headers) {
+    public RESTResponse get(String url, Map<String, String> headers) throws RESTException {
         if (url == null) {
             url = this.serviceURL;
         }
@@ -113,7 +112,7 @@ public class RESTService implements RESTServiceI {
     }
 
     @Override
-    public RESTResponse put(String url, Map<String, Object> data, Map<String, String> headers) {
+    public RESTResponse put(String url, Map<String, Object> data, Map<String, String> headers) throws RESTException {
         if (url == null) {
             url = this.serviceURL;
         }
@@ -163,7 +162,9 @@ public class RESTService implements RESTServiceI {
     }
 
     @Override
-    public RESTResponse post(String url, Map<String, Object> data, Map<String, String> headers) {
+    public RESTResponse post(String url, Map<String, Object> data, Map<String, String> headers) throws RESTException {
+        log.debug("post request with parameters: url={}, data={}, headers={}", url, data, headers);
+
         if (url == null) {
             url = this.serviceURL;
         }
@@ -183,24 +184,31 @@ public class RESTService implements RESTServiceI {
 
         Response response;
         try {
+            log.debug("post request do call");
             response = this.client.newCall(request).execute();
         } catch (IOException e) {
+            log.debug("post request IOException: {}", e);
             e.printStackTrace();
             throw new RESTException("Stub");
         } catch (NetworkOnMainThreadException e) {
+            log.debug("post request NetworkOnMainThreadException: {}", e);
             e.printStackTrace();
             throw new RESTException("Stub");
         }
 
         String responseBodyString;
         try {
+            log.debug("post request get body");
             ResponseBody body = response.body();
             if (body == null) {
+                log.debug("post request body is null");
                 throw new RESTException("Stub");
             } else {
                 responseBodyString = body.string();
+                log.debug("post request body: {}", responseBodyString);
             }
         } catch (IOException e) {
+            log.debug("post request IOException: {}", e);
             throw new RESTException("Stub");
         }
 
@@ -208,6 +216,7 @@ public class RESTService implements RESTServiceI {
             return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString,
                     response.headers());
         } catch (JSONException e) {
+            log.debug("post request JSONException: {}", e);
             e.printStackTrace();
             throw new RESTException("Stub");
         }
@@ -262,6 +271,7 @@ public class RESTService implements RESTServiceI {
     }
 
     private RequestBody prepareRequestBody(Map<String, Object> data) {
+        log.debug("prepareRequestBody with parameters data={}", data);
         String dataJson = this.gson.toJson(data);
 
         return RequestBody.create(JSON, dataJson);
@@ -291,9 +301,9 @@ public class RESTService implements RESTServiceI {
 
     private RESTResponse parseResponse(int responseCode, boolean isOk, String responseBodyString,
                                        Headers headers) throws JSONException {
-        System.out.println("!\nthis is response:\n" + responseBodyString);
-        log.debug("parseResponse started. This is responce before parsing:\n" + responseBodyString);
+        log.debug("parseResponse with parameters: responseCode={}, isOk={}, responseBodyString={}, headers={}", responseCode, isOk, responseBodyString, headers);
         JSONObject jsonObj = new JSONObject(responseBodyString);
+        log.debug("Created JSON object from response body: {}", jsonObj.toString());
 
         String status = (String) jsonObj.get("status");
 
@@ -304,21 +314,25 @@ public class RESTService implements RESTServiceI {
         if (isOk) {
             log.info("Response success");
             if (jsonObj.has("data")) {
+                log.debug("JSONObject contains data");
                 JSONObject data = jsonObj.getJSONObject("data");
                 restResponse.setData(data);
             }
 
             if (jsonObj.has("limit")) {
+                log.debug("JSONObject contains limit");
                 Integer limit = (Integer) jsonObj.get("limit");
                 restResponse.setLimit(limit);
             }
 
             if (jsonObj.has("offset")) {
+                log.debug("JSONObject contains offset");
                 Integer offset = (Integer) jsonObj.get("offset");
                 restResponse.setLimit(offset);
             }
         } else if (jsonObj.has("errors")) {
-            log.error("reponseBodyString has API error. HALT API ERROR:\n" + responseBodyString + "HALT API ERROR");
+            log.debug("JSONObject contains errors");
+            log.error("responseBodyString has API error. HALT API ERROR: {}", responseBodyString);
             List<RESTError> errors = new ArrayList<>();
             JSONArray errorsJson = jsonObj.getJSONArray("errors");
             for (int i = 0; i < errorsJson.length(); i++) {

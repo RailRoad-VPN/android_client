@@ -3,7 +3,7 @@ package net.rroadvpn.model;
 public final class VPNAppPreferences {
 
 
-    private static final String API_URL = "http://api.rroadvpn.net";
+    private static final String API_URL = "https://api.rroadvpn.net";
     private static final String API_VER = "v1";
 
     public static final String PREF_USER_GLOBAL_KEY = "user_details";
