@@ -234,15 +234,15 @@ public class NewMainActivity2 extends BaseActivity {
 
     private void toggleMenu(RelativeLayout mainLayout) {
         ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams) mainLayout.getLayoutParams();
-        if (margins.leftMargin == 0) {
+        if (margins.leftMargin == -133) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
             DisplayMetrics displayMetrics = getBaseContext().getResources().getDisplayMetrics();
             float dpWidth = displayMetrics.widthPixels;
-            margins.setMargins(Math.round(dpWidth / 2), 0, -Math.round(dpWidth / 2), 0);
+            margins.setMargins(Math.round(dpWidth / 2) - 133, 0, -Math.round(dpWidth / 2), 0);
             MENU_VISIBLE = true;
         } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            margins.setMargins(0, 0, 0, 0);
+            margins.setMargins(-133, 0, 0, 0);
             MENU_VISIBLE = false;
         }
 

@@ -94,11 +94,11 @@
         android:layout_height="match_parent"
         android:animateLayoutChanges="true"
         android:layout_marginLeft="-67dp"
-        android:background="@drawable/rroad_main_background">
+        android:background="@drawable/drop_shadow">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/drop_shadow">
+            android:background="@drawable/rroad_main_background">
 
             <ImageButton
                 android:id="@+id/connect_to_vpn"
