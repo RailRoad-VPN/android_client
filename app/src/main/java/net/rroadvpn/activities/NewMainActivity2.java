@@ -117,7 +117,6 @@ public class NewMainActivity2 extends BaseActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             log.info("dialogInterface positive button pressed. AsyncTask disconnectFromVPN enter.");
-//                            ProfileManager.setConntectedVpnProfileDisconnected(getBaseContext());
                             connectToVPNBtn.setBackgroundResource(R.drawable.black_yellow_semaphore_animation);
                             ((AnimationDrawable) connectToVPNBtn.getBackground()).start();
                             AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
@@ -259,7 +258,11 @@ public class NewMainActivity2 extends BaseActivity {
             @Override
             protected Void doInBackground(Void... voids) {
                 String vpnConfig = userVPNPolicy.getNewRandomVPNServer();
-                ovcs.prepareToConnectVPN(vpnConfig);
+                boolean isReady = ovcs.prepareToConnectVPN(vpnConfig);
+                if (!isReady) {
+                    // TODO do some UI update
+                    return null;
+                }
                 ovcs.connectToVPN();
                 userVPNPolicy.afterConnectedToVPN();
                 return null;
@@ -301,6 +304,4 @@ public class NewMainActivity2 extends BaseActivity {
         super.onDestroy();
         ovcs.unBindService();
     }
-
-
 }

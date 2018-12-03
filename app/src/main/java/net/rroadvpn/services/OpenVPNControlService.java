@@ -79,7 +79,7 @@ public class OpenVPNControlService {
         log.debug("unBindService method exit");
     }
 
-    public void prepareToConnectVPN(String configBase64) {
+    public boolean prepareToConnectVPN(String configBase64) {
         log.info("prepareToConnectVPN method enter");
 
         byte[] decoded = android.util.Base64.decode(configBase64, android.util.Base64.DEFAULT);
@@ -100,11 +100,8 @@ public class OpenVPNControlService {
             EXTRA_KEY = profile.getUUID().toString();
 
         } catch (OpenVPNProfileException e) {
-            log.error(String.format("Message: %s\nStackTrace: %s"
-                    , e.getMessage()
-                    , Arrays.toString(e.getStackTrace())
-            ));
-            return;
+            log.error("OpenVPNProfileException: {}", e);
+            return false;
         }
 
         // Check if we need to clear the log
@@ -113,7 +110,7 @@ public class OpenVPNControlService {
 
         int vpnok = profile.checkProfile(this.ctx);
         if (vpnok != R.string.no_error_found) {
-            return;
+            return false;
         }
 
 
@@ -132,6 +129,7 @@ public class OpenVPNControlService {
                     mCmfixed = true;
             } catch (InterruptedException | IOException e) {
                 VpnStatus.logException("SU command", e);
+                return false;
             }
         }
         if (usecm9fix && !mCmfixed) {
@@ -144,9 +142,12 @@ public class OpenVPNControlService {
                     mCmfixed = true;
             } catch (InterruptedException | IOException e) {
                 VpnStatus.logException("SU command", e);
+                return false;
             }
         }
+
         log.info("prepareToConnectVPN method exit");
+        return true;
     }
 
     public Intent vpnPreparePermissionIntent() {
