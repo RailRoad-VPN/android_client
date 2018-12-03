@@ -57,8 +57,9 @@ public class NewMainActivity2 extends BaseActivity {
         ImageButton menuBtn = findViewById(R.id.side_menu_btn);
         RelativeLayout mainLayout = findViewById(R.id.main_wrapper);
 
-
+        log.debug("check build version");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            log.debug("layout transition enable changing transition type");
             mainLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
         }
 
@@ -84,14 +85,15 @@ public class NewMainActivity2 extends BaseActivity {
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                log.debug("click profile button");
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://rroadvpn.net/en/profile"));
                 startActivity(browserIntent);
-
             }
         });
 
         ImageButton connectToVPNBtn = (ImageButton) findViewById(R.id.connect_to_vpn);
         if (ovcs.isVPNActive()) {
+            log.debug("vpn is active - set background resource for connect to vpn button");
             connectToVPNBtn.setBackgroundResource(R.drawable.ic_green_semaphore);
         }
 
@@ -99,7 +101,7 @@ public class NewMainActivity2 extends BaseActivity {
         connectToVPNBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                log.info("connectToVPNBtn button pressed");
+                log.info("connectToVPNBtn button click");
 
                 if (ovcs.isVPNActive()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(NewMainActivity2.this);
@@ -155,7 +157,7 @@ public class NewMainActivity2 extends BaseActivity {
                             // Shame on you Sony! At least one user reported that
                             // an official Sony Xperia Arc S image triggers this exception
                             VpnStatus.logError("ActivityNotFoundException PIZDEC!!!!!");
-                            System.out.println("ActivityNotFoundException PIZDEC!!!!!!!!!!!");
+                            log.debug("ActivityNotFoundException PIZDEC!!!!!!!!!!!");
                         }
                     } else {
                         connectToVPN();
@@ -201,11 +203,13 @@ public class NewMainActivity2 extends BaseActivity {
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                log.info("Log out button pressed");
+                log.info("Log out button click");
                 AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
                     @Override
                     protected Void doInBackground(Void... voids) {
+                        log.debug("check is vpn active");
                         if (ovcs.isVPNActive()) {
+                            log.debug("vpn is active");
                             try {
                                 ovcs.disconnectFromVPN();
                                 userVPNPolicy.afterDisconnectVPN();

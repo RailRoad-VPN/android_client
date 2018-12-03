@@ -64,6 +64,8 @@ public class RESTService implements RESTServiceI {
 
     @Override
     public RESTResponse get(String url, Map<String, String> headers) throws RESTException {
+        log.debug("get request with parameters: url={}, headers={}", url, headers);
+
         if (url == null) {
             url = this.serviceURL;
         }
@@ -82,11 +84,14 @@ public class RESTService implements RESTServiceI {
 
         Response response;
         try {
+            log.debug("get request do call");
             response = this.client.newCall(request).execute();
         } catch (IOException e) {
+            log.error("get request IOException: {}", e);
             e.printStackTrace();
             throw new RESTException("Stub");
         } catch (NetworkOnMainThreadException e) {
+            log.error("get request NetworkOnMainThreadException: {}", e);
             e.printStackTrace();
             throw new RESTException("Stub");
         }
@@ -95,17 +100,21 @@ public class RESTService implements RESTServiceI {
         try {
             ResponseBody body = response.body();
             if (body == null) {
+                log.error("get request body is null");
                 throw new RESTException("Stub");
             } else {
                 responseBodyString = body.string();
+                log.debug("body string: {}", responseBodyString);
             }
         } catch (IOException e) {
+            log.error("get request IOException: {}", e);
             throw new RESTException("Stub");
         }
 
         try {
             return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString, response.headers());
         } catch (JSONException e) {
+            log.error("get request JSONException: {}", e);
             e.printStackTrace();
             throw new RESTException("Stub");
         }
@@ -113,6 +122,7 @@ public class RESTService implements RESTServiceI {
 
     @Override
     public RESTResponse put(String url, Map<String, Object> data, Map<String, String> headers) throws RESTException {
+        log.debug("put request with parameters: url={}, data={}, headers={}", url, data, headers);
         if (url == null) {
             url = this.serviceURL;
         }
@@ -132,12 +142,15 @@ public class RESTService implements RESTServiceI {
 
         Response response;
         try {
+            log.debug("put request do call");
             response = this.client.newCall(request).execute();
         } catch (IOException e) {
             e.printStackTrace();
+            log.error("put request IOException: {}", e);
             throw new RESTException("Stub");
         } catch (NetworkOnMainThreadException e) {
             e.printStackTrace();
+            log.error("put request NetworkOnMainThreadException: {}", e);
             throw new RESTException("Stub");
         }
 
@@ -145,11 +158,15 @@ public class RESTService implements RESTServiceI {
         try {
             ResponseBody body = response.body();
             if (body == null) {
+                log.error("get request body is null");
                 throw new RESTException("Stub");
             } else {
                 responseBodyString = body.string();
+                log.debug("body string: {}", responseBodyString);
             }
         } catch (IOException e) {
+            e.printStackTrace();
+            log.error("put request IOException: {}", e);
             throw new RESTException("Stub");
         }
 
@@ -157,6 +174,7 @@ public class RESTService implements RESTServiceI {
             return this.parseResponse(response.code(), response.isSuccessful(), responseBodyString, response.headers());
         } catch (JSONException e) {
             e.printStackTrace();
+            log.error("put request JSONException: {}", e);
             throw new RESTException("Stub");
         }
     }

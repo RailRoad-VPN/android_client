@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4n.view.ViewPager;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -30,22 +31,20 @@ import net.rroadvpn.services.UserVPNPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.Objects;
-
 import static android.support.constraint.Constraints.TAG;
 
 public class InputPinView extends BaseActivity {
-    private UserVPNPolicy userVPNPolicy;
-    private PinView pinView;
     private Logger log = LoggerFactory.getLogger(InputPinView.class);
 
+    private PinView pinView;
+
+    private ProcessUserPincodeTask processUserPincodeTaskTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.userVPNPolicy = new UserVPNPolicy(this);
+        UserVPNPolicy userVPNPolicy = new UserVPNPolicy(this);
 
         setContentView(R.layout.input_pin_view);
 
@@ -84,61 +83,25 @@ public class InputPinView extends BaseActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() == 4) {
-                    log.info(String.format("Pin typed: %s. AsyncTask check pin enter", s.toString()));
-                    new AsyncTask<Void, Void, Boolean>() {
-                        private int errorCode = -1;
-
+            public void afterTextChanged(Editable userPincodeValue) {
+                if (userPincodeValue.length() == 4) {
+                    log.info(String.format("Pin typed: %s. AsyncTask check pin enter", userPincodeValue.toString()));
+                    processUserPincodeTaskTask = new ProcessUserPincodeTask(userVPNPolicy, userPincodeValue);
+                    processUserPincodeTaskTask.setListener(new ProcessUserPincodeTask.ProcessUserPincodeListener() {
                         @Override
-                        protected Boolean doInBackground(Void... voids) {
-                            try {
-                                userVPNPolicy.checkPinCode(Integer.valueOf(s.toString()));
-                            } catch (UserServiceException e) {
-                                log.error(String.format("Message: %s\nStackTrace: %s"
-                                        , e.getMessage()
-                                        , Arrays.toString(e.getStackTrace())
-                                ));
-                                errorCode = 1;
-                                return false;
-                            }
-
-                            try {
-                                userVPNPolicy.createUserDevice();
-                            } catch (UserServiceException e) {
-                                log.error(String.format("Message: %s\nStackTrace: %s"
-                                        , e.getMessage()
-                                        , Arrays.toString(e.getStackTrace())
-                                ));
-                                errorCode = 2;
-                                return false;
-                            }
-                            return true;
-                        }
-
-                        @Override
-                        protected void onPostExecute(Boolean isOk) {
+                        public void onProcessUserPincodeListener(Boolean isOk) {
                             if (isOk) {
                                 Intent intent = new Intent(getBaseContext(), NewMainActivity2.class);
                                 startActivity(intent);
                                 finish();
                             } else {
-                                switch (errorCode) {
-                                    case 1:
-                                        Toast.makeText(getBaseContext(), "Wrong pin", Toast.LENGTH_LONG).show();
-                                        pinView.setItemBackgroundColor(getResources().getColor(R.color.wrong_pin));
-                                        break;
-                                    case 2:
-                                        Toast.makeText(getBaseContext(), "Did not create device", Toast.LENGTH_LONG).show();
-                                        break;
-                                    default:
-                                        Toast.makeText(getBaseContext(), "System Error. HALT!", Toast.LENGTH_LONG).show();
-                                        break;
-                                }
+                                Toast.makeText(getBaseContext(), "Wrong pin", Toast.LENGTH_LONG).show();
+                                pinView.setItemBackgroundColor(getResources().getColor(R.color.wrong_pin));
                             }
-                            log.info(String.format("Pin typed: %s. AsyncTask check pin enter", s.toString()));
+                            log.info(String.format("Pin typed: %s. AsyncTask check pin enter", userPincodeValue.toString()));
                         }
-                    }.execute();
+                    });
+                    processUserPincodeTaskTask.execute();
                 }
             }
         });
@@ -195,8 +158,58 @@ public class InputPinView extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
 
+        this.processUserPincodeTaskTask.setListener(null);
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
                 .hideSoftInputFromWindow(pinView.getWindowToken(), 0);
+    }
+
+    private static class ProcessUserPincodeTask extends AsyncTask<Void, Void, Boolean> {
+        private Logger log = LoggerFactory.getLogger(InputPinView.class);
+
+        private ProcessUserPincodeListener listener;
+
+        private UserVPNPolicy userVPNPolicy;
+        private Editable userPincode;
+
+        ProcessUserPincodeTask(UserVPNPolicy userVPNPolicy, Editable userPincode) {
+            this.userVPNPolicy = userVPNPolicy;
+            this.userPincode = userPincode;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            try {
+                userVPNPolicy.checkPinCode(Integer.valueOf(userPincode.toString()));
+            } catch (UserServiceException e) {
+                log.error("UserServiceException: {}", e);
+                return false;
+            }
+
+            try {
+                userVPNPolicy.createUserDevice();
+            } catch (UserServiceException e) {
+                log.error("UserServiceException: {}", e);
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isOk) {
+            super.onPostExecute(isOk);
+            if (listener != null) {
+                listener.onProcessUserPincodeListener(isOk);
+            }
+        }
+
+        void setListener(ProcessUserPincodeListener listener) {
+            this.listener = listener;
+        }
+
+        public interface ProcessUserPincodeListener {
+            void onProcessUserPincodeListener(Boolean value);
+        }
     }
 }

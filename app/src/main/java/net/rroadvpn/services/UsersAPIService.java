@@ -37,44 +37,52 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     }
 
     public User getUserByPinCode(Integer pincode) throws UserServiceException {
-        log.info("getUserByPinCode method enter");
+        log.debug("getUserByPinCode method enter");
 
+        log.debug("create url");
         String url = String.format("%s/pincode/%s", this.getServiceURL(), String.valueOf(pincode));
-
+        log.debug("url: {}", url);
 
         Map<String, String> headers = new HashMap<String, String>();
-        if (!this.deviceToken.equals("")) {
-            headers.put("x-device-token", this.deviceToken);
-        }
+
+        log.debug("generate auth token");
         headers.put("x-auth-token", this.utilities.generateAuthToken());
 
+        log.debug("do get call");
         RESTResponse ur = this.get(url, headers);
 
+        log.debug("check is request is ok");
         if (ur.getOk()) {
+            log.debug("request is OK");
+
+            log.debug("get data");
             Object valueObj = ur.getData();
             if (valueObj instanceof JSONObject) {
+                log.debug("data is instance of JSONObject");
                 JSONObject data = (JSONObject) valueObj;
+                log.debug("data: {}", data);
                 try {
+                    log.debug("get user from data");
                     User user = new User(data);
+
+                    log.debug("save user uuid and email in preferences");
                     this.preferencesService.save(VPNAppPreferences.USER_UUID, user.getUuid());
                     this.preferencesService.save(VPNAppPreferences.USER_EMAIL, user.getEmail());
                     log.info("getUserByPinCode method exit");
                     return user;
                 } catch (JSONException e) {
-                    log.error(String.format("Message: %s\nStackTrace: %s"
-                            , e.getMessage()
-                            , Arrays.toString(e.getStackTrace())
-                    ));
-                    return null;
+                    log.error("UserServiceException: {}", e);
+                    throw new UserServiceException("JSON parse exception");
                 }
             } else if (valueObj instanceof JSONArray) {
+                log.debug("data is instance of JSONArray - bad situation");
                 throw new UserServiceException("got more than one user by pincode");
+            } else {
+                throw new UserServiceException("got bad body");
             }
         } else {
             throw new UserServiceException("user is not OK");
         }
-        log.info("getUserByPinCode method exit");
-        return null;
     }
 
     public User getUserByUuid(String uuid) throws UserServiceException {
@@ -162,6 +170,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         if (!this.deviceToken.equals("")) {
             headers.put("x-device-token", deviceToken);
         }
+
         headers.put("x-auth-token", this.utilities.generateAuthToken());
         RESTResponse ur = this.get(url, headers);
 

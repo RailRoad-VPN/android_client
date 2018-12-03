@@ -47,7 +47,7 @@ public class UserVPNPolicy {
     }
 
     public void checkPinCode(Integer pinCode) throws UserServiceException {
-        log.info("checkPinCode method enter. Pin:" + String.valueOf(pinCode));
+        log.debug("checkPinCode method enter. Pin:" + String.valueOf(pinCode));
         user = us.getUserByPinCode(pinCode);
         log.debug("email:" + user.getEmail() +
                 ", userUuid:" + user.getUuid() +

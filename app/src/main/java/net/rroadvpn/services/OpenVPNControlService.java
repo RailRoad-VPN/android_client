@@ -172,9 +172,9 @@ public class OpenVPNControlService {
     }
 
     public void disconnectFromVPN() throws RemoteException {
-        log.info("connectToVPN method enter");
+        log.info("disconnectFromVPN method enter");
         mService.stopVPN(false);
-        log.info("connectToVPN method exit");
+        log.info("disconnectFromVPN method exit");
 
     }
 
