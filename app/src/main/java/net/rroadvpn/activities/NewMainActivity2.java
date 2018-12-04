@@ -3,28 +3,24 @@ package net.rroadvpn.activities;
 
 import android.animation.LayoutTransition;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.RemoteException;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import net.rroadvpn.activities.pin.InputPinView;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.activities.BaseActivity;
+import net.rroadvpn.openvpn.activities.DisconnectVPN;
 import net.rroadvpn.openvpn.core.VpnStatus;
 import net.rroadvpn.services.OpenVPNControlService;
 import net.rroadvpn.services.UserVPNPolicy;
@@ -32,6 +28,7 @@ import net.rroadvpn.services.UserVPNPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static net.rroadvpn.openvpn.core.OpenVPNService.DISCONNECT_VPN;
 import static net.rroadvpn.services.OpenVPNControlService.VPN_SERVICE_INTENT_PERMISSION;
 
 
@@ -40,10 +37,16 @@ public class NewMainActivity2 extends BaseActivity {
     private UserVPNPolicy userVPNPolicy;
     private Logger log = LoggerFactory.getLogger(NewMainActivity2.class);
 
-
-    public static String EXTRA_KEY = "net.rroadvpn.openvpn.shortcutProfileUUID";
     private boolean MENU_VISIBLE = false;
 
+    private static final Integer DISCONNECT_VPN_REQUEST_CODE = 9090;
+    private static final Integer LOGOUT_DISCONNECT_VPN_REQUEST_CODE = 9091;
+
+    private AfterDisconnectVPNTask afterDisconnectVPNTask;
+    private ConnectVPNTask connectVPNTask;
+    private LogoutTask logoutTask;
+
+    private Integer MENU_MARGIN_LEFT = 133;
 
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +65,26 @@ public class NewMainActivity2 extends BaseActivity {
             log.debug("layout transition enable changing transition type");
             mainLayout.getLayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
         }
+
+//        switch (getResources().getDisplayMetrics().densityDpi) {
+//            case DisplayMetrics.DENSITY_LOW:
+//                MENU_MARGIN_LEFT = pixelToDP(MENU_MARGIN_LEFT /= 4);
+//                break;
+//            case DisplayMetrics.DENSITY_MEDIUM:
+//                MENU_MARGIN_LEFT = pixelToDP(MENU_MARGIN_LEFT /= 2);
+//                break;
+//            case DisplayMetrics.DENSITY_HIGH:
+//                MENU_MARGIN_LEFT = pixelToDP(MENU_MARGIN_LEFT);
+//                break;
+//            case DisplayMetrics.DENSITY_XHIGH:
+//                MENU_MARGIN_LEFT = pixelToDP(MENU_MARGIN_LEFT);
+//                break;
+//        }
+
+        ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams) mainLayout.getLayoutParams();
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        margins.setMargins(-MENU_MARGIN_LEFT, 0, 0, 0);
+        mainLayout.setLayoutParams(margins);
 
         menuBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,10 +116,13 @@ public class NewMainActivity2 extends BaseActivity {
 
         ImageButton connectToVPNBtn = (ImageButton) findViewById(R.id.connect_to_vpn);
         if (ovcs.isVPNActive()) {
-            log.debug("vpn is active - set background resource for connect to vpn button");
-            connectToVPNBtn.setBackgroundResource(R.drawable.ic_green_semaphore);
+            if (ovcs.isVPNConnected()) {
+                connectToVPNBtn.setBackgroundResource(R.drawable.ic_green_semaphore);
+            } else {
+                connectToVPNBtn.setBackgroundResource(R.drawable.black_yellow_semaphore_animation);
+                ((AnimationDrawable) connectToVPNBtn.getBackground()).start();
+            }
         }
-
 
         connectToVPNBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,48 +130,7 @@ public class NewMainActivity2 extends BaseActivity {
                 log.info("connectToVPNBtn button click");
 
                 if (ovcs.isVPNActive()) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(NewMainActivity2.this);
-                    builder.setTitle("Turning off VPN");
-                    builder.setMessage("Are you sure?");
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            log.info("dialogInterface negative button pressed");
-                        }
-                    });
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            log.info("dialogInterface positive button pressed. AsyncTask disconnectFromVPN enter.");
-                            connectToVPNBtn.setBackgroundResource(R.drawable.black_yellow_semaphore_animation);
-                            ((AnimationDrawable) connectToVPNBtn.getBackground()).start();
-                            AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
-                                @Override
-                                protected Void doInBackground(Void... voids) {
-                                    try {
-                                        ovcs.disconnectFromVPN();
-                                    } catch (RemoteException e) {
-                                        log.error(e.getMessage());
-                                    }
-                                    userVPNPolicy.afterDisconnectVPN();
-                                    return null;
-                                }
-
-                                @Override
-                                protected void onPostExecute(Void result) {
-                                    findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.ic_red_semaphore);
-                                    log.info("disconnectFromVPN AsyncTask onPostExecute exit");
-                                }
-                            }.execute();
-                        }
-                    });
-                    builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialogInterface) {
-                            log.info("dialogInterface cancel button pressed");
-                        }
-                    });
-                    builder.show();
+                    showDisconnectDialogVPN(DISCONNECT_VPN_REQUEST_CODE);
                 } else {
                     connectToVPNBtn.setBackgroundResource(R.drawable.black_yellow_semaphore_animation);
                     ((AnimationDrawable) connectToVPNBtn.getBackground()).start();
@@ -155,8 +140,6 @@ public class NewMainActivity2 extends BaseActivity {
                         } catch (ActivityNotFoundException ane) {
                             // Shame on you Sony! At least one user reported that
                             // an official Sony Xperia Arc S image triggers this exception
-                            VpnStatus.logError("ActivityNotFoundException PIZDEC!!!!!");
-                            log.debug("ActivityNotFoundException PIZDEC!!!!!!!!!!!");
                         }
                     } else {
                         connectToVPN();
@@ -203,79 +186,55 @@ public class NewMainActivity2 extends BaseActivity {
             @Override
             public void onClick(View view) {
                 log.info("Log out button click");
-                AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... voids) {
-                        log.debug("check is vpn active");
-                        if (ovcs.isVPNActive()) {
-                            log.debug("vpn is active");
-                            try {
-                                ovcs.disconnectFromVPN();
-                                userVPNPolicy.afterDisconnectVPN();
-                            } catch (RemoteException e) {
-                                log.error(e.getMessage());
-                                return null;
-                            }
-                        }
-                        userVPNPolicy.reInitUserServiceCrutch();
-                        userVPNPolicy.deleteUserSettings();
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void result) {
-                        findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.ic_red_semaphore);
-                        Intent intent = new Intent(getBaseContext(), InputPinView.class);
-                        startActivity(intent);
-                        log.info("disconnectFromVPN AsyncTask onPostExecute exit");
-                    }
-                }.execute();
+                log.debug("check is vpn active");
+                if (ovcs.isVPNActive()) {
+                    showDisconnectDialogVPN(LOGOUT_DISCONNECT_VPN_REQUEST_CODE);
+                } else {
+                    logoutUser();
+                }
             }
         });
-
     }
 
-    private void toggleMenu(RelativeLayout mainLayout) {
-        ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams) mainLayout.getLayoutParams();
-        if (margins.leftMargin == -133) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            DisplayMetrics displayMetrics = getBaseContext().getResources().getDisplayMetrics();
-            float dpWidth = displayMetrics.widthPixels;
-            margins.setMargins(Math.round(dpWidth / 2) - 133, 0, -Math.round(dpWidth / 2), 0);
-            MENU_VISIBLE = true;
-        } else {
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            margins.setMargins(-133, 0, 0, 0);
-            MENU_VISIBLE = false;
-        }
-
-        mainLayout.setLayoutParams(margins);
+    private void logoutUser() {
+        logoutTask = new LogoutTask(userVPNPolicy);
+        logoutTask.setListener(new LogoutTask.LogoutTaskListener() {
+            @Override
+            public void onLogoutTask(Boolean value) {
+                findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.ic_red_semaphore);
+                Intent intent = new Intent(getBaseContext(), InputPinView.class);
+                startActivity(intent);
+            }
+        });
+        logoutTask.execute();
     }
 
     private void connectToVPN() {
         log.info("connectToVPN enter.  AsyncTask connectToVPN enter.");
-        new AsyncTask<Void, Void, Void>() {
+        connectVPNTask = new ConnectVPNTask(userVPNPolicy, ovcs);
+        connectVPNTask.setListener(new ConnectVPNTask.ConnectVPNTaskListener() {
             @Override
-            protected Void doInBackground(Void... voids) {
-                String vpnConfig = userVPNPolicy.getNewRandomVPNServer();
-                boolean isReady = ovcs.prepareToConnectVPN(vpnConfig);
-                if (!isReady) {
-                    // TODO do some UI update
-                    return null;
-                }
-                ovcs.connectToVPN();
-                userVPNPolicy.afterConnectedToVPN();
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Void result) {
+            public void onConnectVPNTaskListener(Boolean value) {
                 findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.ic_green_semaphore);
-                log.info("AsyncTask connectToVPN onPostExecute exit.");
-
             }
-        }.execute();
+        });
+        connectVPNTask.execute();
         log.info("connectToVPN exit");
+    }
+
+    private void showDisconnectDialogVPN(int requestCode) {
+        if (!ovcs.isVPNConnected()) {
+            connectVPNTask.cancel(true);
+            if (!connectVPNTask.isCancelled()) {
+                AsyncTask.Status status = connectVPNTask.getStatus();
+                if (status == AsyncTask.Status.RUNNING || status == AsyncTask.Status.PENDING) {
+                    connectVPNTask.cancel(true);
+                }
+            }
+        }
+        Intent disconnectVPN = new Intent(getBaseContext(), DisconnectVPN.class);
+        disconnectVPN.setAction(DISCONNECT_VPN);
+        startActivityForResult(disconnectVPN, requestCode);
     }
 
     @Override
@@ -288,6 +247,27 @@ public class NewMainActivity2 extends BaseActivity {
             } else {
                 // TODO make error
             }
+        } else if (requestCode == DISCONNECT_VPN_REQUEST_CODE) {
+            if (data.getExtras() != null && data.getExtras().getBoolean("toDisconnect")) {
+                afterDisconnectVPNTask = new AfterDisconnectVPNTask(userVPNPolicy);
+                afterDisconnectVPNTask.setListener(new AfterDisconnectVPNTask.AfterDisconnectVPNTaskListener() {
+                    @Override
+                    public void onAfterDisconnectVPNTaskListener(Boolean value) {
+                        findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.ic_red_semaphore);
+                    }
+                });
+                afterDisconnectVPNTask.execute();
+            }
+        } else if (requestCode == LOGOUT_DISCONNECT_VPN_REQUEST_CODE) {
+            afterDisconnectVPNTask = new AfterDisconnectVPNTask(userVPNPolicy);
+            afterDisconnectVPNTask.setListener(new AfterDisconnectVPNTask.AfterDisconnectVPNTaskListener() {
+                @Override
+                public void onAfterDisconnectVPNTaskListener(Boolean value) {
+                    findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.ic_red_semaphore);
+                    logoutUser();
+                }
+            });
+            afterDisconnectVPNTask.execute();
         } else {
             // TODO make error
         }
@@ -302,6 +282,169 @@ public class NewMainActivity2 extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        // prevent memory leak
+        afterDisconnectVPNTask.setListener(null);
+        connectVPNTask.setListener(null);
+        logoutTask.setListener(null);
         ovcs.unBindService();
+    }
+
+    private static class LogoutTask extends AsyncTask<Void, Void, Boolean> {
+        private Logger log = LoggerFactory.getLogger(LogoutTask.class);
+
+        private LogoutTaskListener listener;
+
+        private UserVPNPolicy userVPNPolicy;
+
+        LogoutTask(UserVPNPolicy userVPNPolicy) {
+            this.userVPNPolicy = userVPNPolicy;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            log.debug("clean user settings");
+            userVPNPolicy.deleteUserSettings();
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isOk) {
+            super.onPostExecute(isOk);
+            if (listener != null) {
+                listener.onLogoutTask(isOk);
+            }
+        }
+
+        void setListener(LogoutTaskListener listener) {
+            this.listener = listener;
+        }
+
+        public interface LogoutTaskListener {
+            void onLogoutTask(Boolean value);
+        }
+    }
+
+    private static class AfterDisconnectVPNTask extends AsyncTask<Void, Void, Boolean> {
+        private Logger log = LoggerFactory.getLogger(AfterDisconnectVPNTask.class);
+
+        private AfterDisconnectVPNTaskListener listener;
+
+        private UserVPNPolicy userVPNPolicy;
+
+        AfterDisconnectVPNTask(UserVPNPolicy userVPNPolicy) {
+            this.userVPNPolicy = userVPNPolicy;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            log.debug("do after disconnect vpn staff");
+            userVPNPolicy.afterDisconnectVPN();
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isOk) {
+            super.onPostExecute(isOk);
+            if (listener != null) {
+                listener.onAfterDisconnectVPNTaskListener(isOk);
+            }
+        }
+
+        void setListener(AfterDisconnectVPNTaskListener listener) {
+            this.listener = listener;
+        }
+
+        public interface AfterDisconnectVPNTaskListener {
+            void onAfterDisconnectVPNTaskListener(Boolean value);
+        }
+    }
+
+    private static class ConnectVPNTask extends AsyncTask<Void, Void, Boolean> {
+        private Logger log = LoggerFactory.getLogger(ConnectVPNTask.class);
+
+        private ConnectVPNTaskListener listener;
+
+        private UserVPNPolicy userVPNPolicy;
+        private OpenVPNControlService ovcs;
+
+        ConnectVPNTask(UserVPNPolicy userVPNPolicy, OpenVPNControlService ovcs) {
+            this.userVPNPolicy = userVPNPolicy;
+            this.ovcs = ovcs;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            log.debug("get new random server");
+            String vpnConfig = userVPNPolicy.getNewRandomVPNServer();
+            log.debug("random server: {}", vpnConfig);
+
+            log.debug("prepare to connect to VPN");
+            boolean isOk = ovcs.prepareToConnectVPN(vpnConfig);
+
+            if (!isOk) {
+                return false;
+            }
+
+            log.debug("connect to VPN");
+            ovcs.connectToVPN();
+
+            String status = VpnStatus.getLastCleanLogMessage(userVPNPolicy.getCtx());
+            boolean gotVirtualIP = false;
+            while (!gotVirtualIP) {
+                status = VpnStatus.getLastCleanLogMessage(userVPNPolicy.getCtx());
+                gotVirtualIP = status.contains("Connected: SUCCESS");
+                if (isCancelled()) {
+                    break;
+                }
+            }
+
+            if (gotVirtualIP) {
+                log.info("Status contains SUCCESS");
+                String virtualIP = status.split(",")[1];
+
+                log.debug("virtualIP: {}", virtualIP);
+                log.debug("do after connect staff");
+                userVPNPolicy.afterConnectedToVPN(virtualIP);
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isOk) {
+            super.onPostExecute(isOk);
+            if (listener != null) {
+                listener.onConnectVPNTaskListener(isOk);
+            }
+        }
+
+        void setListener(ConnectVPNTaskListener listener) {
+            this.listener = listener;
+        }
+
+        public interface ConnectVPNTaskListener {
+            void onConnectVPNTaskListener(Boolean value);
+        }
+    }
+
+    private void toggleMenu(RelativeLayout mainLayout) {
+        ViewGroup.MarginLayoutParams margins = (ViewGroup.MarginLayoutParams) mainLayout.getLayoutParams();
+        if (margins.leftMargin == -MENU_MARGIN_LEFT) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            DisplayMetrics displayMetrics = getBaseContext().getResources().getDisplayMetrics();
+            float dpWidth = displayMetrics.widthPixels;
+            margins.setMargins(Math.round(dpWidth / 2) - MENU_MARGIN_LEFT, 0, -Math.round(dpWidth / 2), 0);
+            MENU_VISIBLE = true;
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            margins.setMargins(-MENU_MARGIN_LEFT, 0, 0, 0);
+            MENU_VISIBLE = false;
+        }
+
+        mainLayout.setLayoutParams(margins);
+    }
+
+    int pixelToDP(int pixel) {
+        final float scale = getResources().getDisplayMetrics().density;
+        return (int) ((pixel * scale) + 0.5f);
     }
 }

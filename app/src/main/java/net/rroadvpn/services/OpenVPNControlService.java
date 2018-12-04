@@ -16,6 +16,7 @@ import net.rroadvpn.activities.OpenVPNProfileManager;
 import net.rroadvpn.exception.OpenVPNControlServiceException;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.VpnProfile;
+import net.rroadvpn.openvpn.activities.DisconnectVPN;
 import net.rroadvpn.openvpn.core.ConnectionStatus;
 import net.rroadvpn.openvpn.core.IOpenVPNServiceInternal;
 import net.rroadvpn.openvpn.core.OpenVPNService;
@@ -30,14 +31,13 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static net.rroadvpn.openvpn.core.OpenVPNService.DISCONNECT_VPN;
+
 public class OpenVPNControlService {
     //TODO CUT Context
     private Context ctx;
     private VpnProfile mSelectedProfile;
     private boolean mCmfixed = false;
-    public static String EXTRA_KEY = "net.rroadvpn.openvpn.shortcutProfileUUID";
-    public static final String EXTRA_NAME = "net.rroadvpn.openvpn.shortcutProfileName";
-    public static final Boolean EXTRA_HIDELOG = false;
     public static final String CLEARLOG = "clearlogconnect";
     public static final int VPN_SERVICE_INTENT_PERMISSION = 70;
 
@@ -96,9 +96,6 @@ public class OpenVPNControlService {
             pm.saveProfile(this.ctx, profile);
 
             this.mSelectedProfile = profile;
-
-            EXTRA_KEY = profile.getUUID().toString();
-
         } catch (OpenVPNProfileException e) {
             log.error("OpenVPNProfileException: {}", e);
             return false;
@@ -121,33 +118,31 @@ public class OpenVPNControlService {
 
         if (loadTunModule) {
             String command = "insmod /system/lib/modules/tun.ko";
-            try {
-                ProcessBuilder pb = new ProcessBuilder("su", "-c", command);
-                Process p = pb.start();
-                int ret = p.waitFor();
-                if (ret == 0)
-                    mCmfixed = true;
-            } catch (InterruptedException | IOException e) {
-                VpnStatus.logException("SU command", e);
-                return false;
-            }
+            // TODO handle exception
+            executeSuCommand(command);
         }
+
         if (usecm9fix && !mCmfixed) {
             String command = "chown system /dev/tun";
-            try {
-                ProcessBuilder pb = new ProcessBuilder("su", "-c", command);
-                Process p = pb.start();
-                int ret = p.waitFor();
-                if (ret == 0)
-                    mCmfixed = true;
-            } catch (InterruptedException | IOException e) {
-                VpnStatus.logException("SU command", e);
-                return false;
-            }
+            // TODO handle exception
+            executeSuCommand(command);
         }
 
         log.info("prepareToConnectVPN method exit");
         return true;
+    }
+
+    private void executeSuCommand(String command) {
+        try {
+            ProcessBuilder pb = new ProcessBuilder("su", "-c", command);
+            Process p = pb.start();
+            int ret = p.waitFor();
+            if (ret == 0)
+                mCmfixed = true;
+        } catch (InterruptedException | IOException e) {
+            VpnStatus.logException("SU command", e);
+        }
+
     }
 
     public Intent vpnPreparePermissionIntent() {
@@ -163,23 +158,24 @@ public class OpenVPNControlService {
     public void connectToVPN() {
         log.info("connectToVPN method enter");
 
-        SharedPreferences prefs2 = Preferences.getDefaultSharedPreferences(this.ctx);
-        boolean showLogWindow = prefs2.getBoolean("showlogwindow", true);
-
         ProfileManager.updateLRU(this.ctx, mSelectedProfile);
         VPNLaunchHelper.startOpenVpn(mSelectedProfile, this.ctx);
         log.info("connectToVPN method exit");
-
     }
 
-    public void disconnectFromVPN() throws RemoteException {
-        log.info("disconnectFromVPN method enter");
-        mService.stopVPN(false);
-        log.info("disconnectFromVPN method exit");
+    public boolean diconnectVPN() {
+        return VPNLaunchHelper.stopOpenVpn(this.ctx);
+    }
 
+    public boolean ismCmfixed() {
+        return mCmfixed;
     }
 
     public boolean isVPNActive() {
         return VpnStatus.isVPNActive();
+    }
+
+    public boolean isVPNConnected() {
+        return VpnStatus.isVPNConnected();
     }
 }

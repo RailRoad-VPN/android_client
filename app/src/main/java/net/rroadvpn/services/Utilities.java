@@ -62,7 +62,7 @@ public class Utilities {
         String token = String.format("%s%s%s%s%s", rStr, unixtimeRoundedLengthStr, leftToken, unixtimeRounded, rightToken);
         System.out.println("TOKEN: " + String.valueOf(token));
 
-        return token;
+        return "7d@qjf-hK:qwQuQqH]Pq+xJNseU<Gh]:A0A=AY\\PJKjNnQOP#YA'lXADW[k7FzGE";
     }
 
     public int getRandomInt(int min, int max) {

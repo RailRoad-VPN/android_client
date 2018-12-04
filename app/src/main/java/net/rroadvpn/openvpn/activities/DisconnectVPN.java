@@ -15,7 +15,6 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 
-import net.rroadvpn.openvpn.LaunchVPN;
 import net.rroadvpn.openvpn.core.OpenVPNService;
 import net.rroadvpn.openvpn.core.ProfileManager;
 import net.rroadvpn.openvpn.core.VpnStatus;
@@ -29,7 +28,6 @@ import net.rroadvpn.openvpn.core.IOpenVPNServiceInternal;
 public class DisconnectVPN extends Activity implements DialogInterface.OnClickListener, DialogInterface.OnCancelListener {
     private IOpenVPNServiceInternal mService;
     private ServiceConnection mConnection = new ServiceConnection() {
-
 
 
         @Override
@@ -67,7 +65,6 @@ public class DisconnectVPN extends Activity implements DialogInterface.OnClickLi
         builder.setMessage(R.string.cancel_connection_query);
         builder.setNegativeButton(android.R.string.cancel, this);
         builder.setPositiveButton(R.string.cancel_connection, this);
-        builder.setNeutralButton(R.string.reconnect, this);
         builder.setOnCancelListener(this);
 
         builder.show();
@@ -75,21 +72,22 @@ public class DisconnectVPN extends Activity implements DialogInterface.OnClickLi
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
+        Intent returnIntent = new Intent();
         if (which == DialogInterface.BUTTON_POSITIVE) {
             ProfileManager.setConntectedVpnProfileDisconnected(this);
             if (mService != null) {
                 try {
                     mService.stopVPN(false);
+                    returnIntent.putExtra("toDisconnect", true);
                 } catch (RemoteException e) {
                     VpnStatus.logException(e);
                 }
             }
-        } else if (which == DialogInterface.BUTTON_NEUTRAL) {
-            Intent intent = new Intent(this, LaunchVPN.class);
-            intent.putExtra(LaunchVPN.EXTRA_KEY, VpnStatus.getLastConnectedVPNProfile());
-            intent.setAction(Intent.ACTION_MAIN);
-            startActivity(intent);
+        } else {
+            returnIntent.putExtra("toDisconnect", false);
         }
+
+        setResult(Activity.RESULT_OK, returnIntent);
         finish();
     }
 

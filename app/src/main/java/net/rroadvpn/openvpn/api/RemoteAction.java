@@ -15,7 +15,6 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.widget.Toast;
 
-import net.rroadvpn.openvpn.LaunchVPN;
 import net.rroadvpn.openvpn.VpnProfile;
 import net.rroadvpn.openvpn.core.IOpenVPNServiceInternal;
 import net.rroadvpn.openvpn.core.OpenVPNService;
@@ -82,10 +81,11 @@ public class RemoteAction extends Activity {
             if (profile == null) {
                 Toast.makeText(this, String.format("Vpn profile %s from API call not found", vpnName), Toast.LENGTH_LONG).show();
             } else {
-                Intent startVPN = new Intent(this, LaunchVPN.class);
-                startVPN.putExtra(LaunchVPN.EXTRA_KEY, profile.getUUID().toString());
-                startVPN.setAction(Intent.ACTION_MAIN);
-                startActivity(startVPN);
+                // TODO launch VPN
+//                Intent startVPN = new Intent(this, LaunchVPN.class);
+//                startVPN.putExtra(LaunchVPN.EXTRA_KEY, profile.getUUID().toString());
+//                startVPN.setAction(Intent.ACTION_MAIN);
+//                startActivity(startVPN);
             }
         }
         finish();

@@ -37,7 +37,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import net.rroadvpn.openvpn.LaunchVPN;
 import net.rroadvpn.openvpn.VpnProfile;
 import net.rroadvpn.openvpn.api.ExternalAppDatabase;
 
@@ -54,9 +53,6 @@ import java.util.Vector;
 import net.rroadvpn.openvpn.R;
 
 import net.rroadvpn.openvpn.activities.DisconnectVPN;
-import net.rroadvpn.openvpn.activities.MainActivity;
-
-import net.rroadvpn.openvpn.core.IOpenVPNServiceInternal;
 
 public class OpenVPNService extends VpnService implements VpnStatus.StateListener, Callback, VpnStatus.ByteCountListener, IOpenVPNServiceInternal {
     public static final String START_SERVICE = "net.rroadvpn.openvpn.START_SERVICE";
@@ -241,20 +237,17 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
         else
             priority = PRIORITY_DEFAULT;
 
-        if (mProfile != null)
-            nbuilder.setContentTitle(getString(R.string.notifcation_title, mProfile.mName));
-        else
-            nbuilder.setContentTitle(getString(R.string.notifcation_title_notconnect));
+        nbuilder.setContentTitle(getString(R.string.notification_title));
 
         nbuilder.setContentText(msg);
         nbuilder.setOnlyAlertOnce(true);
         nbuilder.setOngoing(true);
 
         nbuilder.setSmallIcon(icon);
-        if (status == ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT)
-            nbuilder.setContentIntent(getUserInputIntent(msg));
-        else
-            nbuilder.setContentIntent(getGraphPendingIntent());
+//        if (status == ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT)
+//            nbuilder.setContentIntent(getUserInputIntent(msg));
+//        else
+//            nbuilder.setContentIntent(getGraphPendingIntent());
 
         if (when != 0)
             nbuilder.setWhen(when);
@@ -390,30 +383,30 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
         }
     }
 
-    PendingIntent getUserInputIntent(String needed) {
-        Intent intent = new Intent(getApplicationContext(), LaunchVPN.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        intent.putExtra("need", needed);
-        Bundle b = new Bundle();
-        b.putString("need", needed);
-        PendingIntent pIntent = PendingIntent.getActivity(this, 12, intent, 0);
-        return pIntent;
-    }
-
-    PendingIntent getGraphPendingIntent() {
-        // Let the configure Button show the Log
-        Class activityClass = MainActivity.class;
-        if (mNotificationActivityClass != null) {
-            activityClass = mNotificationActivityClass;
-        }
-        Intent intent = new Intent(getBaseContext(), activityClass);
-        intent.putExtra("PAGE", "graph");
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        PendingIntent startLW = PendingIntent.getActivity(this, 0, intent, 0);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        return startLW;
-
-    }
+//    PendingIntent getUserInputIntent(String needed) {
+//        Intent intent = new Intent(getApplicationContext(), LaunchVPN.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//        intent.putExtra("need", needed);
+//        Bundle b = new Bundle();
+//        b.putString("need", needed);
+//        PendingIntent pIntent = PendingIntent.getActivity(this, 12, intent, 0);
+//        return pIntent;
+//    }
+//
+//    PendingIntent getGraphPendingIntent() {
+//        // Let the configure Button show the Log
+//        Class activityClass = MainActivity.class;
+//        if (mNotificationActivityClass != null) {
+//            activityClass = mNotificationActivityClass;
+//        }
+//        Intent intent = new Intent(getBaseContext(), activityClass);
+//        intent.putExtra("PAGE", "graph");
+//        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//        PendingIntent startLW = PendingIntent.getActivity(this, 0, intent, 0);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//        return startLW;
+//
+//    }
 
     synchronized void registerDeviceStateReceiver(OpenVPNManagement magnagement) {
         // Registers BroadcastReceiver to track network connection changes.
@@ -827,12 +820,12 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
 
         String ipv4info;
         int ipv4len;
-        if (mLocalIP!=null) {
-            ipv4len=mLocalIP.len;
-            ipv4info=mLocalIP.mIp;
+        if (mLocalIP != null) {
+            ipv4len = mLocalIP.len;
+            ipv4info = mLocalIP.mIp;
         } else {
             ipv4len = -1;
-            ipv4info="(not set)";
+            ipv4info = "(not set)";
         }
         VpnStatus.logInfo(R.string.local_ip_info, ipv4info, ipv4len, mLocalIPv6, mMtu);
         VpnStatus.logInfo(R.string.dns_server_info, TextUtils.join(", ", mDnslist), mDomain);
@@ -872,7 +865,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
         mLocalIPv6 = null;
         mDomain = null;
 
-        builder.setConfigureIntent(getGraphPendingIntent());
+//        builder.setConfigureIntent(getGraphPendingIntent());
 
         try {
             //Debug.stopMethodTracing();
@@ -898,8 +891,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
     }
 
     private void addLocalNetworksToRoutes() {
-        for (String net: NetworkUtils.getLocalNetworks(this, false))
-        {
+        for (String net : NetworkUtils.getLocalNetworks(this, false)) {
             String[] netparts = net.split("/");
             String ipAddr = netparts[0];
             int netMask = Integer.parseInt(netparts[1]);
@@ -916,7 +908,8 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
         // IPv6 is Lollipop+ only so we can skip the lower than KITKAT case
         if (mProfile.mAllowLocalLAN) {
             for (String net : NetworkUtils.getLocalNetworks(this, true)) {
-                addRoutev6(net, false);;
+                addRoutev6(net, false);
+                ;
             }
         }
 
@@ -1205,7 +1198,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
 
     public void trigger_url_open(String info) {
         String channel = NOTIFICATION_CHANNEL_USERREQ_ID;
-        String url = info.split(":",2)[1];
+        String url = info.split(":", 2)[1];
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -1223,7 +1216,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
         openUrlIntent.setData(Uri.parse(url));
         openUrlIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        nbuilder.setContentIntent(PendingIntent.getActivity(this,0, openUrlIntent, 0));
+        nbuilder.setContentIntent(PendingIntent.getActivity(this, 0, openUrlIntent, 0));
 
 
         // Try to set the priority available since API 16 (Jellybean)

@@ -41,21 +41,12 @@
             android:resource="@xml/app_restrictions" />
 
         <activity
-            android:name="net.rroadvpn.openvpn.activities.VPNPreferences"
-            android:exported="false"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
             android:name="net.rroadvpn.openvpn.activities.DisconnectVPN"
             android:autoRemoveFromRecents="true"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:taskAffinity=".DisconnectVPN"
             android:theme="@style/blinkt.dialog" />
-        <activity
-            android:name="net.rroadvpn.openvpn.activities.LogWindow"
-            android:allowTaskReparenting="true"
-            android:label="@string/openvpn_log"
-            android:launchMode="singleTask" />
         <activity android:name="net.rroadvpn.openvpn.activities.FileSelect" />
         <activity
             android:name="net.rroadvpn.activities.NewMainActivity"
@@ -100,21 +91,6 @@
             android:name="net.rroadvpn.openvpn.core.OpenVPNStatusService"
             android:exported="false"
             android:process=":openvpn" />
-        <service
-            android:name="net.rroadvpn.openvpn.OpenVPNTileService"
-            android:icon="@drawable/ic_quick"
-            android:label="@string/qs_title"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-            android:value="true">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.service.quicksettings.ACTIVE_TILE"
-                android:value="false" />
-
-        </service>
 
         <activity android:name="net.rroadvpn.openvpn.api.GrantPermissionsActivity">
             <intent-filter>
@@ -181,20 +157,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="net.rroadvpn.openvpn.LaunchVPN"
-            android:autoRemoveFromRecents="true"
-            android:excludeFromRecents="true"
-            android:label="@string/vpn_launch_title"
-            android:taskAffinity=".LaunchVPN"
-            android:theme="@style/blinkt.dialog"
-            tools:ignore="ExportedActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".api.Intents"
             android:autoRemoveFromRecents="true"
             android:excludeFromRecents="true"
@@ -204,18 +166,6 @@
             tools:ignore="ExportedActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="net.rroadvpn.openvpn.activities.CreateShortcuts"
-            android:excludeFromRecents="true"
-            android:label="@string/vpn_shortcut"
-            android:taskAffinity=".CreateShortcuts"
-            android:theme="@android:style/Theme.DeviceDefault.Light.DialogWhenLarge">
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

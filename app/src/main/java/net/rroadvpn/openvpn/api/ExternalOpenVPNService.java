@@ -22,7 +22,6 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 
-import net.rroadvpn.openvpn.LaunchVPN;
 import net.rroadvpn.openvpn.core.VpnStatus;
 
 import java.io.IOException;
@@ -33,9 +32,6 @@ import java.util.List;
 
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.VpnProfile;
-
-import net.rroadvpn.openvpn.api.IOpenVPNAPIService;
-import net.rroadvpn.openvpn.api.IOpenVPNStatusCallback;
 
 import net.rroadvpn.openvpn.core.ConfigParser;
 import net.rroadvpn.openvpn.core.ConfigParser.ConfigParseError;
@@ -137,13 +133,14 @@ public class ExternalOpenVPNService extends Service implements VpnStatus.StateLi
 
             int neddPassword = vp.needUserPWInput(null, null);
 
+            // TODO launch VPN
             if(vpnPermissionIntent != null || neddPassword != 0){
                 Intent shortVPNIntent = new Intent(Intent.ACTION_MAIN);
-                shortVPNIntent.setClass(getBaseContext(), LaunchVPN.class);
-                shortVPNIntent.putExtra(LaunchVPN.EXTRA_KEY, vp.getUUIDString());
-                shortVPNIntent.putExtra(LaunchVPN.EXTRA_HIDELOG, true);
-                shortVPNIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(shortVPNIntent);
+//                shortVPNIntent.setClass(getBaseContext(), LaunchVPN.class);
+//                shortVPNIntent.putExtra(LaunchVPN.EXTRA_KEY, vp.getUUIDString());
+//                shortVPNIntent.putExtra(LaunchVPN.EXTRA_HIDELOG, true);
+//                shortVPNIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(shortVPNIntent);
             } else {
                 VPNLaunchHelper.startOpenVpn(vp, getBaseContext());
             }

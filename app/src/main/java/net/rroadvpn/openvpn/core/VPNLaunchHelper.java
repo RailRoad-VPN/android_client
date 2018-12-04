@@ -26,6 +26,8 @@ public class VPNLaunchHelper {
     private static final String MINIPIEVPN = "pie_openvpn";
     private static final String OVPNCONFIGFILE = "android.conf";
 
+    private static Intent startedVPNService;
+
 
     private static String writeMiniVPN(Context context) {
         String[] abis;
@@ -128,16 +130,25 @@ public class VPNLaunchHelper {
     }
 
 
-    public static void startOpenVpn(VpnProfile startprofile, Context context) {
+    public static boolean startOpenVpn(VpnProfile startprofile, Context context) {
         Intent startVPN = startprofile.prepareStartService(context);
         if (startVPN != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 //noinspection NewApi
                 context.startForegroundService(startVPN);
-            else
+            } else {
                 context.startService(startVPN);
-
+            }
+            startedVPNService = startVPN;
+            return true;
+        } else {
+            return false;
         }
+    }
+
+
+    public static boolean stopOpenVpn(Context context) {
+        return context.stopService(startedVPNService);
     }
 
 

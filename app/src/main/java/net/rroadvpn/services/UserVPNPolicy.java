@@ -26,10 +26,13 @@ public class UserVPNPolicy {
 
     private String serverUuid;
     private User user;
-    private Context ctx;
+    public Context ctx;
     private PreferencesService preferencesService;
     private Logger log = LoggerFactory.getLogger(UserVPNPolicy.class);
 
+    public Context getCtx() {
+        return ctx;
+    }
 
     public UserVPNPolicy(Context ctx) {
         this.ctx = ctx;
@@ -88,39 +91,24 @@ public class UserVPNPolicy {
         return null;
     }
 
-    public void afterConnectedToVPN() {
+    public void afterConnectedToVPN(String virtualIP) {
         log.info("afterConnectedToVPN method enter");
 
-        String status = VpnStatus.getLastCleanLogMessage(this.ctx);
-
-        while (!status.contains("Connected: SUCCESS")) {
-//               System.out.println("openVPN log:" + VpnStatus.getLastCleanLogMessage(this.ctx));
-            status = VpnStatus.getLastCleanLogMessage(this.ctx);
-        }
-
-        log.info("afterConnectedToVPN while ended. Status contains SUCCESS");
-        String virtualIP = status.split(",")[1];
-//        Toast.makeText(this.ctx, "YOUR VIRTUAL IP IS: " + virtualIP, Toast.LENGTH_LONG).show();
-
         try {
-            //TODO cut second UsersService init
             reInitUserServiceCrutch();
-            //todo device_ip
+            // TODO device_ip
             this.us.updateUserDevice(this.user.getUuid(), this.preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID), virtualIP, "1.1.1.1");
 
             String email = this.preferencesService.getString(VPNAppPreferences.USER_EMAIL);
-            System.out.println("Create connection begin");
+
             this.us.createConnection(this.serverUuid, virtualIP, "1.1.1.1", email);
         } catch (UserServiceException e) {
-            log.error(String.format("Message: %s\nStackTrace: %s"
-                    , e.getMessage()
-                    , Arrays.toString(e.getStackTrace())
-            ));
+            log.error("UserServiceException: {}", e);
         }
         log.info("afterConnectedToVPN method exit");
     }
 
-    public void reInitUserServiceCrutch() {
+    private void reInitUserServiceCrutch() {
         log.info("reInitUserServiceCrutch method enter");
         String userServiceURL = VPNAppPreferences.getUserServiceURL("users");
 
