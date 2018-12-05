@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2012-2016 Arne Schwabe
- * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
- */
-
 package net.rroadvpn.openvpn.core;
 
 import android.annotation.TargetApi;
@@ -13,15 +8,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 
-/*
-import org.acra.ACRA;
-import org.acra.ReportingInteractionMode;
-import org.acra.annotation.ReportsCrashes;
-*/
-
 import android.os.StrictMode;
 
-import net.rroadvpn.openvpn.BuildConfig;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.api.AppRestrictions;
 

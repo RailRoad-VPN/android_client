@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">RailRoad VPN</string>
+  <string name="app">RailroadVPN</string>
     <string name="no_keystore_cert_selected">"Aucun certificat utilisateur sélectionné."</string>
   <string name="no_ca_cert_selected">Vous devez sélectionner un certificat CA</string>
   <string name="no_error_found">"Aucune erreur"</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">Routes : %1$s %2$s</string>
   <string name="routes_info_excl">Routes exclues : %1$s %2$s</string>
   <string name="routes_debug">Routes VpnService installés : %1$s %2$s</string>
-  <string name="ip_not_cidr">Informations récupérées de l\'interface : %1$s et %2$s , en supposant que la seconde adresse est l\'adresse peer du réseau distant. Utilisation du masque de réseau /32 pour l\'IP locale. Mode donné par OpenVPN : \"%3$s\".</string>
+  <string name="ip_not_cidr">Informations récupérées de l\'interface : %1$s et %2$s , en supposant que la seconde adresse est l\'adresse peer du réseau distant. Utilisation du masque de réseau /32 pour l\'IP locale. Mode donné parRailroadVPN: \"%3$s\".</string>
   <string name="route_not_cidr">"Ne peut pas donner un sens à %1$s et %2$s comme routage IP avec masque réseau de type CIDR, en utilisant /32 comme masque de réseau."</string>
   <string name="route_not_netip">Route corrigée : %1$s / %2$s en %3$s / %2$s</string>
   <string name="keychain_access">\"Impossible d\'accéder aux certificats \"Android Keychain\". (Peut être causé par une mise à jour du firmware ou par une restauration d\'une sauvegarde des paramètres de l\'application). Veuillez modifier le profil VPN et sélectionnez de nouveau le certificat dans les réglages de base pour recréer l\'autorisation d\'accéder au certificat.\".</string>
@@ -42,8 +42,8 @@
   <string name="ip_add_error">Impossible de configurer l\'adresse IP \"%1$s\", rejetées par le système : %2$s</string>
     <string name="getproxy_error">Erreur d\'obtention des paramètres de proxy : %s</string>
   <string name="using_proxy">"Utilisation du proxy %1$s %2$s"</string>
-    <string name="minidump_generated">OpenVPN a planté de façon inattendue. Veuillez envisager d\'utiliser l\'option Minidump dans le menu principal</string>
-    <string name="notification_title">OpenVPN - %s</string>
+    <string name="minidump_generated">RailroadVPN a planté de façon inattendue. Veuillez envisager d\'utiliser l\'option Minidump dans le menu principal</string>
+    <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Connexion</string>
@@ -80,7 +80,7 @@
   <string name="app_no_longer_exists">Application %s désinstallée, retirée de la liste des applications autorisées/refusées</string>
     <string name="remote_no_server_selected">Vous devez définir et activer au moins un serveur distant.</string>
     <string name="ignore_multicast_route">Ignorer la route multidiffusion : %s</string>
-    <string name="service_restarted">Redémarrage du service OpenVPN (l\'Application a probablement plantée ou a été tué pour cause d\'utilisation excessive de la mémoire)</string>
+    <string name="service_restarted">Redémarrage du serviceRailroadVPN(l\'Application a probablement plantée ou a été tué pour cause d\'utilisation excessive de la mémoire)</string>
     <string name="no_allowed_app">Aucune application n\'est autorisée. Il faut au minimum ajouter cette application (%s) afin d\'en autoriser au moins une. Cela évite d’autoriser toutes les autres applications inutilement</string>
     <string name="permission_revoked">Autorisation de VPN révoquée par le système d\'exploitation (ex : un autre programme VPN est lancé), arrêt du VPN</string>
     <string name="missing_tlsauth">Fichier tls-auth manquant</string>

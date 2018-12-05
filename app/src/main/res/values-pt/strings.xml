@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">OpenVPN para Android</string>
+  <string name="app">RailroadVPN para Android</string>
     <string name="no_keystore_cert_selected">Tem de selecionar um certificado de utilizador</string>
   <string name="no_ca_cert_selected">Deve selecionar um certificado</string>
   <string name="no_error_found">Nenhum erro encontrado</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">Rotas: %1$s %2$s</string>
   <string name="routes_info_excl">Rotas excluídas: %1$s %2$s</string>
   <string name="routes_debug">Rotas VpnService instaladas: %1$s %2$s</string>
-  <string name="ip_not_cidr">Existem múltiplas informações de interface, %1$s e %2$s, a aplicação assume que o segundo endereço é um endereço \'peer\' do endereço remoto. Será usada uma máscara de rede /32 para o IP local. O modo estabelecido pela OpenVPN é \"%3$s\".</string>
+  <string name="ip_not_cidr">Existem múltiplas informações de interface, %1$s e %2$s, a aplicação assume que o segundo endereço é um endereço \'peer\' do endereço remoto. Será usada uma máscara de rede /32 para o IP local. O modo estabelecido pelaRailroadVPNé \"%3$s\".</string>
   <string name="route_not_cidr">não é possível fazer sentido de %1$s e %2$s como rotas de IP, com máscara de rede CIDR, será usada uma máscara de rede /32.</string>
   <string name="route_not_netip">A rota %1$s/%2$s foi corrigida para %3$s/%2$s</string>
   <string name="keychain_access">Não é possível aceder aos certificados \'Keychain Android\'. Isto pode ser causado por uma atualização de firmware ou um restauro das configurações da app/app. Será necessário editar o perfil VPN e selecionar novamente o certificado nas configurações básicas para recriar a permissão e possibilitar o acesso ao certificado.</string>
@@ -39,7 +39,7 @@
   <string name="dns_add_error">Não foi possível adicionar o servidor de DNS \"%1$s\", rejeitado pelo sistema: %2$s</string>
   <string name="ip_add_error">Não foi possível configurar o endereço de IP \"%1$s\", rejeitado pelo sistema: %2$s</string>
     <string name="getproxy_error">Erro ao obter definições proxy %s</string>
-    <string name="notification_title">OpenVPN - %s</string>
+    <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">A ligar</string>

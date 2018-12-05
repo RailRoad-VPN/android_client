@@ -67,7 +67,7 @@
         </activity>
         <activity
             android:name="net.rroadvpn.activities.pin.InputPinView"
-            tools:ignore="ExportedActivity"></activity>
+            tools:ignore="ExportedActivity" />
 
         <service
             android:name="net.rroadvpn.openvpn.core.OpenVPNService"

@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">OpenVPN Androidile</string>
+  <string name="app">RailroadVPN Androidile</string>
     <string name="no_keystore_cert_selected">Peate valima kasutaja sertifikaadi</string>
   <string name="no_ca_cert_selected">Peate valima CA sertifikaadi</string>
   <string name="no_error_found">Vigu ei leitud</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">Marsruudid: %1$s %2$s</string>
   <string name="routes_info_excl">Välistatud marsruudid: %1$s %2$s</string>
   <string name="routes_debug">Määratud VpnService marsruudid: %1$s %2$s</string>
-  <string name="ip_not_cidr">Liidese andmed on %1$s ja %2$s, eeldades et teine aadress on eemalasuva serveri aadress. Lokaalse IP jaoks kasutatakse /32 võrgumaski. OpenVPN teatab režiimiks %3$s\".</string>
+  <string name="ip_not_cidr">Liidese andmed on %1$s ja %2$s, eeldades et teine aadress on eemalasuva serveri aadress. Lokaalse IP jaoks kasutatakse /32 võrgumaski.RailroadVPNteatab režiimiks %3$s\".</string>
   <string name="route_not_cidr">%1$s ja %2$s on mõttetud CIDR võrgumaskiga IP marsruutidest, võrgumaskiks määratakse /32.</string>
   <string name="route_not_netip">%1$s/%2$s marsruut parandatud: %3$s/%2$s</string>
   <string name="keychain_access">Androidi Keychain sertifikaadid on kättesaamatud. See võib olla põhjustatud püsivara uuendamisest või appide/apiseadistuste taastamisest. Sertifikaatide pääsuõiguste taastamiseks redigeerige palun VPN seadistusi ja valige uuesti üldiste seadistuste alt sertifikaat.</string>
@@ -41,8 +41,8 @@
   <string name="dns_add_error">DNS serveri \"%1$s\" lisamine ebaõnnestus, süsteemi poolt keelduti: %2$s</string>
   <string name="ip_add_error">IP aadressi \"%1$s\" seadistamine ei õnnestunud, süsteemi poolt välja praagitud: %2$s</string>
     <string name="getproxy_error">Viga proxy seadistuste vastuvõtul: %s</string>
-    <string name="minidump_generated">OpenVPN jooksis ootamatult kokku. Palun kaaluge \"saada Minitõmmis\" valiku lubamist peamenüüs</string>
-    <string name="notification_title">OpenVPN - %s</string>
+    <string name="minidump_generated">RailroadVPN jooksis ootamatult kokku. Palun kaaluge \"saada Minitõmmis\" valiku lubamist peamenüüs</string>
+    <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Ühendumine</string>
@@ -79,7 +79,7 @@
   <string name="app_no_longer_exists">Programm %s on seadmest eemaldatud, see kustutatakse ka lubatud/keelatud programmide nimistust</string>
     <string name="remote_no_server_selected">Peate määrama vähemalt ühe kaugserveri.</string>
     <string name="ignore_multicast_route">Eiran multicast marsruuti: %s</string>
-    <string name="service_restarted">OpenVPN teenuse taaskäivitamine (Programm jooksis tõenäoliselt kokku või suleti mälusurve tõttu)</string>
+    <string name="service_restarted">RailroadVPN teenuse taaskäivitamine (Programm jooksis tõenäoliselt kokku või suleti mälusurve tõttu)</string>
     <string name="no_allowed_app">Lisati lubamatu programm. Lisame ennast (%s) et lubatud programmide seas oleks vähemalt üks ja ei lubataks kõiki programme</string>
     <string name="abi_mismatch">Selle seadme eelistatud ABI eelisjärjekord (%1$s) ja seadme kaasnevate teekide teatatud ABI (%2$s) ei ühildu</string>
   <string name="permission_revoked">OS tühistas VPN õigused (nt. töötab teine VPN programm). VPN peatatakse</string>

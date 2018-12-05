@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">RailRoad VPN</string>
+  <string name="app">RailroadVPN</string>
     <string name="no_keystore_cert_selected">Потрібно вибрати сертифікат користувача</string>
   <string name="no_ca_cert_selected">Ви повинні обрати кореневий (СА) сертифікат</string>
   <string name="no_error_found">Помилок не знайдено</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">Маршрути: %1$s %2$s</string>
   <string name="routes_info_excl">Виключені маршрути : %1$s %2$s</string>
   <string name="routes_debug">Встановлені маршрути VpnService: %1$s %2$s</string>
-  <string name="ip_not_cidr">Отримано інформацію інтерфейсу %1$s і %2$s, друга адреса є віддаленою адресою каналу. Використовується мережева маска /32 для локальної IP-адреси. Режим, встановлений OpenVPN: \"%3$s\".</string>
+  <string name="ip_not_cidr">Отримано інформацію інтерфейсу %1$s і %2$s, друга адреса є віддаленою адресою каналу. Використовується мережева маска /32 для локальної IP-адреси. Режим, встановлений RailroadVPN: \"%3$s\".</string>
   <string name="route_not_cidr">Неможливо використовувати вирази %1$s і %2$s як маршрут за стандартом CIDR. використовується /32 як маска підмережі.</string>
   <string name="route_not_netip">Виправлено маршрут з %1$s/%2$s на %3$s/%2$s</string>
   <string name="keychain_access">Не можна отримати доступ до сховища ключів та сертифікатів Андроїд. Це можливо  спричинено оновлення прошивки або відновленням резервної копії програми чи її налаштувань. Будь ласка, відредагуйте профіль VPN та заново виберіть сертифікат у основних параметрах для створення доступу до сертифікату.</string>
@@ -41,8 +41,8 @@
   <string name="dns_add_error">Не можливо додати DNS-сервер \"%1$s\", відхилено системою: %2$s</string>
   <string name="ip_add_error">Не вдалося налаштувати IP-адресу \"%1$s\", відхилено системою: %2$s</string>
     <string name="getproxy_error">Помилка отримання параметрів проксі: %s</string>
-    <string name="minidump_generated">OpenVPN впав несподівано. Будь ласка, розгляньте використання параметру \"Надіслати Мінідамп\" в головному меню</string>
-    <string name="notification_title">OpenVPN - %s</string>
+    <string name="minidump_generated">RailroadVPN впав несподівано. Будь ласка, розгляньте використання параметру \"Надіслати Мінідамп\" в головному меню</string>
+    <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Підключення</string>
@@ -79,7 +79,7 @@
   <string name="app_no_longer_exists">Пакет програм з ім\'ям %s не встановлений, та буде вилучений зі списку дозволених/заборонених VPN програм.</string>
     <string name="remote_no_server_selected">Вам потрібно вказати і включити принаймні один сервер.</string>
     <string name="ignore_multicast_route">Ігнорувати multicast маршрут:%s</string>
-    <string name="service_restarted">Перезапуск OpenVPN Service (Додаток зупинився або закрився через нестачу пам\'яті)</string>
+    <string name="service_restarted">ПерезапускRailroadVPNService (Додаток зупинився або закрився через нестачу пам\'яті)</string>
     <string name="no_allowed_app">Не додано в список дозволених додатків. Додайте себе (%s), щоб мати принаймні один додаток в списку дозволених, щоб не дозволяти всі програми</string>
     <string name="abi_mismatch">Preferred native ABI precedence of this device (%1$s) and ABI reported by native libraries (%2$s) mismatch</string>
   <string name="permission_revoked">Дозвіл VPN відкликано ОС (наприклад, інша програма VPN запущена), зупинка VPN</string>
@@ -98,13 +98,13 @@
   <string name="volume_mbyte">%.1f МБ</string>
   <string name="volume_gbyte">%.1f ГБ</string>
   <string name="channel_name_background">Статистика з\'єднання</string>
-  <string name="channel_description_background">Поточна статистика встановленого з\'єднання OpenVPN</string>
+  <string name="channel_description_background">Поточна статистика встановленого з\'єднання RailroadVPN</string>
   <string name="channel_name_status">Зміна статусу з\'єднання</string>
-  <string name="channel_description_status">Зміни статусу з\'єднання OpenVPN (підключення, автентифікація,...)</string>
+  <string name="channel_description_status">Зміни статусу з\'єднанняRailroadVPN(підключення, автентифікація,...)</string>
     <string name="openssl_cipher_name">Назви шифрів OpenSSL</string>
     <string name="openssl_error">OpenSSL повернув помилку</string>
   <string name="running_test">Запуск тесту&#8230;</string>
   <string name="test_algoirhtms">Тестування вибраних алгоритмів</string>
-    <string name="openvpn3_nostatickeys">Реалізація OpenVPN 3 C ++ не підтримує статичні ключи. Перейдіть в OpenVPN 2.x під загальними налаштуваннями.</string>
-  <string name="openvpn3_pkcs12">Використання файлів PKCS12 напряму за допомогою OpenVPN 3 C ++ не підтримується. Імпортуйте файли pkcs12 в сховище ключів Android або замініть OpenVPN 2.x на загальні налаштування.</string>
+    <string name="openvpn3_nostatickeys">РеалізаціяRailroadVPN3 C ++ не підтримує статичні ключи. Перейдіть вRailroadVPN2.x під загальними налаштуваннями.</string>
+  <string name="openvpn3_pkcs12">Використання файлів PKCS12 напряму за допомогоюRailroadVPN3 C ++ не підтримується. Імпортуйте файли pkcs12 в сховище ключів Android або замінітьRailroadVPN2.x на загальні налаштування.</string>
 </resources>

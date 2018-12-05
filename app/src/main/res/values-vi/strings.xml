@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">OpenVPN cho Android</string>
+  <string name="app">RailroadVPN cho Android</string>
   <string name="no_keystore_cert_selected">Bạn phải chọn một chứng chỉ người dùng</string>
   <string name="no_ca_cert_selected">Bạn phải chọn một chứng chỉ CA</string>
   <string name="no_error_found">Không tìm thấy lỗi</string>
@@ -42,8 +42,8 @@
   <string name="ip_add_error">Không thể cấu hình địa chỉ IP \"%1$s\", từ chối bởi hệ thống: %2$s</string>
   <string name="getproxy_error">Lỗi nhận cấu hình proxy: %s</string>
   <string name="using_proxy">ใช้พร็อกซี% 1 $ s% 2 $ s</string>
-  <string name="minidump_generated">OpenVPN bất ngờ bị lỗi. Vui lòng xem xét và gửi tùy chọn Báo cáo sự cố trong menu chính</string>
-  <string name="notification_title">OpenVPN - %s</string>
+  <string name="minidump_generated">RailroadVPN bất ngờ bị lỗi. Vui lòng xem xét và gửi tùy chọn Báo cáo sự cố trong menu chính</string>
+  <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Đang kết nối</string>
@@ -80,7 +80,7 @@
   <string name="app_no_longer_exists">Gói %s không còn được cài đặt nữa, gỡ bỏ nó từ danh sách ứng dụng cho phép/không cho phép</string>
   <string name="remote_no_server_selected">Bạn cần phải xác định và cho phép ít nhất một máy chủ từ xa.</string>
   <string name="ignore_multicast_route">Bỏ qua định tuyến đa luồng: %s</string>
-  <string name="service_restarted">Đang khởi động lại dịch vụ OpenVPN (Ứng dụng gặp lỗi hoặc bị dừng do tràn bộ nhớ)</string>
+  <string name="service_restarted">Đang khởi động lại dịch vụRailroadVPN(Ứng dụng gặp lỗi hoặc bị dừng do tràn bộ nhớ)</string>
   <string name="no_allowed_app">Không có ứng dụng nào được phép thêm. Đang thêm (%s) có tối thiểu một ứng dụng trong danh sách những ứng dụng đã cho phép chứ không cho phép tất cả ứng dụng</string>
   <string name="abi_mismatch">Ưu tiên ABI gốc của thiết bị này (%1$s) và ABI được báo cáo bởi thư viện gốc (%2$s) bất đối xứng</string>
   <string name="permission_revoked">cho phép VPN bị thu hồi bởi hệ điều hành (ví dụ như chương trình VPN khác bắt đầu), dừng VPN</string>

@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">OpenVPN til Android</string>
+  <string name="app">RailroadVPN til Android</string>
     <string name="no_keystore_cert_selected">Du skal vælge et bruger certifikat</string>
   <string name="no_ca_cert_selected">Du skal vælge et CA-certifikat</string>
   <string name="no_error_found">Ingen fejl fundet</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">Ruter: %1$s %2$s</string>
   <string name="routes_info_excl">Ekskluderede ruter: %1$s %2$s</string>
   <string name="routes_debug">VpnService rute installeret: %1$s %2$s</string>
-  <string name="ip_not_cidr">Fik grænsfladeoplysninger %1$s og %2$s, antager at anden adresse er peer-adressen på fjernserveren. Bruger /32 netmask til lokal IP. Tilstanden givet af OpenVPN er \"%3$s\".</string>
+  <string name="ip_not_cidr">Fik grænsfladeoplysninger %1$s og %2$s, antager at anden adresse er peer-adressen på fjernserveren. Bruger /32 netmask til lokal IP. Tilstanden givet afRailroadVPNer \"%3$s\".</string>
   <string name="route_not_cidr">Kan ikke forstå %1$s og %2$s som IP rute med CIDR netmask, bruger /32 som netmask.</string>
   <string name="route_not_netip">Rettede rute %1$s/%2$s til %3$s/%2$s</string>
   <string name="keychain_access">Kan ikke få adgang til Android Keychain Certifikater. Dette kan skyldes en firmware opdatering eller ved at gendanne en backup af app\'en/app indstillingerne. Rediger venligst VPN\'en og genvælg certifikatet under grund indstillinger for at gendanne rettighederne til at tilgå certifikatet.</string>
@@ -41,8 +41,8 @@
   <string name="dns_add_error">Kunne ikke tilføje DNS server \"%1$s\", afvist af systemet: %2$s</string>
   <string name="ip_add_error">Kunne ikke indstille IP adresse \"%1$s\", afvist af systemet: %2$s</string>
     <string name="getproxy_error">Fejl under indlæsning af proxy-indstillinger: %s</string>
-    <string name="minidump_generated">OpenVPN gik uventet ned. Overvej venligst at benytte muligheden Send Minidump i hovedmenuen</string>
-    <string name="notification_title">OpenVPN - %s</string>
+    <string name="minidump_generated">RailroadVPN gik uventet ned. Overvej venligst at benytte muligheden Send Minidump i hovedmenuen</string>
+    <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Tilslutning</string>
@@ -79,7 +79,7 @@
   <string name="app_no_longer_exists">Pakken %s er ikke længere installeret, fjerner den fra app-listen Tilladte/Ikke-tilladte</string>
     <string name="remote_no_server_selected">Mindst én fjernserver skal definere og aktiveres.</string>
     <string name="ignore_multicast_route">Ignorerer multicast-rute: %s</string>
-    <string name="service_restarted">Genstarter OpenVPN Service (App\'en crashede, den crashede sandsynligvis eller blev stoppet på grund a RAM overbelastning)</string>
+    <string name="service_restarted">GenstarterRailroadVPNService (App\'en crashede, den crashede sandsynligvis eller blev stoppet på grund a RAM overbelastning)</string>
     <string name="no_allowed_app">Ingen tilladt app tilføjet. Tilføjer selve appen (%s) for at have mindst én tilladt app, ellers vil alle apps være tilladte</string>
     <string name="permission_revoked">VPN tilladelse tilbagekaldt af styresystemet (f.eks. kan et andet VPN program være startet), stopper VPN</string>
   <string name="volume_byte">%.0f B</string>

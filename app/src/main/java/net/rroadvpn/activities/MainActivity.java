@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.SystemClock;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import net.rroadvpn.activities.pin.InputPinView;
@@ -12,6 +13,7 @@ import net.rroadvpn.model.VPNAppPreferences;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.services.PreferencesService;
 
+import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends BaseActivity {
@@ -19,29 +21,28 @@ public class MainActivity extends BaseActivity {
     public static int REQUIRE_PIN = 0;
     public static int START_VPN = 1;
 
-    public ProgressBar pb;
-    protected Context ctx;
-
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ctx = this;
-
         setContentView(R.layout.main_activity);
 
-        // on some click or some loading we need to wait for...
-        pb = findViewById(R.id.pbLoading);
 
-        ProgressBarTask progressBarTask = new ProgressBarTask();
+        ProgressBarTask progressBarTask = new ProgressBarTask(this);
         progressBarTask.execute();
     }
 
-    public class ProgressBarTask extends AsyncTask<Void, Integer, String> {
+    public static class ProgressBarTask extends AsyncTask<Void, Integer, String> {
+
+        private WeakReference<MainActivity> activityReference;
 
         int count = 0;
 
+        ProgressBarTask(MainActivity context) {
+            activityReference = new WeakReference<>(context);
+        }
+
         @Override
         protected void onPreExecute() {
+            ProgressBar pb = activityReference.get().findViewById(R.id.pbLoading);
             pb.setVisibility(ProgressBar.VISIBLE);
         }
 
@@ -58,6 +59,7 @@ public class MainActivity extends BaseActivity {
 
         @Override
         protected void onProgressUpdate(Integer... values) {
+            ProgressBar pb = activityReference.get().findViewById(R.id.pbLoading);
             pb.setProgress(values[0]);
         }
 
@@ -65,18 +67,20 @@ public class MainActivity extends BaseActivity {
         protected void onPostExecute(String status) {
             super.onPostExecute(status);
 
-            PreferencesService preferencesService = new PreferencesService(ctx, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
+            Context baseContext = activityReference.get().getBaseContext();
+
+            PreferencesService preferencesService = new PreferencesService(baseContext, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
 
             String device_token = preferencesService.getString(VPNAppPreferences.DEVICE_TOKEN);
 
             if (device_token.equals("")) {
-                Intent intent = new Intent(getBaseContext(), InputPinView.class);
-                startActivityForResult(intent, REQUIRE_PIN);
-                finish();
+                Intent intent = new Intent(baseContext, InputPinView.class);
+                activityReference.get().startActivityForResult(intent, REQUIRE_PIN);
+                activityReference.get().finish();
             } else {
-                Intent intent = new Intent(getBaseContext(), VPNActivity.class);
-                startActivityForResult(intent, START_VPN);
-                finish();
+                Intent intent = new Intent(baseContext, VPNActivity.class);
+                activityReference.get().startActivityForResult(intent, START_VPN);
+                activityReference.get().finish();
             }
         }
     }

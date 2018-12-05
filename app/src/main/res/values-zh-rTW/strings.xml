@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">RailRoad VPN</string>
+  <string name="app">RailroadVPN</string>
   <string name="no_keystore_cert_selected">你必須選擇一個使用者憑證</string>
   <string name="no_ca_cert_selected">您必須選擇一個憑證</string>
   <string name="no_error_found">未找到錯誤</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">路由：%1$s %2$s</string>
   <string name="routes_info_excl">排除的路由：%1$s %2$s</string>
   <string name="routes_debug">VpnService 路由安裝：%1$s %2$s</string>
-  <string name="ip_not_cidr">取得介面訊息 %1$s 及 %2$s，假設第二個位址是遠端對等的位址。使用 /32 子網路遮罩給本機 IP。OpenVPN 的模式是「%3$s」。</string>
+  <string name="ip_not_cidr">取得介面訊息 %1$s 及 %2$s，假設第二個位址是遠端對等的位址。使用 /32 子網路遮罩給本機 IP。RailroadVPN 的模式是「%3$s」。</string>
   <string name="route_not_cidr">無法將 %1$s 和 %2$s 作為具有 CIDR 子網路遮罩的 IP 路由，使用 /32 作為子網路遮罩。</string>
   <string name="route_not_netip">修正路由 %1$s / %2$s 到 %3$s / %2$s</string>
   <string name="keychain_access">無法存取 Android 鑰匙圈憑證。這可能是由韌體更新，或還原此應用程式/應用程式設定造成。請在基本設定下，編輯 VPN 及重新選擇憑證，以重新建立存取憑證的權限。</string>
@@ -41,8 +41,8 @@
   <string name="dns_add_error">無法添加DNS服務器“%1$s”，系統拒絕：%2$s</string>
   <string name="ip_add_error">無法配置IP地址“%1$s”，系統拒絕：%2$s</string>
   <string name="getproxy_error">取得代理伺服器資訊時發生錯誤: %s</string>
-  <string name="minidump_generated">OpenVPN 發生非預期的異常，你可以使用在主選單中的發送異常傾印選項，將資訊提供給開發人員。</string>
-  <string name="notification_title">OpenVPN - %s</string>
+  <string name="minidump_generated">RailroadVPN 發生非預期的異常，你可以使用在主選單中的發送異常傾印選項，將資訊提供給開發人員。</string>
+  <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">連線中</string>
@@ -79,7 +79,7 @@
   <string name="app_no_longer_exists">包%s不再安裝，從應用程序刪除它允許/禁止列表</string>
   <string name="remote_no_server_selected">您需要定義和啟用至少一個遠端伺服器。</string>
   <string name="ignore_multicast_route">忽略多點傳送路徑：%s</string>
-  <string name="service_restarted">正在重新啟動 OpenVPN 服務（應用程式當機可能因為記憶體壓力而當機或被終止）</string>
+  <string name="service_restarted">正在重新啟動RailroadVPN服務（應用程式當機可能因為記憶體壓力而當機或被終止）</string>
   <string name="abi_mismatch">該設備的優先考慮的母語ABI優先級（%1$s）和ABI報告本地庫（%2$s）不匹配</string>
   <string name="missing_tlsauth">缺少 tls-auth 檔案</string>
   <string name="missing_certificates">缺少使用者憑證或使用者憑證金鑰檔案</string>
@@ -94,9 +94,9 @@
   <string name="volume_mbyte">%.1f MB</string>
   <string name="volume_gbyte">%.1f GB</string>
   <string name="channel_name_background">連線統計</string>
-  <string name="channel_description_background">正在統計已建立的 OpenVPN 連線</string>
+  <string name="channel_description_background">正在統計已建立的 RailroadVPN 連線</string>
   <string name="channel_name_status">連線狀態改變</string>
-  <string name="channel_description_status">OpenVPN 連線狀態改變（正在連線，正在驗證...）</string>
+  <string name="channel_description_status">RailroadVPN 連線狀態改變（正在連線，正在驗證...）</string>
   <string name="openssl_cipher_name">OpenSSL cipher 名稱</string>
   <string name="openssl_error">OpenSSL 回傳一個錯誤</string>
   <string name="running_test">執行測試中...</string>

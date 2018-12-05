@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">RailRoad VPN</string>
+  <string name="app">RailroadVPN</string>
     <string name="no_keystore_cert_selected">사용자 인증서를 선택해야 합니다</string>
   <string name="no_ca_cert_selected">CA 인증서를 선택해야 합니다</string>
   <string name="no_error_found">오류 없음</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">경로: %1$s %2$s</string>
   <string name="routes_info_excl">제외된 경로: %1$s %2$s</string>
   <string name="routes_debug">설치된 VpnService 경로: %1$s %2$s</string>
-  <string name="ip_not_cidr">인터페이스 정보 %1$s와 %2$s를 받았고 두 번째 주소를 원격 피어 주소로 가정합니다. 로컬 IP에 대해 /32 넷마스크를 사용합니다. OpenVPN에 의해 주어진 모드는 \"%3$s\"입니다.</string>
+  <string name="ip_not_cidr">인터페이스 정보 %1$s와 %2$s를 받았고 두 번째 주소를 원격 피어 주소로 가정합니다. 로컬 IP에 대해 /32 넷마스크를 사용합니다. RailroadVPN에 의해 주어진 모드는 \"%3$s\"입니다.</string>
   <string name="route_not_cidr">CIDR 넷마스크가 있는 IP 경로로서 %1$s와 %2$s를 이해할 수 없습니다. 넷마스크로 /32를 사용합니다.</string>
   <string name="route_not_netip">%1$s/%2$s에서 %3$s/%2$s로 경로 정정</string>
   <string name="keychain_access">안드로이드 키체인 인증서에 접근할 수 없습니다. 이는 펌웨어 업그레이드 또는 앱 백업 복구, 앱 설정 복구에 의해 발생할 수 있습니다. 인증서에 접근할 수 있는 권한을 다시 생성하기 위해 VPN을 편집하고 기본 설정 아래에서 인증서를 다시 선택하십시오.</string>
@@ -42,8 +42,8 @@
   <string name="ip_add_error">시스템에 의해 거부되어 IP 주소 \"%1$s\"를 설정하지 못하였습니다: %2$s</string>
     <string name="getproxy_error">프록시 설정 가져오기 오류: %s</string>
   <string name="using_proxy">%1$s</string>
-    <string name="minidump_generated">OpenVPN이 예기치 않게 종료됐습니다. 메인 메뉴에 있는 미니 덤프 보내기 옵션의 사용을 고려하시기 바랍니다.</string>
-    <string name="notification_title">OpenVPN - %s</string>
+    <string name="minidump_generated">RailroadVPN 예기치 않게 종료됐습니다. 메인 메뉴에 있는 미니 덤프 보내기 옵션의 사용을 고려하시기 바랍니다.</string>
+    <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">연결중</string>
@@ -80,7 +80,7 @@
   <string name="app_no_longer_exists">%s 패키지가 더이상 설치되어 있지 않으며 앱 허용/거부 목록에서 제거함</string>
     <string name="remote_no_server_selected">하나 이상의 원격 서버를 정의하고 활성화해야 합니다.</string>
     <string name="ignore_multicast_route">멀티캐스트 경로 무시​​: %s</string>
-    <string name="service_restarted">OpenVPN 서비스 재시작 (앱이 메모리 부족으로 죽었거나 강제 종료된 것으로 추정)</string>
+    <string name="service_restarted">RailroadVPN 서비스 재시작 (앱이 메모리 부족으로 죽었거나 강제 종료된 것으로 추정)</string>
     <string name="no_allowed_app">허용된 앱이 추가되지 않았습니다. 모든 앱을 허용하지 않으려면 허용된 앱 목록에 앱이 하나 이상 있어야 하므로 이 앱 자신(%s)을 추가합니다.</string>
     <string name="abi_mismatch">이 장치의 고유 ABI 우선 순위(%1$s)와 고유 라이브러리가 보고한 ABI(%2$s)가 불일치</string>
   <string name="permission_revoked">운영체제에 의해 취소된 VPN 권한(예: 다른 VPN 프로그램 시작됨), VPN 중지</string>
@@ -99,13 +99,13 @@
   <string name="volume_mbyte">%.1f MB</string>
   <string name="volume_gbyte">%.1f GB</string>
   <string name="channel_name_background">연결 통계</string>
-  <string name="channel_description_background">수립된 OpenVPN 연결의 진행 통계</string>
+  <string name="channel_description_background">수립된RailroadVPN연결의 진행 통계</string>
   <string name="channel_name_status">연결 상태 변화</string>
-  <string name="channel_description_status">OpenVPN 연결의 상태 변화 (연결중, 인증중,&#8230;)</string>
+  <string name="channel_description_status">RailroadVPN 연결의 상태 변화 (연결중, 인증중,&#8230;)</string>
     <string name="openssl_cipher_name">OpenSSL 암호화 알고리즘 이름</string>
     <string name="openssl_error">OpenSSL이 오류를 반환함</string>
   <string name="running_test">테스트 수행 중&#8230;</string>
   <string name="test_algoirhtms">선택한 알고리즘 테스트</string>
-    <string name="openvpn3_nostatickeys">OpenVPN 3 C++ 구현은 고정 키를 지원하지 않습니다. 일반 설정에서 OpenVPN 2.x로 변경해 주세요.</string>
-  <string name="openvpn3_pkcs12">OpenVPN 3 C++ 구현과 함께 PKCS12 파일을 직접 사용하는 것은 지원되지 않습니다. PKCS12 파일을 안드로이드 키 저장소로 가져 오거나 일반 설정에서 OpenVPN 2.x으로 변경하세요.</string>
+    <string name="openvpn3_nostatickeys">RailroadVPN 3 C++ 구현은 고정 키를 지원하지 않습니다. 일반 설정에서RailroadVPN2.x로 변경해 주세요.</string>
+  <string name="openvpn3_pkcs12">RailroadVPN 3 C++ 구현과 함께 PKCS12 파일을 직접 사용하는 것은 지원되지 않습니다. PKCS12 파일을 안드로이드 키 저장소로 가져 오거나 일반 설정에서RailroadVPN2.x으로 변경하세요.</string>
 </resources>

@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">OpenVPN untuk Android</string>
+  <string name="app">RailroadVPN untuk Android</string>
     <string name="no_keystore_cert_selected">Anda harus memilih sertifikat pengguna</string>
   <string name="no_ca_cert_selected">Opoeo</string>
   <string name="no_error_found">Tidak ada kesalahan</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">Rute: %1$s %2$s</string>
   <string name="routes_info_excl">Rute terkecualikan: %1$s %2$s</string>
   <string name="routes_debug">Rute LayananVpn telah terpasang: %1$s %2$s</string>
-  <string name="ip_not_cidr">Memilki informasi antarmuka %1$s dan %2$s, asumsi alamat kedua adalah alamat remote. Menggunakan netmask /32 untuk IP lokal. Mode yang diberikan oleh OpenVPN adalah \"%3$s\".</string>
+  <string name="ip_not_cidr">Memilki informasi antarmuka %1$s dan %2$s, asumsi alamat kedua adalah alamat remote. Menggunakan netmask /32 untuk IP lokal. Mode yang diberikan olehRailroadVPNadalah \"%3$s\".</string>
   <string name="route_not_cidr">Tidak masuk akal membuat %1$s dan %2$s sebagai rute IP dengan netmask CIDR, Gunakan /32 sebagai netmask.</string>
   <string name="route_not_netip">Rute yang diperbaiki %1$s/%2$s hingga %3$s/%2$s</string>
   <string name="keychain_access">Tidak dapat mengakses sertifikat Keychain Android. Dapat disebabkan karena upgrade firmware atau pengembalian backup pengaturan app. Mohon ubah VPN, dan pilih ulang sertifikat berbasis pengaturan dasar agar izin mengakses sertifikat dapat dibuat ulang.</string>
@@ -41,8 +41,8 @@
   <string name="dns_add_error">Tak bisa menambahkan Server DNS \"%1$s\", ditolak oleh sistem: %2$s</string>
   <string name="ip_add_error">Tidak bisa mengkonfigurasi IP Address \"%1$s\", ditolak oleh sistem: %2$s</string>
     <string name="getproxy_error">Gagal mendapatkan pengaturan proxy: %s</string>
-    <string name="minidump_generated">OpenVPN crash tak terduga. Silakan mempertimbangkan mengirim menggunakan pilihan Minidump di Menu Utama</string>
-    <string name="notification_title">OpenVPN - %s</string>
+    <string name="minidump_generated">RailroadVPN crash tak terduga. Silakan mempertimbangkan mengirim menggunakan pilihan Minidump di Menu Utama</string>
+    <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Menghubungkan</string>
@@ -79,7 +79,7 @@
   <string name="app_no_longer_exists">Paket %s tidak lagi diinstall, menghapus itu dari app memungkinkan/melarang daftar</string>
     <string name="remote_no_server_selected">Anda harus menentukan dan memungkinkan setidaknya satu server jauh.</string>
     <string name="ignore_multicast_route">Mengabaikan rute multicast: %s</string>
-    <string name="service_restarted">Restart layanan OpenVPN (App jatuh mungkin jatuh atau dibunuh untuk memori tekanan)</string>
+    <string name="service_restarted">Restart layananRailroadVPN(App jatuh mungkin jatuh atau dibunuh untuk memori tekanan)</string>
     <string name="no_allowed_app">Tidak ada aplikasi yang diizinkan ditambahkan Menambahkan diri kita (%s) untuk memiliki setidaknya satu aplikasi dalam daftar aplikasi yang diizinkan agar tidak mengizinkan semua aplikasi</string>
     <string name="abi_mismatch">Preferred native ABI yang diutamakan dari perangkat ini (%1$s) dan ABI dilaporkan oleh perpustakaan asli (%2$s) ketidakcocokan</string>
   <string name="permission_revoked">[01.55] Routes excluded: 10.0.0.0/8, *********/32, 172.16.0.0/12, 192.168.0.0/16 </string>

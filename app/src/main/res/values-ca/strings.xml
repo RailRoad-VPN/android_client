@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">OpenVPN per Android</string>
+  <string name="app">RailroadVPN per Android</string>
     <string name="no_error_found">No s\'ha trobat cap error</string>
     <string name="route_rejected">La ruta ha estat refusas per Android</string>
   <string name="cancel_connection">Desconecta</string>
@@ -16,4 +16,5 @@
   <string name="password">Contrasenya</string>
     <string name="building_configration">Construint la configuració&#8230;</string>
     <string name="netstatus">Estat de la xarxa %s</string>
+    <string name="notification_title">RailroadVPN</string>
 </resources>

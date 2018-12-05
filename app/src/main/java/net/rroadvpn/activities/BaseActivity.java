@@ -21,6 +21,8 @@ public class BaseActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         if (isAndroidTV()) {
             requestWindowFeature(Window.FEATURE_OPTIONS_PANEL);
         }
@@ -37,7 +39,6 @@ public class BaseActivity extends Activity {
                     WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
             );
         }
-        super.onCreate(savedInstanceState);
     }
 
     @Override

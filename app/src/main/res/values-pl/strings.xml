@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">OpenVPN dla Androida</string>
+  <string name="app">RailroadVPN dla Androida</string>
     <string name="no_keystore_cert_selected">Musisz wybrać certyfikat użytkownika</string>
   <string name="no_ca_cert_selected">Musisz wybrać certyfikat CA</string>
   <string name="no_error_found">Brak błędów</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">Trasy: %1$s %2$s</string>
   <string name="routes_info_excl">Wykluczone trasy: %1$s %2$s</string>
   <string name="routes_debug">VpnService dodano trasy: %1$s %2$s</string>
-  <string name="ip_not_cidr">Interfejs uzyskał %1$s oraz %2$s, zakładam, że drugi adres jest adresem zdalnym - peer. Użyto maski /32 dla lokalnego IP. Tryb OpenVPN to \"%3$s\".</string>
+  <string name="ip_not_cidr">Interfejs uzyskał %1$s oraz %2$s, zakładam, że drugi adres jest adresem zdalnym - peer. Użyto maski /32 dla lokalnego IP. TrybRailroadVPNto \"%3$s\".</string>
   <string name="route_not_cidr">%1$s i %2$s, nie są trasami IP w formacie CIDR, używam /32 jako maski sieci.</string>
   <string name="route_not_netip">Poprawiłem trasę %1$s/%2$s na %3$s/%2$s</string>
   <string name="keychain_access">Nie mam dostępu do pęku kluczy Androida. Może być to spowodowane aktualizacją systemu lub przywróceniem kopii aplikacji lub jej opcji. Proszę, edytuj połączenie VPN i wybierz ponownie certyfikat w opcjach, w celu odtworzenia pozwoleń dostępu do certyfikatu.</string>
@@ -42,8 +42,8 @@
   <string name="ip_add_error">Nie można skonfigurować adresu IP \"%1$s\", odrzucone przez system: %2$s</string>
     <string name="getproxy_error">Błąd pobierania ustawień proxy: %s</string>
   <string name="using_proxy">Korzystanie z serwera proxy %1$s %2$s</string>
-    <string name="minidump_generated">OpenVPN niespodziewanie uległ awarii. Proszę rozważ użycie opcji wyślij Minidump w głównym menu</string>
-    <string name="notification_title">OpenVPN - %s</string>
+    <string name="minidump_generated">RailroadVPN niespodziewanie uległ awarii. Proszę rozważ użycie opcji wyślij Minidump w głównym menu</string>
+    <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s-%2$s</string>
   <string name="session_ipv6string">%1$s-%3$s,%2$s</string>
   <string name="state_connecting">Łączę</string>
@@ -80,7 +80,7 @@
   <string name="app_no_longer_exists">Aplikacja %s nie jest już zainstalowana, usuwam ją z listy dozwolonych/zabronionych</string>
     <string name="remote_no_server_selected">Musisz zdefiniować i włączyć co najmniej jeden serwer.</string>
     <string name="ignore_multicast_route">Ignoruj trasę multicast: %s</string>
-    <string name="service_restarted">Restartuję usługę OpenVPN (Aplikacja wywaliła się lub zabito ją z powodu braku pamięci)</string>
+    <string name="service_restarted">Restartuję usługęRailroadVPN(Aplikacja wywaliła się lub zabito ją z powodu braku pamięci)</string>
     <string name="no_allowed_app">Dodano niedozwoloną aplikację. Dodaję siebie (%s), żeby mieć przynajmniej jedną aplikację w liście dozwolonych aplikacji, aby nie pozwolić wszystkim aplikacjom</string>
     <string name="permission_revoked">Pozwolenie VPN odwołane przez system (na przykład inny program VPN jest uruchomiony), zatrzymuję VPN</string>
     <string name="missing_tlsauth">Plik tls-auth nie odnaleziony</string>

@@ -6,24 +6,5 @@
 
 <resources>
     <!-- http://www.google.de/design/spec/style/color.html#color-color-palette -->
-    <style name="rroad.baseTheme" parent="android:Theme.Material.Light.DarkActionBar">
-        <item name="android:colorPrimary">@color/primary</item>
-        <item name="android:colorPrimaryDark">@color/primary_dark</item>
-        <item name="android:colorAccent">@color/accent</item>
-        <item name="android:alertDialogTheme">@style/rroad.alertDialog</item>
-    </style>
-
-    <style name="rroad.dialog" parent="android:Theme.Material.Light.Dialog">
-        <item name="android:colorPrimary">@color/primary</item>
-        <item name="android:colorPrimaryDark">@color/primary_dark</item>
-        <item name="android:colorAccent">@color/accent</item>
-        <item name="android:alertDialogTheme">@style/rroad.alertDialog</item>
-    </style>
-
-    <style name="rroad.alertDialog" parent="android:Theme.Material.Light.Dialog.Alert">
-        <item name="android:colorPrimary">@color/primary</item>
-        <item name="android:colorPrimaryDark">@color/primary_dark</item>
-        <item name="android:colorAccent">@color/accent</item>
-    </style>
 
 </resources>

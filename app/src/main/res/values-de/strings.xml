@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">OpenVPN für Android</string>
+  <string name="app">RailroadVPN für Android</string>
     <string name="no_keystore_cert_selected">Kein Benutzerzertifikat ausgewählt</string>
   <string name="no_ca_cert_selected">Sie müssen ein CA-Zertifikat auswählen</string>
   <string name="no_error_found">Kein Fehler.</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">Routen: %1$s %2$s</string>
   <string name="routes_info_excl">Ausgeschlossene Routen: %1$s %2$s</string>
   <string name="routes_debug">Installierte VpnService-Routen: %1$s %2$s</string>
-  <string name="ip_not_cidr">Interface Information %1$s und %2$s: verwende die zweite Adresse als Peer-Adresse. Benutze /32-Netzmaske für die lokale IP-Adresse. Von OpenVPN gesetzter Interface-Modus ist \"%3$s\".</string>
+  <string name="ip_not_cidr">Interface Information %1$s und %2$s: verwende die zweite Adresse als Peer-Adresse. Benutze /32-Netzmaske für die lokale IP-Adresse. VonRailroadVPNgesetzter Interface-Modus ist \"%3$s\".</string>
   <string name="route_not_cidr">Die Route %1$s mit der Netzmaske %2$s ist keine Route mit einer CIDR-Netzmaske; verwende /32 als Netzmaske.</string>
   <string name="route_not_netip">Route %1$s/%2$s korrigiert zu %3$s/%2$s</string>
   <string name="keychain_access">Kann nicht auf die Zertifikate im Android-Zertifikatsspeicher zugreifen. Dies kann durch ein Systemupdate oder durch Zurückspielen der App oder ihrer Einstellungen aus einem Backup hervorgerufen werden. Bitte bearbeiten Sie das VPN und wählen Sie das Zertifikat erneut in den Grundeinstellungen aus, um die Zugriffsberechtigung für das Zertifikat wieder herzustellen.</string>
@@ -32,7 +32,7 @@
     <string name="pkcs12_file_encryption_key">PKCS12-Verschlüsselungs-Passwort</string>
   <string name="private_key_password">Passphrase des privaten Schlüssels</string>
   <string name="password">Passwort</string>
-    <string name="building_configration">Generiere OpenVPN-Konfiguration&#8230;</string>
+    <string name="building_configration">Generiere RailroadVPN-Konfiguration&#8230;</string>
     <string name="netstatus">Netzwerkstatus: %s</string>
     <string name="keychain_nocacert">Beim Abfragen des Android-Zertifikatsspeichers wurde kein CA-Zertifikat zurückgegeben. Die Überprüfung des Serverzertifikats wird wahrscheinlich fehlschlagen. Geben Sie manuell ein CA-Zertifikat an.</string>
     <string name="mobile_info">%10$s %9$s läuft auf %3$s %1$s (%2$s), Android %6$s (%7$s) API %4$d, ABI %5$s, (%8$s)</string>
@@ -42,8 +42,8 @@
   <string name="ip_add_error">Das Setzen der IP-Adresse \"%1$s\" wurde vom System abgewiesen %2$s</string>
     <string name="getproxy_error">Fehler beim Ermitteln der Proxy-Einstellungen: %s</string>
   <string name="using_proxy">Verwende Proxy %1$s %2$s</string>
-    <string name="minidump_generated">Der OpenVPN-Prozess ist unerwartet abgestürzt. Bitte erwägen Sie die Option \"Minidump an Entwickler senden\" im Hauptmenü</string>
-    <string name="notification_title">OpenVPN - %s</string>
+    <string name="minidump_generated">Der RailroadVPN-Prozess ist unerwartet abgestürzt. Bitte erwägen Sie die Option \"Minidump an Entwickler senden\" im Hauptmenü</string>
+    <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Verbinde</string>
@@ -56,7 +56,7 @@
   <string name="state_disconnected">Getrennt</string>
   <string name="state_reconnecting">Wiederverbinden</string>
   <string name="state_exiting">Beende</string>
-  <string name="state_noprocess">OpenVPN läuft nicht</string>
+  <string name="state_noprocess">RailroadVPN läuft nicht</string>
   <string name="state_resolve">Löse Hostnamen auf</string>
   <string name="state_tcp_connect">Verbinde (TCP)</string>
   <string name="state_auth_failed">Authentifizierung fehlgeschlagen</string>
@@ -80,7 +80,7 @@
   <string name="app_no_longer_exists">Die App \'%s\' ist nicht mehr installiert und wird daher von der Liste der erlaubten/nicht erlaubten VPN-Anwendungen entfernt</string>
     <string name="remote_no_server_selected">Sie müssen mindestens einen Server definieren und aktivieren.</string>
     <string name="ignore_multicast_route">Ignoriere Multicast-Route: %s</string>
-    <string name="service_restarted">OpenVPN-Dienst wird neu gestartet (App vermutlich abgestürzt oder wegen Speichermangels beendet)</string>
+    <string name="service_restarted">RailroadVPN-Dienst wird neu gestartet (App vermutlich abgestürzt oder wegen Speichermangels beendet)</string>
     <string name="no_allowed_app">Keine erlaubte App hinzugefügt. Füge unsere eigene App (%s) hinzu, um zumindest eine App in der Liste der nicht erlaubten Anwendungen zu haben</string>
     <string name="abi_mismatch">Bevorzugte native ABI-Reihenfolge dieses Gerätes (%1$s) und die installierten nativen Bibliotheken (%2$s) unterscheiden sich</string>
   <string name="permission_revoked">VPN-Berechtigung wurde vom Betriebssytem widerrufen (z.B. weil ein anderes VPN gestartet wurde); VPN wird gestoppt</string>
@@ -99,13 +99,13 @@
   <string name="volume_mbyte">%.1f MB</string>
   <string name="volume_gbyte">%.1f GB</string>
   <string name="channel_name_background">Verbindungsstatistiken</string>
-  <string name="channel_description_background">Laufende Statistiken der OpenVPN-Verbindung</string>
+  <string name="channel_description_background">Laufende Statistiken der RailroadVPN-Verbindung</string>
   <string name="channel_name_status">Verbindungsstatus Änderungen</string>
-  <string name="channel_description_status">Statusänderungen der OpenVPN-Verbindung (Verbindung, Authentifizierung,...)</string>
+  <string name="channel_description_status">Statusänderungen der RailroadVPN-Verbindung (Verbindung, Authentifizierung,...)</string>
     <string name="openssl_cipher_name">OpenSSL Chiffrenamen</string>
     <string name="openssl_error">OpenSSL hat einen Fehler gemeldet</string>
   <string name="running_test">Test läuft&#8230;</string>
   <string name="test_algoirhtms">Ausgewählte Algorithmen testen</string>
-    <string name="openvpn3_nostatickeys">Die OpenVPN 3 C ++ - Implementierung unterstützt keine statischen Schlüssel. Bitte wechseln Sie zu OpenVPN 2.x unter den allgemeinen Einstellungen.</string>
-  <string name="openvpn3_pkcs12">Die Benutzung von PKCS12 Dateien mit der OpenVPN 3 C++ Implementierung wird nicht unterstützt. Bitte importieren Sie entweder die PKCS12 Datei in den Android Keystore oder nutzen Sie die Option OpenVPN 2.x in den allgemeinen Einstellungen auszuwählen.</string>
+    <string name="openvpn3_nostatickeys">DieRailroadVPN3 C ++ - Implementierung unterstützt keine statischen Schlüssel. Bitte wechseln Sie zuRailroadVPN2.x unter den allgemeinen Einstellungen.</string>
+  <string name="openvpn3_pkcs12">Die Benutzung von PKCS12 Dateien mit derRailroadVPN3 C++ Implementierung wird nicht unterstützt. Bitte importieren Sie entweder die PKCS12 Datei in den Android Keystore oder nutzen Sie die OptionRailroadVPN2.x in den allgemeinen Einstellungen auszuwählen.</string>
 </resources>

@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">安卓OpenVPN</string>
+  <string name="app">安卓RailroadVPN</string>
     <string name="no_keystore_cert_selected">您必须选择一个用户证书</string>
   <string name="no_ca_cert_selected">你必须选择一个CA证书</string>
   <string name="no_error_found">没有找到错误</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">路由: %1$s %2$s</string>
   <string name="routes_info_excl">排除的路由： %1$s %2$s</string>
   <string name="routes_debug">VpnService安装路线 : %1$s %2$s</string>
-  <string name="ip_not_cidr">已获得接口信息 %1$s 以及 %2$s，将第二个地址作为远程地址。使用 /32 作为本地掩码。OpenVPN 给出的模式是 \"%3$s\"。</string>
+  <string name="ip_not_cidr">已获得接口信息 %1$s 以及 %2$s，将第二个地址作为远程地址。使用 /32 作为本地掩码。RailroadVPN 给出的模式是 \"%3$s\"。</string>
   <string name="route_not_cidr">无法将 %1$s 和 %2$s 作为 CIDR 形式的路由，将使用 /32 的子网掩码。</string>
   <string name="route_not_netip">纠正路由 %1$s/%2$s 为 %3$s/%2$s</string>
   <string name="keychain_access">不能访问 Android 密钥链证书。这可能是由于固件升级或通过还原备份的应用程序/软件设置造成的。请编辑 VPN 配置文件并在基本设置中重新选择证书以重新创建证书访问权限。</string>
@@ -42,8 +42,8 @@
   <string name="ip_add_error">无法配置 IP 地址 %1$s，被系统拒绝：%2$s</string>
     <string name="getproxy_error">获取代理设置时出错：%s</string>
   <string name="using_proxy">Using proxy %1$s %2$s</string>
-    <string name="minidump_generated">OpenVPN 意外崩溃。建议您使用主菜单中的发送转储文件功能向开发者发送转储文件</string>
-    <string name="notification_title">OpenVPN - %s</string>
+    <string name="minidump_generated">RailroadVPN 意外崩溃。建议您使用主菜单中的发送转储文件功能向开发者发送转储文件</string>
+    <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">连接中</string>
@@ -80,7 +80,7 @@
   <string name="app_no_longer_exists">程序 %s 已经从设备上卸载，正在将其从应用过滤规则中移除。</string>
     <string name="remote_no_server_selected">您需要至少定义并启用一个远程服务器。</string>
     <string name="ignore_multicast_route">忽略多播路由:%s</string>
-    <string name="service_restarted">重新启动OpenVPN服务中 (应用程序崩溃-可能是真崩溃或由于内存不够用被kill)</string>
+    <string name="service_restarted">重新启动RailroadVPN服务中 (应用程序崩溃-可能是真崩溃或由于内存不够用被kill)</string>
     <string name="no_allowed_app">没有允许的应用程序被添加。加入本应用 (%s) 以保证允许的应用程序列表中至少有一个应用程序从而禁止其他所有应用</string>
     <string name="abi_mismatch">Preferred native ABI precedence of this device (%1$s) and ABI reported by native libraries (%2$s) mismatch</string>
   <string name="permission_revoked">VPN权限被操作系统撤销 (比如其他VPN程序启动了) ，VPN停止中</string>
@@ -99,9 +99,9 @@
   <string name="volume_mbyte">%.1f MB</string>
   <string name="volume_gbyte">%.1f GB</string>
   <string name="channel_name_background">连接统计</string>
-  <string name="channel_description_background">正在建立的OpenVPN连接的统计数据</string>
+  <string name="channel_description_background">正在建立的RailroadVPN连接的统计数据</string>
   <string name="channel_name_status">连接状态改变</string>
-  <string name="channel_description_status">OpenVPN连接的状态更改（连接，身份验证...）</string>
+  <string name="channel_description_status">RailroadVPN连接的状态更改（连接，身份验证...）</string>
     <string name="openssl_cipher_name">OpenSSL密码名称</string>
     <string name="openssl_error">OpenSSL 返回错误</string>
   <string name="running_test">正在运行测试&#8230;</string>

@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">OpenVPN Androidhoz</string>
+  <string name="app">RailroadVPN Androidhoz</string>
     <string name="no_keystore_cert_selected">Válasszon egy felhasználói tanúsítványt</string>
   <string name="no_ca_cert_selected">Ki kell választania egy CA tanúsítványt</string>
   <string name="no_error_found">Hiba nem található</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">Útvonalak: %1$s %2$s</string>
   <string name="routes_info_excl">Kizárt útvonalak: %1$s %2$s</string>
   <string name="routes_debug">VpnService útvonalak telepítve: %1$s %2$s</string>
-  <string name="ip_not_cidr">Érkezett interfész információk: %1$s és %2$s, feltételezve a második cím a távoli oldali cím. /32 alhálózati maszk lesz használva a helyi IP-hez. OpenVPN beállította a módokat: \"%3$s\".</string>
+  <string name="ip_not_cidr">Érkezett interfész információk: %1$s és %2$s, feltételezve a második cím a távoli oldali cím. /32 alhálózati maszk lesz használva a helyi IP-hez.RailroadVPNbeállította a módokat: \"%3$s\".</string>
   <string name="route_not_cidr">Nincs értelme a %1$s és %2$s-nek, mint IP útvonalnak CIDR alhálózati maszkkal, /32 alhálózati maszk kerül használatra.</string>
   <string name="route_not_netip">Az %1$s/%2$s útvonal javítva: %3$s/%2$s</string>
   <string name="keychain_access">Nem sikerült hozzáférni az Android Keychain Tanúsivànyokhoz. Ezt egy firmware frissítés vagy az alkalmazás/beállításainak visszaállítása okozhatja. Kérem szerkessze meg a VPN-t, és újra válassza ki a tanúsítványokat az alapvető beállításoknál, hogy visszaálljanak a tanúsítványok hozzáférési jogai.</string>
@@ -42,8 +42,8 @@
   <string name="ip_add_error">A \"%1$s\" IP címet nem lehet konfigurálni, a rendszer elutasította: %2$s</string>
     <string name="getproxy_error">Hiba a proxy beállítások lekérésekor: %s</string>
   <string name="using_proxy">%1$s %2$s proxy használata</string>
-    <string name="minidump_generated">Az OpenVPN váratlanul összeomlott. Kérem, gondolja meg a főmenüben levő Minidump elküldése opció használatát</string>
-    <string name="notification_title">OpenVPN - %s</string>
+    <string name="minidump_generated">Az RailroadVPN váratlanul összeomlott. Kérem, gondolja meg a főmenüben levő Minidump elküldése opció használatát</string>
+    <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Csatlakozás</string>
@@ -80,7 +80,7 @@
   <string name="app_no_longer_exists">%s csomag már nincs telepítve, eltávolítás az alkalmazások engedélyező/letiltó listájáról</string>
     <string name="remote_no_server_selected">Legalább egy távoli kiszolgálót definiálnia és engedélyeznie kell.</string>
     <string name="ignore_multicast_route">Multicast útvonal figyelmen kívül hagyása: %s</string>
-    <string name="service_restarted">OpenVPN Service újraindítása (az alkalmazás valószínűleg összeomlott vagy memória nyomásra bezárták)</string>
+    <string name="service_restarted">RailroadVPN Service újraindítása (az alkalmazás valószínűleg összeomlott vagy memória nyomásra bezárták)</string>
     <string name="no_allowed_app">Nincs engedélyezett alkalmazás hozzáadva. Saját magunk (%s) hozzáadása, hogy legalább egy alkalmazás legyen az engedélyezett alkalmazások listáján, hogy ne engedjünk meg minden alkalmazást</string>
     <string name="abi_mismatch">Preferred native ABI precedence of this device (%1$s) and ABI reported by native libraries (%2$s) mismatch</string>
   <string name="permission_revoked">A VPN engedélyt visszavonta az OS (pl.: másik VPN program indult), VPN leállítása</string>
@@ -99,18 +99,18 @@
   <string name="volume_mbyte">%.1f MB</string>
   <string name="volume_gbyte">%.1f GB</string>
   <string name="channel_name_background">Kapcsolatstatisztika</string>
-  <string name="channel_description_background">A létrehozott OpenVPN kapcsolat pillanatnyi statisztikái</string>
+  <string name="channel_description_background">A létrehozottRailroadVPNkapcsolat pillanatnyi statisztikái</string>
   <string name="channel_name_status">Kapcsolat állapot változás</string>
-  <string name="channel_description_status">Állapotváltozások az OpenVPN kapcsolatban (Csatlakozás, hitelesítés,&#8230;)
+  <string name="channel_description_status">Állapotváltozások azRailroadVPNkapcsolatban (Csatlakozás, hitelesítés,&#8230;)
     </string>
     <string name="openssl_cipher_name">OpenSSL titkosítások</string>
     <string name="openssl_error">Az OpenSSL hibával tért vissza</string>
   <string name="running_test">A teszt fut&#8230;</string>
   <string name="test_algoirhtms">Kijelölt algoritmusok tesztelése</string>
-    <string name="openvpn3_nostatickeys">Az OpenVPN 3 C++ implementáció nem támogatja a statikus kulcsokat, Kérem, váltson
-        OpenVPN 2.x-re az általános beállításokban.
+    <string name="openvpn3_nostatickeys">AzRailroadVPN3 C++ implementáció nem támogatja a statikus kulcsokat, Kérem, váltson
+       RailroadVPN2.x-re az általános beállításokban.
     </string>
-  <string name="openvpn3_pkcs12">PKCS12-fájlok közvetlen használata nem támogatott az OpenVPN 3 C++ implementációval.
-        Kérem, importálja az Android kulcstárba a pkcs12 fájlokat, vagy váltson OpenVPN 2.x-re az általános beállításokban.
+  <string name="openvpn3_pkcs12">PKCS12-fájlok közvetlen használata nem támogatott azRailroadVPN3 C++ implementációval.
+        Kérem, importálja az Android kulcstárba a pkcs12 fájlokat, vagy váltsonRailroadVPN2.x-re az általános beállításokban.
     </string>
 </resources>

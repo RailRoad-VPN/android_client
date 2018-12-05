@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">OpenVPN para Android</string>
+  <string name="app">RailroadVPN para Android</string>
   <string name="no_keystore_cert_selected">Debe seleccionar un certificado de usuario</string>
   <string name="no_ca_cert_selected">Debe seleccionar un certificado</string>
   <string name="no_error_found">No se encontraron errores</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">Rutas: %1$s %2$s</string>
   <string name="routes_info_excl">Rutas excluidas: %1$s %2$s</string>
   <string name="routes_debug">Rutas instaladas por VpnService: %1$s %2$s</string>
-  <string name="ip_not_cidr">Información de la interfaz obtenida %1$s and %2$s, asumiendo que la segunda dirección es una dirección equivalente del remoto. Usando una máscara de red /32 para la IP local. El modo dado por OpenVPN es \"%3$s\".</string>
+  <string name="ip_not_cidr">Información de la interfaz obtenida %1$s and %2$s, asumiendo que la segunda dirección es una dirección equivalente del remoto. Usando una máscara de red /32 para la IP local. El modo dado porRailroadVPNes \"%3$s\".</string>
   <string name="route_not_cidr">No tienen sentido %1$s y %2$s como ruta IP con máscara de red CIDR, usando /32 como máscara de red.</string>
   <string name="route_not_netip">Ruta conectada de %1$s/%2$s a %3$s/%2$s</string>
   <string name="keychain_access">No se puede acceder a los certificados de Android. Puede ser causado por una actualización de firmware o por restaurar una copia de seguridad de la aplicación/configuración de la aplicación. Por favor edite la VPN y vuelva a seleccionar el certificado bajo meltdownajustes básicos para recrear los permisos para acceder al certificado.</string>
@@ -42,8 +42,8 @@
   <string name="ip_add_error">No se pudo configurar la dirección IP \"%1$s\", rechazada por el sistema: %2$s</string>
   <string name="getproxy_error">Error al obtener la configuración de proxy: %s</string>
   <string name="using_proxy">Using proxy %1$s %2$s</string>
-  <string name="minidump_generated">OpenVPN falló inesperadamente. Por favor considere usar la opción envío de minivolcado en el menú principal</string>
-  <string name="notification_title">OpenVPN - %s</string>
+  <string name="minidump_generated">RailroadVPN falló inesperadamente. Por favor considere usar la opción envío de minivolcado en el menú principal</string>
+  <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Conectando</string>
@@ -80,7 +80,7 @@
   <string name="app_no_longer_exists">El paquete %s ya no está instalado, sacándolo de la lista de apps permitidas/no permitidas</string>
   <string name="remote_no_server_selected">Es necesario definir y habilitar al menos un servidor remoto.</string>
   <string name="ignore_multicast_route">Haciendo caso omiso de ruta multidifusión: %s</string>
-  <string name="service_restarted">Servicio OpenVPN reinicio (App estrelló probablemente se estrelló o muerto por la presión de memoria)</string>
+  <string name="service_restarted">ServicioRailroadVPNreinicio (App estrelló probablemente se estrelló o muerto por la presión de memoria)</string>
   <string name="no_allowed_app">No aplicación permitido añadió. Adición de nosotros mismos (%s) que tiene al menos una aplicación en la lista de aplicaciones permitido para no permitir que todas las aplicaciones
 </string>
   <string name="abi_mismatch">La precedencia de ABI nativa preferida de este dispositivo (%1$s) y la ABI informada por bibliotecas nativas (%2$s) no coinciden</string>
@@ -99,5 +99,5 @@
   <string name="volume_kbyte">%.1f kB</string>
   <string name="volume_mbyte">%.1f MB</string>
   <string name="volume_gbyte">%.1f GB</string>
-  <string name="channel_description_background">Ongoing statistics of the established OpenVPN connection</string>
+  <string name="channel_description_background">Ongoing statistics of the establishedRailroadVPNconnection</string>
 </resources>

@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">OpenVPN pentru Android</string>
+  <string name="app">RailroadVPN pentru Android</string>
     <string name="no_keystore_cert_selected">Trebuie să selectați un certificat de utilizator</string>
   <string name="no_ca_cert_selected">Trebuie să selectați un certificat CA</string>
   <string name="no_error_found">Nu s-a găsit nici o eroare</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">Rute: %1$s %2$s</string>
   <string name="routes_info_excl">Rute excluse: %1$s %2$s</string>
   <string name="routes_debug">Rute VpnService instalate: %1$s %2$s</string>
-  <string name="ip_not_cidr">S-au primit informaţiile despre interfaţă %1$s şi %2$s, presupun că a doua adresă este adresa peer a serverlui remote. Folosesc netmask /32 pentru IP local. Modul dat de OpenVPN este \"%3$s\".</string>
+  <string name="ip_not_cidr">S-au primit informaţiile despre interfaţă %1$s şi %2$s, presupun că a doua adresă este adresa peer a serverlui remote. Folosesc netmask /32 pentru IP local. Modul dat deRailroadVPNeste \"%3$s\".</string>
   <string name="route_not_cidr">Nu se poate interpreta %1$s şi %2$s ca rute IP cu netmask CIDR, folosesc /32 ca netmask.</string>
   <string name="route_not_netip">Am corectat ruta %1$s/%2$s ca %3$s/%2$s</string>
   <string name="keychain_access">Imposibil de accesat Keychain cu certificate al Android. Acest lucur poate fi cauzat de un upgrade de firmware sau de restaurarea unei copii de siguranţă a setărilor app/app. Editaţi din nou VPN-ul si reselectaţi certificatul la \"setări de bază\" pentru a recreea permisiile de a accesa certificatul.</string>
@@ -41,8 +41,8 @@
   <string name="dns_add_error">Nu s-a putut adăuga serverul DNS \"%1$s\", respins de sistem: %2$s</string>
   <string name="ip_add_error">Adresa IP \"%1$s\" nu a putut fi configurată, respinsă de sistem: %2$s</string>
     <string name="getproxy_error">Eroare la obţinerea setărilor proxy: %s</string>
-    <string name="minidump_generated">OpenVPN sa oprit în mod neaşteptat. Vă rugăm să consideraţi opţiunea de trimitere a unui Minidump din meniul principal</string>
-    <string name="notification_title">OpenVPN - %s</string>
+    <string name="minidump_generated">RailroadVPN sa oprit în mod neaşteptat. Vă rugăm să consideraţi opţiunea de trimitere a unui Minidump din meniul principal</string>
+    <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Se conectează</string>
@@ -79,7 +79,7 @@
   <string name="app_no_longer_exists">Pachetul %s nu mai este instalat, eliminați-l din lista de acces / dezactivare a aplicației</string>
     <string name="remote_no_server_selected">Trebuie să definiți și să activați cel puțin un server de la distanță.</string>
     <string name="ignore_multicast_route">Ignorarea rutei multicast: %s</string>
-    <string name="service_restarted">Repornirea serviciului OpenVPN (aplicația s-a blocat probabil a blocat sau terminat pentru presiunea de memorie)</string>
+    <string name="service_restarted">Repornirea serviciuluiRailroadVPN(aplicația s-a blocat probabil a blocat sau terminat pentru presiunea de memorie)</string>
     <string name="no_allowed_app">Nu a fost adăugată nicio aplicație permisă. Adăugându-ne (%s) să aibă cel puțin o aplicație în lista de aplicații permise pentru a nu permite tuturor aplicațiilor</string>
     <string name="abi_mismatch">Precedența ABI-ului nativ preferat a acestui dispozitiv (%1$s) și ABI-ul raportat de bibliotecile native (%2$s) diferă</string>
   <string name="permission_revoked">Permisiunea VPN revocată de sistemul de operare (de exemplu, a pornit un alt program VPN), se oprește VPN</string>

@@ -18,20 +18,10 @@
             <maxHistory>1</maxHistory>
         </rollingPolicy>
 
-
         <encoder>
             <pattern>%date [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-
-    <!--<appender name="OpenVPNLog2" class="ch.qos.logback.core.FileAppender">-->
-        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter"></filter>-->
-        <!--<file>${LOG_DIR}/openVPN.log</file>-->
-
-        <!--<encoder>-->
-            <!--<pattern>%date [%thread] %-5level %logger{36} - %msg%n</pattern>-->
-        <!--</encoder>-->
-    <!--</appender>-->
 
     <appender name="OpenVPNLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--<file>${LOG_DIR}/info.log</file>-->

@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">OpenVPN za Android</string>
+  <string name="app">RailroadVPN za Android</string>
     <string name="no_keystore_cert_selected">Izbrati morate uporabniško potrdilo</string>
   <string name="no_ca_cert_selected">Izbrati morate potrdilo overitelja potrdil</string>
   <string name="no_error_found">Ni najdenih napak</string>
@@ -24,7 +24,7 @@
   <string name="routes_info_incl">Poti: %1$s %2$s</string>
   <string name="routes_info_excl">Izključene poti: %1$s %2$s</string>
   <string name="routes_debug">Nameščene poti storitve VPN: %1$s %2$s</string>
-  <string name="ip_not_cidr">Dobljeni podatki vmesnika %1$s in %2$s, predpostavlja se, da je drugi naslov naslov oddaljenega soležnika. Za krajevni IP bo uporabljena maska omrežja /32. Način, ki ga dobavi OpenVPN, je \"%3$s\".</string>
+  <string name="ip_not_cidr">Dobljeni podatki vmesnika %1$s in %2$s, predpostavlja se, da je drugi naslov naslov oddaljenega soležnika. Za krajevni IP bo uporabljena maska omrežja /32. Način, ki ga dobavi RailroadVPN, je \"%3$s\".</string>
   <string name="route_not_cidr">%1$s in %2$s kot poti IP z masko omrežja CIDR ni mogoče razumeti, kot masko omrežja se bo uporabil /32.</string>
   <string name="route_not_netip">Popravljena pot %1$s/%2$s v %3$s/%2$s</string>
   <string name="keychain_access">Dostop do potrdil verige ključev Android ni mogoč. To lahko povzroči nadgradnja strojne programske opreme ali obnovitev var. kopije programov/nastavitev programov. Uredite VPN in ponovno izberite potrdilo v osnovnih nastavitvah, da poustvarite dovoljenje za dostop do potrdila.</string>
@@ -41,8 +41,8 @@
   <string name="dns_add_error">Strežnika DNS \"%1$s\" ni bilo mogoče dodati, zavrnil ga je sistem: %2$s</string>
   <string name="ip_add_error">Naslova IP \"%1$s\" ni bilo mogoče nastaviti, zavrnil ga je sistem: %2$s</string>
     <string name="getproxy_error">Napaka pri dobivanju nastavitev posredniškega strežnika: %s</string>
-    <string name="minidump_generated">OpenVPN se je nepričakovano sesul. Razmislite o uporabi možnosti pošiljanja mini izpisa v glavnem meniju.</string>
-    <string name="notification_title">OpenVPN - %s</string>
+    <string name="minidump_generated">RailroadVPN se je nepričakovano sesul. Razmislite o uporabi možnosti pošiljanja mini izpisa v glavnem meniju.</string>
+    <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Povezovanje</string>
@@ -78,7 +78,7 @@
   <string name="app_no_longer_exists">Paket %s ni več nameščen, odstranjevanje paketa s seznama programov z/brez dovoljenja.</string>
     <string name="remote_no_server_selected">Določiti in omogočiti morate vsaj en oddaljeni strežnik.</string>
     <string name="ignore_multicast_route">Preziranje poti večsmernega oddajanja: %s</string>
-    <string name="service_restarted">Ponovno zaganjanje storitve OpenVPN (program se je verjetno sesul ali je bil uničen zaradi pomanjkanja pomnilnika)</string>
+    <string name="service_restarted">Ponovno zaganjanje storitveRailroadVPN(program se je verjetno sesul ali je bil uničen zaradi pomanjkanja pomnilnika)</string>
     <string name="no_allowed_app">Noben program z dovoljenjem ni bil dodan. Samodejno dodajanje (%s), da se na seznamu programov z dovoljenjem nahaja vsaj en program, da ostali ne dobijo dovoljenja.</string>
     <string name="abi_mismatch">Prednostna izvirna predhodnost ABI (%1$s) in ABI, ki ga sporočajo izvirne knjižnice (%2$s), se ne ujemata.</string>
   <string name="permission_revoked">OS je preklical dovoljenje VPN (npr. zagnan je bil drug program VPN), ustavljanje VPN-a</string>

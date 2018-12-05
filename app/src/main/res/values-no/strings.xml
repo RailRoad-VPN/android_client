@@ -5,7 +5,7 @@
   ~ Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
   -->
 <resources>
-  <string name="app">RailRoad VPN</string>
+  <string name="app">RailroadVPN</string>
     <string name="no_keystore_cert_selected">Du må velge et brukersertifikat</string>
   <string name="no_ca_cert_selected">Du må velge et CA-sertifikat</string>
   <string name="no_error_found">Ingen feil funnet</string>
@@ -32,8 +32,8 @@
     <string name="mobile_info">%10$s %9$s kjører på %3$s %1$s (%2$s), Android %6$s (%7$s) API %4$d, ABI %5$s, (%8$s)</string>
     <string name="warn_no_dns">Ingen DNS-servere som brukes. Navneoppløsning fungerer ikke. Vurdere å angi tilpassede DNS-servere. Vær også oppmerksom på at Android vil fortsette å bruke proxy-innstillingene angitt for mobile/Wi-Fi-tilkoblingen når ingen DNS-servere er angitt.</string>
     <string name="getproxy_error">Feil ved henting av proxy-innstillinger: %s</string>
-    <string name="minidump_generated">OpenVPN krasjet uventet. Vennligst vurder bruk av Minidump-alternativet i hovedmenyen</string>
-    <string name="notification_title">OpenVPN - %s</string>
+    <string name="minidump_generated">RailroadVPN krasjet uventet. Vennligst vurder bruk av Minidump-alternativet i hovedmenyen</string>
+    <string name="notification_title">RailroadVPN</string>
   <string name="session_ipv4string">%1$s - %2$s</string>
   <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
   <string name="state_connecting">Kobler til</string>

@@ -4,7 +4,7 @@
   -->
 <resources>
 
-    <string name="app">RailRoad VPN</string>
+    <string name="app">RailroadVPN</string>
     <string name="no_keystore_cert_selected">You must select a User certificate</string>
     <string name="no_ca_cert_selected">You must select a CA certificate</string>
     <string name="no_error_found">No error found</string>
@@ -23,7 +23,7 @@
     <string name="routes_info_incl">Routes: %1$s %2$s</string>
     <string name="routes_info_excl">Routes excluded: %1$s %2$s</string>
     <string name="routes_debug">VpnService routes installed: %1$s %2$s</string>
-    <string name="ip_not_cidr">Got interface information %1$s and %2$s, assuming second address is peer address of remote. Using /32 netmask for local IP. Mode given by OpenVPN is \"%3$s\".</string>
+    <string name="ip_not_cidr">Got interface information %1$s and %2$s, assuming second address is peer address of remote. Using /32 netmask for local IP. Mode given byRailroadVPNis \"%3$s\".</string>
     <string name="route_not_cidr">Cannot make sense of %1$s and %2$s as IP route with CIDR netmask, using /32 as netmask.</string>
     <string name="route_not_netip">Corrected route %1$s/%2$s to %3$s/%2$s</string>
     <string name="keychain_access">Cannot access the Android Keychain Certificates. This can be caused by a firmware upgrade or by restoring a backup of the app/app settings. Please edit the VPN and reselect the certificate under basic settings to recreate the permission to access the certificate.</string>
@@ -42,7 +42,7 @@
     <string name="ip_add_error">Could not configure IP Address \"%1$s\", rejected by the system: %2$s</string>
     <string name="getproxy_error">Error getting proxy settings: %s</string>
     <string name="using_proxy">Using proxy %1$s %2$s</string>
-    <string name="minidump_generated">OpenVPN crashed unexpectedly. Please consider using the send Minidump option in the main menu</string>
+    <string name="minidump_generated">RailroadVPN crashed unexpectedly. Please consider using the send Minidump option in the main menu</string>
     <string name="notification_title">RailroadVPN</string>
     <string name="session_ipv4string">%1$s - %2$s</string>
     <string name="session_ipv6string">%1$s - %3$s, %2$s</string>
@@ -81,7 +81,7 @@
     <string name="app_no_longer_exists">Package %s is no longer installed, removing it from app allow/disallow list</string>
     <string name="remote_no_server_selected">You need to define and enable at least one remote server.</string>
     <string name="ignore_multicast_route">Ignoring multicast route: %s</string>
-    <string name="service_restarted">Restarting OpenVPN Service (App crashed probably crashed or killed for memory pressure)</string>
+    <string name="service_restarted">RestartingRailroadVPNService (App crashed probably crashed or killed for memory pressure)</string>
     <string name="no_allowed_app">No allowed app added. Adding ourselves (%s) to have at least one app in the allowed app list to not allow all apps</string>
     <string name="abi_mismatch">Preferred native ABI precedence of this device (%1$s) and ABI reported by native libraries (%2$s) mismatch</string>
     <string name="permission_revoked">VPN permission revoked by OS (e.g. other VPN program started), stopping VPN</string>
@@ -100,22 +100,20 @@
     <string name="volume_mbyte">%.1f MB</string>
     <string name="volume_gbyte">%.1f GB</string>
     <string name="channel_name_background">Connection statistics</string>
-    <string name="channel_description_background">Ongoing statistics of the established OpenVPN connection</string>
+    <string name="channel_description_background">Ongoing statistics of the establishedRailroadVPNconnection</string>
     <string name="channel_name_status">Connection status change</string>
-    <string name="channel_description_status">Status changes of the OpenVPN connection (Connecting, authenticating,…)</string>
+    <string name="channel_description_status">Status changes of theRailroadVPNconnection (Connecting, authenticating,…)</string>
     <string name="openssl_cipher_name">OpenSSL cipher names</string>
     <string name="openssl_error">OpenSSL returned an error</string>
     <string name="running_test">Running test…</string>
     <string name="test_algoirhtms">Test selected algorithms</string>
-    <string name="openvpn3_nostatickeys">The OpenVPN 3 C++ implementation does not support static keys. Please change to OpenVPN 2.x under general settings.</string>
-    <string name="openvpn3_pkcs12">Using PKCS12 files directly with OpenVPN 3 C++ implementation is not supported. Please import the pkcs12 files into the Android keystore or change to OpenVPN 2.x under general settings.</string>
-    <string name="openvpn3_socksproxy">OpenVPN 3 C++ implementation does not support connecting via Socks proxy</string>
+    <string name="openvpn3_nostatickeys">TheRailroadVPN3 C++ implementation does not support static keys. Please change toRailroadVPN2.x under general settings.</string>
+    <string name="openvpn3_pkcs12">Using PKCS12 files directly withRailroadVPN3 C++ implementation is not supported. Please import the pkcs12 files into the Android keystore or change toRailroadVPN2.x under general settings.</string>
+    <string name="openvpn3_socksproxy">RailroadVPN 3 C++ implementation does not support connecting via Socks proxy</string>
     <string name="no_orbotfound">Orbot application cannot be found. Please install Orbot or use manual Socks v5 integration.</string>
     <string name="error_orbot_and_proxy_options">Cannot use extra http-proxy-option statement and Orbot integration at the same timeO</string>
     <string name="channel_name_userreq">User interaction required</string>
-    <string name="channel_description_userreq">OpenVPN connection requires a user input, e.g. two factor
-        authentification
-    </string>
+    <string name="channel_description_userreq">"RailroadVPN connection requires a user input, e.g. two factor authentification     "</string>
     <string name="openurl_requested">Open URL to continue VPN authentication</string>
     <string name="state_auth_pending">Authentication pending</string>
 
@@ -124,5 +122,7 @@
     <string name="connect_disconnect">connect/disconnect</string>
     <string name="side_menu_btn_log_out">Log out</string>
     <string name="side_menu_btn_profile">Profile</string>
+    <string name="main_activity_railroad_part_2_text">adVPN</string>
+    <string name="main_activity_railroad_part_1_text">Railr</string>
 
 </resources>
