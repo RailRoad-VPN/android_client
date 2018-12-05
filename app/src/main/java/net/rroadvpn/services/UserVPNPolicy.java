@@ -5,6 +5,7 @@ import android.content.Context;
 import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.model.User;
 import net.rroadvpn.model.VPNAppPreferences;
+import net.rroadvpn.openvpn.core.Preferences;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,28 +16,22 @@ import java.util.Arrays;
 //import java.util.concurrent.ExecutionException;
 
 public class UserVPNPolicy {
+
     private UsersAPIService us;
+    private PreferencesService preferencesService;
 
     private String serverUuid;
     private User user;
-    public Context ctx;
-    private PreferencesService preferencesService;
-    private Logger log = LoggerFactory.getLogger(UserVPNPolicy.class);
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public Context getCtx() {
-        return ctx;
-    }
-
-    public UserVPNPolicy(Context ctx) {
-        this.ctx = ctx;
+    public UserVPNPolicy(PreferencesService preferencesService) {
         String userServiceURL = VPNAppPreferences.getUserServiceURL("users");
 
-        this.preferencesService = new PreferencesService(ctx, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
+        this.preferencesService = preferencesService;
+
         this.user = new User(
                 preferencesService.getString(VPNAppPreferences.USER_UUID)
                 , preferencesService.getString(VPNAppPreferences.USER_EMAIL)
-                , "current_date"
-                , true
         );
 
         this.us = new UsersAPIService(preferencesService, userServiceURL);
@@ -46,8 +41,7 @@ public class UserVPNPolicy {
         log.debug("checkPinCode method enter. Pin:" + String.valueOf(pinCode));
         user = us.getUserByPinCode(pinCode);
         log.debug("email:" + user.getEmail() +
-                ", userUuid:" + user.getUuid() +
-                ", createdDate" + user.getCreatedDate()
+                ", userUuid:" + user.getUuid()
         );
 
     }
@@ -104,8 +98,6 @@ public class UserVPNPolicy {
     private void reInitUserServiceCrutch() {
         log.info("reInitUserServiceCrutch method enter");
         String userServiceURL = VPNAppPreferences.getUserServiceURL("users");
-
-        this.preferencesService = new PreferencesService(this.ctx, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
 
         this.us = new UsersAPIService(preferencesService, userServiceURL);
         log.info("reInitUserServiceCrutch method exit");

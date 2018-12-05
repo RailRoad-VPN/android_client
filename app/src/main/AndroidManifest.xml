@@ -33,6 +33,7 @@
         android:label="@string/app"
         android:supportsRtl="true"
         android:theme="@style/rroad"
+        android:screenOrientation="portrait"
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
 

@@ -15,33 +15,13 @@
         android:layout_centerHorizontal="true"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/railroad_part_1_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/main_activity_railroad_part_1_text"
-            android:textColor="@color/line_focused"
-            android:textSize="30sp"
-            android:textStyle="bold" />
-
         <ImageView
-            android:id="@+id/railroad_o_image"
-            android:layout_width="21dp"
-            android:layout_height="29dp"
-            android:layout_marginTop="10dp"
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:contentDescription="TODO"
-            android:src="@drawable/mascot_head" />
-
-        <TextView
-            android:id="@+id/railroad_part_3_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="-5dp"
-            android:layout_marginStart="-5dp"
-            android:text="@string/main_activity_railroad_part_2_text"
-            android:textColor="@color/line_focused"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            android:padding="10dp"
+            android:src="@drawable/logo" />
     </LinearLayout>
 
     <ProgressBar

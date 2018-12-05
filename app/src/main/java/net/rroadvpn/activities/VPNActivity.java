@@ -18,13 +18,18 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import net.rroadvpn.activities.pin.InputPinView;
+import net.rroadvpn.model.User;
+import net.rroadvpn.model.VPNAppPreferences;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.core.VpnStatus;
 import net.rroadvpn.services.OpenVPNControlService;
+import net.rroadvpn.services.PreferencesService;
 import net.rroadvpn.services.UserVPNPolicy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.ref.WeakReference;
 
 import static net.rroadvpn.openvpn.core.OpenVPNService.DISCONNECT_VPN;
 import static net.rroadvpn.services.OpenVPNControlService.VPN_SERVICE_INTENT_PERMISSION;
@@ -51,7 +56,10 @@ public class VPNActivity extends BaseActivity {
 
         log.info("VPNActivity onCreate enter");
         this.ovcs = new OpenVPNControlService(this);
-        this.userVPNPolicy = new UserVPNPolicy(this);
+
+        PreferencesService preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
+
+        this.userVPNPolicy = new UserVPNPolicy(preferencesService);
 
         setContentView(R.layout.vpn_activity);
 
@@ -208,7 +216,11 @@ public class VPNActivity extends BaseActivity {
 
     private void connectToVPN() {
         log.info("connectToVPN enter.  AsyncTask connectToVPN enter.");
-        connectVPNTask = new ConnectVPNTask(userVPNPolicy, ovcs);
+        if (connectVPNTask != null) {
+            connectVPNTask.cancel(true);
+
+        }
+        connectVPNTask = new ConnectVPNTask(this, userVPNPolicy, ovcs);
         connectVPNTask.setListener(new ConnectVPNTask.ConnectVPNTaskListener() {
             @Override
             public void onConnectVPNTaskListener(Boolean value) {
@@ -220,7 +232,7 @@ public class VPNActivity extends BaseActivity {
     }
 
     private void showDisconnectDialogVPN(int requestCode) {
-        if (!ovcs.isVPNConnected()) {
+        if (connectVPNTask != null) {
             connectVPNTask.cancel(true);
             if (!connectVPNTask.isCancelled()) {
                 AsyncTask.Status status = connectVPNTask.getStatus();
@@ -273,17 +285,29 @@ public class VPNActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        ovcs.bindService();
+
+        if (ovcs != null) {
+            ovcs.bindService();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
         // prevent memory leak
-        afterDisconnectVPNTask.setListener(null);
-        connectVPNTask.setListener(null);
-        logoutTask.setListener(null);
-        ovcs.unBindService();
+        if (afterDisconnectVPNTask != null) {
+            afterDisconnectVPNTask.setListener(null);
+        }
+        if (connectVPNTask != null) {
+            connectVPNTask.setListener(null);
+        }
+        if (logoutTask != null) {
+            logoutTask.setListener(null);
+        }
+        if (ovcs != null) {
+            ovcs.unBindService();
+        }
     }
 
     private static class LogoutTask extends AsyncTask<Void, Void, Boolean> {
@@ -361,10 +385,13 @@ public class VPNActivity extends BaseActivity {
 
         private ConnectVPNTaskListener listener;
 
+        private WeakReference<VPNActivity> activityReference;
+
         private UserVPNPolicy userVPNPolicy;
         private OpenVPNControlService ovcs;
 
-        ConnectVPNTask(UserVPNPolicy userVPNPolicy, OpenVPNControlService ovcs) {
+        ConnectVPNTask(VPNActivity context, UserVPNPolicy userVPNPolicy, OpenVPNControlService ovcs) {
+            this.activityReference = new WeakReference<>(context);
             this.userVPNPolicy = userVPNPolicy;
             this.ovcs = ovcs;
         }
@@ -385,10 +412,10 @@ public class VPNActivity extends BaseActivity {
             log.debug("connect to VPN");
             ovcs.connectToVPN();
 
-            String status = VpnStatus.getLastCleanLogMessage(userVPNPolicy.getCtx());
+            String status = VpnStatus.getLastCleanLogMessage(this.activityReference.get());
             boolean gotVirtualIP = false;
             while (!gotVirtualIP) {
-                status = VpnStatus.getLastCleanLogMessage(userVPNPolicy.getCtx());
+                status = VpnStatus.getLastCleanLogMessage(activityReference.get());
                 gotVirtualIP = status.contains("Connected: SUCCESS");
                 if (isCancelled()) {
                     break;

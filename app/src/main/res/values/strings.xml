@@ -117,12 +117,10 @@
     <string name="openurl_requested">Open URL to continue VPN authentication</string>
     <string name="state_auth_pending">Authentication pending</string>
 
-    <string name="welcome">Welcome!</string>
-    <string name="enter_a_pin_or_sign_up">Enter a pin or Sign Up</string>
+    <string name="enter_pin_welcome">Enter your pin code</string>
+    <string name="enter_pin_new_user">Don’t have an account yet?</string>
     <string name="connect_disconnect">connect/disconnect</string>
     <string name="side_menu_btn_log_out">Log out</string>
     <string name="side_menu_btn_profile">Profile</string>
-    <string name="main_activity_railroad_part_2_text">adVPN</string>
-    <string name="main_activity_railroad_part_1_text">Railr</string>
 
 </resources>

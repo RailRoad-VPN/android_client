@@ -3,6 +3,7 @@ package net.rroadvpn.activities.pin;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.icu.util.MeasureUnit;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,13 +19,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebSettings;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import net.rroadvpn.activities.VPNActivity;
 import net.rroadvpn.exception.UserServiceException;
+import net.rroadvpn.model.VPNAppPreferences;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.activities.BaseActivity;
+import net.rroadvpn.services.PreferencesService;
 import net.rroadvpn.services.UserVPNPolicy;
 
 import org.slf4j.Logger;
@@ -43,7 +47,8 @@ public class InputPinView extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        UserVPNPolicy userVPNPolicy = new UserVPNPolicy(this);
+        PreferencesService preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
+        UserVPNPolicy userVPNPolicy = new UserVPNPolicy(preferencesService);
 
         setContentView(R.layout.input_pin_view);
 
@@ -52,16 +57,17 @@ public class InputPinView extends BaseActivity {
                 ResourcesCompat.getColor(getResources(), R.color.colorAccent, getTheme()));
         pinView.setTextColor(
                 ResourcesCompat.getColorStateList(getResources(), R.color.text_colors, getTheme()));
-        pinView.setLineColor(
-                ResourcesCompat.getColor(getResources(), R.color.colorPrimary, getTheme()));
-        pinView.setLineColor(
-                ResourcesCompat.getColorStateList(getResources(), R.color.line_colors, getTheme()));
+        pinView.setTextSize(40);
+//        pinView.setLineColor(
+//                ResourcesCompat.getColor(getResources(), R.color.colorPrimary, getTheme()));
+//        pinView.setLineColor(
+//                ResourcesCompat.getColorStateList(getResources(), R.color.line_colors, getTheme()));
         pinView.setItemCount(4);
         pinView.setItemHeight(getResources().getDimensionPixelSize(R.dimen.pv_pin_view_item_size));
         pinView.setItemWidth(getResources().getDimensionPixelSize(R.dimen.pv_pin_view_item_size));
-        pinView.setItemRadius(getResources().getDimensionPixelSize(R.dimen.pv_pin_view_item_radius));
+//        pinView.setItemRadius(getResources().getDimensionPixelSize(R.dimen.pv_pin_view_item_radius));
         pinView.setItemSpacing(getResources().getDimensionPixelSize(R.dimen.pv_pin_view_item_spacing));
-        pinView.setLineWidth(getResources().getDimensionPixelSize(R.dimen.pv_pin_view_item_line_width));
+//        pinView.setLineWidth(getResources().getDimensionPixelSize(R.dimen.pv_pin_view_item_line_width));
         pinView.setAnimationEnable(true);// start animation when adding text
         pinView.setCursorVisible(false);
         pinView.setCursorColor(
@@ -112,26 +118,15 @@ public class InputPinView extends BaseActivity {
         pinView.setFocusableInTouchMode(true);
         pinView.requestFocus();
 
-        SpannableString ss = new SpannableString(getString(R.string.enter_a_pin_or_sign_up));
-        ClickableSpan clickableSpan = new ClickableSpan() {
+        TextView newUserLink = findViewById(R.id.enter_pin_new_user);
+        newUserLink.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View textView) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"));
+            public void onClick(View v) {
+                // TODO l10n
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://rroadvpn.net/en/profile"));
                 startActivity(browserIntent);
             }
-
-            @Override
-            public void updateDrawState(TextPaint ds) {
-                super.updateDrawState(ds);
-                ds.setUnderlineText(false);
-            }
-        };
-        ss.setSpan(clickableSpan, 15, 22, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        TextView textView = (TextView) findViewById(R.id.pin_tip);
-        textView.setText(ss);
-        textView.setMovementMethod(LinkMovementMethod.getInstance());
-        textView.setHighlightColor(Color.TRANSPARENT);
+        });
     }
 
     @Override
@@ -157,7 +152,9 @@ public class InputPinView extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        this.processUserPincodeTaskTask.setListener(null);
+        if (processUserPincodeTaskTask != null) {
+            this.processUserPincodeTaskTask.setListener(null);
+        }
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))

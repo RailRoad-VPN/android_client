@@ -111,6 +111,7 @@
     <string name="side_menu_btn_profile">Профиль</string>
   <string name="side_menu_btn_log_out">Выйти из аккаунта</string>
   <string name="connect_disconnect">присоединится/отсоединится</string>
-  <string name="enter_a_pin_or_sign_up">Введите пин или Зарегистрируйтесь</string>
-  <string name="welcome">Добро пожаловать!</string>
+    <string name="welcome">Добро пожаловать!</string>
+  <string name="enter_pin_welcome">Введите ваш пинкод</string>
+  <string name="enter_pin_new_user">Нет аккаунта?</string>
 </resources>
