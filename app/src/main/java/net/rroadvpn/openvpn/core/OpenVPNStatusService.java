@@ -21,10 +21,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 
-import net.rroadvpn.activities.NewMainActivity2;
-import net.rroadvpn.openvpn.core.IServiceStatus;
-import net.rroadvpn.openvpn.core.IStatusCallbacks;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

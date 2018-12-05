@@ -24,7 +24,6 @@
         android:required="false" />
 
 
-
     <application
         android:name="net.rroadvpn.openvpn.core.ICSOpenVPNApplication"
         android:allowBackup="true"
@@ -33,23 +32,23 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app"
         android:supportsRtl="true"
-        android:theme="@style/blinkt"
-        tools:ignore="UnusedAttribute">
+        android:theme="@style/rroad"
+        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute">
 
 
-        <meta-data android:name="android.content.APP_RESTRICTIONS"
+        <meta-data
+            android:name="android.content.APP_RESTRICTIONS"
             android:resource="@xml/app_restrictions" />
 
         <activity
-            android:name="net.rroadvpn.openvpn.activities.DisconnectVPN"
+            android:name="net.rroadvpn.activities.DisconnectVPN"
             android:autoRemoveFromRecents="true"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:taskAffinity=".DisconnectVPN"
-            android:theme="@style/blinkt.dialog" />
-        <activity android:name="net.rroadvpn.openvpn.activities.FileSelect" />
+            android:theme="@style/rroad.dialog" />
         <activity
-            android:name="net.rroadvpn.activities.NewMainActivity"
+            android:name="net.rroadvpn.activities.MainActivity"
             tools:ignore="ExportedActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,7 +59,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="net.rroadvpn.activities.NewMainActivity2"
+            android:name="net.rroadvpn.activities.VPNActivity"
             tools:ignore="ExportedActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -68,8 +67,7 @@
         </activity>
         <activity
             android:name="net.rroadvpn.activities.pin.InputPinView"
-            tools:ignore="ExportedActivity">
-        </activity>
+            tools:ignore="ExportedActivity"></activity>
 
         <service
             android:name="net.rroadvpn.openvpn.core.OpenVPNService"
@@ -79,29 +77,11 @@
                 <action android:name="android.net.VpnService" />
             </intent-filter>
         </service>
-        <service
-            android:name="net.rroadvpn.openvpn.api.ExternalOpenVPNService"
-            android:process=":openvpn"
-            tools:ignore="ExportedService">
-            <intent-filter>
-                <action android:name="net.rroadvpn.openvpn.api.IOpenVPNAPIService" />
-            </intent-filter>
-        </service>
+
         <service
             android:name="net.rroadvpn.openvpn.core.OpenVPNStatusService"
             android:exported="false"
             android:process=":openvpn" />
-
-        <activity android:name="net.rroadvpn.openvpn.api.GrantPermissionsActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-        <activity android:name="net.rroadvpn.openvpn.api.ConfirmDialog">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
 
         <receiver android:name="net.rroadvpn.openvpn.OnBootReceiver">
             <intent-filter android:priority="999">
@@ -109,103 +89,6 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
-
-        <activity
-            android:name="net.rroadvpn.openvpn.activities.ConfigConverter"
-            android:excludeFromRecents="true"
-            android:label="Convert Config File"
-            android:taskAffinity=".ConfigConverter"
-            android:uiOptions="splitActionBarWhenNarrow"
-            tools:ignore="ExportedActivity">
-            <intent-filter
-                android:label="@string/import_config"
-                tools:ignore="AppLinkUrlError">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:mimeType="application/x-openvpn-profile" />
-            </intent-filter>
-            <intent-filter
-                android:label="@string/import_config"
-                tools:ignore="AppLinkUrlError">
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:mimeType="application/ovpn" />
-            </intent-filter>
-            <intent-filter android:label="@string/import_config">
-
-                <!-- http://stackoverflow.com/questions/7f030832/associating-certain-file-extension-to-my-android-application/7102838#7102838 -->
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="*/*" />
-                <data android:scheme="file" />
-                <data android:scheme="content" />
-                <data android:host="*" />
-                <data android:pathPattern=".*..*..*..*..*.ovpn" />
-                <data android:pathPattern=".*..*..*..*.ovpn" />
-                <data android:pathPattern=".*..*..*.ovpn" />
-                <data android:pathPattern=".*..*.ovpn" />
-                <data android:pathPattern=".*.ovpn" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".api.Intents"
-            android:autoRemoveFromRecents="true"
-            android:excludeFromRecents="true"
-            android:label="@string/vpn_launch_title"
-            android:taskAffinity=".LaunchVPN"
-            android:theme="@style/blinkt.dialog"
-            tools:ignore="ExportedActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <provider
-            android:name="net.rroadvpn.openvpn.FileProvider"
-            android:authorities="net.rroadvpn.openvpn.FileProvider"
-            android:exported="true"
-            android:grantUriPermissions="true"
-            tools:ignore="ExportedContentProvider" />
-
-        <!--
-        <receiver android:name="core.GetRestrictionReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.GET_RESTRICTION_ENTRIES" />
-            </intent-filter>
-        </receiver>
-        -->
-        <activity
-            android:name="net.rroadvpn.openvpn.activities.OpenSSLSpeed"
-            android:label="@string/title_activity_open_sslspeed"
-            android:parentActivityName="net.rroadvpn.openvpn.activities.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="net.rroadvpn.openvpn.activities.MainActivity" />
-        </activity>
-        <activity
-            android:name="net.rroadvpn.openvpn.api.RemoteAction"
-            />
-        <activity-alias
-            android:exported="true"
-            android:name=".api.DisconnectVPN"
-            android:targetActivity="net.rroadvpn.openvpn.api.RemoteAction" />
-
-        <activity-alias
-            android:exported="true"
-            android:name=".api.ConnectVPN"
-            android:targetActivity="net.rroadvpn.openvpn.api.RemoteAction" />
-
 
     </application>
 

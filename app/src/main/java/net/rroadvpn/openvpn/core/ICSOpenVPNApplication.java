@@ -20,16 +20,16 @@ import org.acra.annotation.ReportsCrashes;
 */
 
 import android.os.StrictMode;
+
 import net.rroadvpn.openvpn.BuildConfig;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.api.AppRestrictions;
 
 public class ICSOpenVPNApplication extends Application {
-    private StatusListener mStatus;
 
     @Override
     public void onCreate() {
-        if("robolectric".equals(Build.FINGERPRINT))
+        if ("robolectric".equals(Build.FINGERPRINT))
             return;
 
         super.onCreate();
@@ -37,11 +37,10 @@ public class ICSOpenVPNApplication extends Application {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             createNotificationChannels();
-        mStatus = new StatusListener();
+        StatusListener mStatus = new StatusListener();
         mStatus.init(getApplicationContext());
 
-        if (BuildConfig.BUILD_TYPE.equals("debug"))
-            enableStrictModes();
+        enableStrictModes();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AppRestrictions.getInstance(this).checkRestrictions(this);

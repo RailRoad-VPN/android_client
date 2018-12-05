@@ -13,8 +13,4 @@
     <item quantity="one">En time tilbage</item>
     <item quantity="other">%d timer tilbage</item>
   </plurals>
-  <plurals name="minutes_left">
-    <item quantity="one">Et minut tilbage</item>
-    <item quantity="other">%d minutter tilbage</item>
-  </plurals>
 </resources>

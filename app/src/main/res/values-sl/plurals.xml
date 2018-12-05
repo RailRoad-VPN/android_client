@@ -19,10 +19,4 @@
     <item quantity="few">Preostale so še %d ure</item>
     <item quantity="other">Preostalo je še %d ur</item>
   </plurals>
-  <plurals name="minutes_left">
-    <item quantity="one">Preostala je še ena minuta</item>
-    <item quantity="two">Preostali sta še %d minuti</item>
-    <item quantity="few">Preostale so še %d minute</item>
-    <item quantity="other">Preostalo je še %d minut</item>
-  </plurals>
 </resources>

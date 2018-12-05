@@ -13,8 +13,4 @@
     <item quantity="one">En timme kvar</item>
     <item quantity="other">%d timmar kvar</item>
   </plurals>
-  <plurals name="minutes_left">
-    <item quantity="one">En minut kvar</item>
-    <item quantity="other">%d minuter kvar</item>
-  </plurals>
 </resources>

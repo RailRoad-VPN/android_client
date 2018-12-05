@@ -1,18 +1,11 @@
 package net.rroadvpn.services;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.RemoteException;
-import android.widget.Toast;
 
-import net.rroadvpn.activities.NewMainActivity2;
 import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.model.User;
 import net.rroadvpn.model.VPNAppPreferences;
-import net.rroadvpn.openvpn.core.VpnStatus;
 
-import org.json.JSONException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -10,7 +10,4 @@
   <plurals name="hours_left">
     <item quantity="other">%d 시간 남음</item>
   </plurals>
-  <plurals name="minutes_left">
-    <item quantity="other">%d 분 남음</item>
-  </plurals>
 </resources>

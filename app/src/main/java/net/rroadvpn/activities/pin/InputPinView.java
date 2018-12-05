@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4n.view.ViewPager;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -22,10 +21,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import net.rroadvpn.activities.NewMainActivity2;
+import net.rroadvpn.activities.VPNActivity;
 import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.openvpn.R;
-import net.rroadvpn.openvpn.activities.BaseActivity;
+import net.rroadvpn.activities.BaseActivity;
 import net.rroadvpn.services.UserVPNPolicy;
 
 import org.slf4j.Logger;
@@ -91,7 +90,7 @@ public class InputPinView extends BaseActivity {
                         @Override
                         public void onProcessUserPincodeListener(Boolean isOk) {
                             if (isOk) {
-                                Intent intent = new Intent(getBaseContext(), NewMainActivity2.class);
+                                Intent intent = new Intent(getBaseContext(), VPNActivity.class);
                                 startActivity(intent);
                                 finish();
                             } else {

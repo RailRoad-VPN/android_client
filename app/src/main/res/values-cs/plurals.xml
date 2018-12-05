@@ -16,9 +16,4 @@
     <item quantity="few">Zbývají %d hodiny</item>
     <item quantity="other">Zbývá %d hodin</item>
   </plurals>
-  <plurals name="minutes_left">
-    <item quantity="one">Zbývá jedna minuta</item>
-    <item quantity="few">Zbývají %d minuty</item>
-    <item quantity="other">Zbývá %d minut</item>
-  </plurals>
 </resources>

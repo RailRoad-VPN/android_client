@@ -13,8 +13,4 @@
     <item quantity="one">Nog één uur</item>
     <item quantity="other">Nog %d uren</item>
   </plurals>
-  <plurals name="minutes_left">
-    <item quantity="one">Nog één minuut</item>
-    <item quantity="other">Nog %d minuten</item>
-  </plurals>
 </resources>

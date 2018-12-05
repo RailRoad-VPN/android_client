@@ -10,7 +10,4 @@
   <plurals name="hours_left">
     <item quantity="other">還剩 %d 小時</item>
   </plurals>
-  <plurals name="minutes_left">
-    <item quantity="other">還剩 %d 分鐘</item>
-  </plurals>
 </resources>

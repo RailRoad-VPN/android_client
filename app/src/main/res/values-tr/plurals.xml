@@ -13,8 +13,4 @@
     <item quantity="one">Bir saat kaldı</item>
     <item quantity="other">%d saat kaldı</item>
   </plurals>
-  <plurals name="minutes_left">
-    <item quantity="one">Bir dakika kaldı</item>
-    <item quantity="other">%d dakika kaldı</item>
-  </plurals>
 </resources>

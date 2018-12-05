@@ -13,8 +13,4 @@
     <item quantity="one">Falta 1 hora</item>
     <item quantity="other">Faltam %d horas</item>
   </plurals>
-  <plurals name="minutes_left">
-    <item quantity="one">Falta 1 minuto</item>
-    <item quantity="other">Faltam %d minutos</item>
-  </plurals>
 </resources>

@@ -10,7 +10,4 @@
   <plurals name="hours_left">
     <item quantity="other">Còn lại %d giờ</item>
   </plurals>
-  <plurals name="minutes_left">
-    <item quantity="other">Còn lại %d phút</item>
-  </plurals>
 </resources>

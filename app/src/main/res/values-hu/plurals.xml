@@ -13,8 +13,4 @@
     <item quantity="one">Egy óra van hátra</item>
     <item quantity="other">%d óra van hátra</item>
   </plurals>
-  <plurals name="minutes_left">
-    <item quantity="one">Egy perc van hátra</item>
-    <item quantity="other">%d perc van hátra</item>
-  </plurals>
 </resources>

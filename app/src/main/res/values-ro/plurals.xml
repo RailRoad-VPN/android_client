@@ -16,9 +16,4 @@
     <item quantity="few">%d ore rămase</item>
     <item quantity="other">%d ore rămase</item>
   </plurals>
-  <plurals name="minutes_left">
-    <item quantity="one">Un minut rămas</item>
-    <item quantity="few">%d minute rămase</item>
-    <item quantity="other">%d minute rămase</item>
-  </plurals>
 </resources>

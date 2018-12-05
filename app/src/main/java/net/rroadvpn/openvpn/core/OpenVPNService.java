@@ -23,7 +23,6 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.net.VpnService;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.IBinder;
@@ -38,7 +37,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import net.rroadvpn.openvpn.VpnProfile;
-import net.rroadvpn.openvpn.api.ExternalAppDatabase;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -52,7 +50,7 @@ import java.util.Vector;
 
 import net.rroadvpn.openvpn.R;
 
-import net.rroadvpn.openvpn.activities.DisconnectVPN;
+import net.rroadvpn.activities.DisconnectVPN;
 
 public class OpenVPNService extends VpnService implements VpnStatus.StateListener, Callback, VpnStatus.ByteCountListener, IOpenVPNServiceInternal {
     public static final String START_SERVICE = "net.rroadvpn.openvpn.START_SERVICE";
@@ -172,19 +170,6 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
     }
 
     @Override
-    public void addAllowedExternalApp(String packagename) throws RemoteException {
-        ExternalAppDatabase extapps = new ExternalAppDatabase(OpenVPNService.this);
-        extapps.addApp(packagename);
-    }
-
-    @Override
-    public boolean isAllowedExternalApp(String packagename) throws RemoteException {
-        ExternalAppDatabase extapps = new ExternalAppDatabase(OpenVPNService.this);
-        return extapps.checkRemoteActionPermission(this, packagename);
-    }
-
-
-    @Override
     public IBinder onBind(Intent intent) {
         String action = intent.getAction();
         if (action != null && action.equals(START_SERVICE))
@@ -230,12 +215,17 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
         android.app.Notification.Builder nbuilder = new Notification.Builder(this);
 
         int priority;
-        if (channel.equals(NOTIFICATION_CHANNEL_BG_ID))
-            priority = PRIORITY_MIN;
-        else if (channel.equals(NOTIFICATION_CHANNEL_USERREQ_ID))
-            priority = PRIORITY_MAX;
-        else
-            priority = PRIORITY_DEFAULT;
+        switch (channel) {
+            case NOTIFICATION_CHANNEL_BG_ID:
+                priority = PRIORITY_MIN;
+                break;
+            case NOTIFICATION_CHANNEL_USERREQ_ID:
+                priority = PRIORITY_MAX;
+                break;
+            default:
+                priority = PRIORITY_DEFAULT;
+                break;
+        }
 
         nbuilder.setContentTitle(getString(R.string.notification_title));
 
@@ -297,7 +287,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
 
                     if (mlastToast != null)
                         mlastToast.cancel();
-                    String toastText = String.format(Locale.getDefault(), "%s - %s", mProfile.mName, msg);
+                    String toastText = String.format(Locale.getDefault(), "%s", msg);
                     mlastToast = Toast.makeText(getBaseContext(), toastText, Toast.LENGTH_SHORT);
                     mlastToast.show();
                 }
@@ -368,19 +358,20 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
         nbuilder.addAction(R.drawable.ic_menu_close_clear_cancel,
                 getString(R.string.cancel_connection), disconnectPendingIntent);
 
-        Intent pauseVPN = new Intent(this, OpenVPNService.class);
-        if (mDeviceStateReceiver == null || !mDeviceStateReceiver.isUserPaused()) {
-            pauseVPN.setAction(PAUSE_VPN);
-            PendingIntent pauseVPNPending = PendingIntent.getService(this, 0, pauseVPN, 0);
-            nbuilder.addAction(R.drawable.ic_menu_pause,
-                    getString(R.string.pauseVPN), pauseVPNPending);
-
-        } else {
-            pauseVPN.setAction(RESUME_VPN);
-            PendingIntent resumeVPNPending = PendingIntent.getService(this, 0, pauseVPN, 0);
-            nbuilder.addAction(R.drawable.ic_menu_play,
-                    getString(R.string.resumevpn), resumeVPNPending);
-        }
+// TODO think about pause VPN function
+//        Intent pauseVPN = new Intent(this, OpenVPNService.class);
+//        if (mDeviceStateReceiver == null || !mDeviceStateReceiver.isUserPaused()) {
+//            pauseVPN.setAction(PAUSE_VPN);
+//            PendingIntent pauseVPNPending = PendingIntent.getService(this, 0, pauseVPN, 0);
+//            nbuilder.addAction(R.drawable.ic_menu_pause,
+//                    getString(R.string.pauseVPN), pauseVPNPending);
+//
+//        } else {
+//            pauseVPN.setAction(RESUME_VPN);
+//            PendingIntent resumeVPNPending = PendingIntent.getService(this, 0, pauseVPN, 0);
+//            nbuilder.addAction(R.drawable.ic_menu_play,
+//                    getString(R.string.resumevpn), resumeVPNPending);
+//        }
     }
 
 //    PendingIntent getUserInputIntent(String needed) {
@@ -395,7 +386,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
 //
 //    PendingIntent getGraphPendingIntent() {
 //        // Let the configure Button show the Log
-//        Class activityClass = MainActivity.class;
+//        Class activityClass = VPNActivity.class;
 //        if (mNotificationActivityClass != null) {
 //            activityClass = mNotificationActivityClass;
 //        }
@@ -455,6 +446,16 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
             return getManagement().stopVPN(replaceConnection);
         else
             return false;
+    }
+
+    @Override
+    public void addAllowedExternalApp(String packagename) throws RemoteException {
+
+    }
+
+    @Override
+    public boolean isAllowedExternalApp(String packagename) throws RemoteException {
+        return false;
     }
 
     @Override
@@ -841,7 +842,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
         }
 
 
-        String session = mProfile.mName;
+        String session = "";
         if (mLocalIP != null && mLocalIPv6 != null)
             session = getString(R.string.session_ipv6string, session, mLocalIP, mLocalIPv6);
         else if (mLocalIP != null)

@@ -1,6 +1,5 @@
 package net.rroadvpn.services;
 
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -8,15 +7,11 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.net.VpnService;
 import android.os.IBinder;
-import android.os.RemoteException;
 
-import net.rroadvpn.activities.NewMainActivity2;
-import net.rroadvpn.activities.OpenVPNProfileException;
-import net.rroadvpn.activities.OpenVPNProfileManager;
-import net.rroadvpn.exception.OpenVPNControlServiceException;
+import net.rroadvpn.activities.vpn.OpenVPNProfileException;
+import net.rroadvpn.activities.vpn.OpenVPNProfileManager;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.VpnProfile;
-import net.rroadvpn.openvpn.activities.DisconnectVPN;
 import net.rroadvpn.openvpn.core.ConnectionStatus;
 import net.rroadvpn.openvpn.core.IOpenVPNServiceInternal;
 import net.rroadvpn.openvpn.core.OpenVPNService;
@@ -29,9 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Arrays;
-
-import static net.rroadvpn.openvpn.core.OpenVPNService.DISCONNECT_VPN;
 
 public class OpenVPNControlService {
     //TODO CUT Context
@@ -161,10 +153,6 @@ public class OpenVPNControlService {
         ProfileManager.updateLRU(this.ctx, mSelectedProfile);
         VPNLaunchHelper.startOpenVpn(mSelectedProfile, this.ctx);
         log.info("connectToVPN method exit");
-    }
-
-    public boolean diconnectVPN() {
-        return VPNLaunchHelper.stopOpenVpn(this.ctx);
     }
 
     public boolean ismCmfixed() {

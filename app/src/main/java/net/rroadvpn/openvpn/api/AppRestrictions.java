@@ -132,14 +132,13 @@ public class AppRestrictions {
 
         Vector<VpnProfile> profilesToRemove = new Vector<>();
         // get List of all managed profiles
-        for (VpnProfile vp: pm.getProfiles())
-        {
+        for (VpnProfile vp : pm.getProfiles()) {
             if (PROFILE_CREATOR.equals(vp.mProfileCreator)) {
                 if (!provisionedUuids.contains(vp.getUUIDString()))
                     profilesToRemove.add(vp);
             }
         }
-        for (VpnProfile vp: profilesToRemove) {
+        for (VpnProfile vp : profilesToRemove) {
             VpnStatus.logInfo("Remove with uuid: %s and name: %s since it is no longer in the list of managed profiles");
             pm.removeProfile(c, vp);
         }
@@ -186,8 +185,7 @@ public class AppRestrictions {
         applyRestrictions(c);
     }
 
-    public void pauseCheckRestrictions(Context c)
-    {
+    public void pauseCheckRestrictions(Context c) {
         removeChangesListener(c);
     }
 }
