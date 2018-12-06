@@ -13,8 +13,6 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 
 
-//import java.util.concurrent.ExecutionException;
-
 public class UserVPNPolicy {
 
     private UsersAPIService us;
@@ -54,7 +52,6 @@ public class UserVPNPolicy {
 
     public void afterDisconnectVPN() {
         log.info("afterDisconnectVPN method enter");
-        reInitUserServiceCrutch();
 //        us.deleteConnection(serverUuid, user.getEmail());
         log.info("afterDisconnectVPN method exit");
     }
@@ -82,7 +79,6 @@ public class UserVPNPolicy {
         log.info("afterConnectedToVPN method enter");
 
         try {
-            reInitUserServiceCrutch();
             // TODO device_ip
             this.us.updateUserDevice(this.user.getUuid(), this.preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID), virtualIP, "1.1.1.1");
 
@@ -95,13 +91,13 @@ public class UserVPNPolicy {
         log.info("afterConnectedToVPN method exit");
     }
 
-    private void reInitUserServiceCrutch() {
-        log.info("reInitUserServiceCrutch method enter");
-        String userServiceURL = VPNAppPreferences.getUserServiceURL("users");
-
-        this.us = new UsersAPIService(preferencesService, userServiceURL);
-        log.info("reInitUserServiceCrutch method exit");
-    }
+//    private void reInitUserServiceCrutch() {
+//        log.info("reInitUserServiceCrutch method enter");
+//        String userServiceURL = VPNAppPreferences.getUserServiceURL("users");
+//
+//        this.us = new UsersAPIService(preferencesService, userServiceURL);
+//        log.info("reInitUserServiceCrutch method exit");
+//    }
 
     public void deleteUserSettings() {
         log.info("deleteUserSettings method enter");

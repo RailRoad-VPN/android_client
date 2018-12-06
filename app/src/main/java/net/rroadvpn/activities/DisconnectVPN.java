@@ -22,6 +22,8 @@ import net.rroadvpn.openvpn.core.VpnStatus;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.core.IOpenVPNServiceInternal;
 
+import static net.rroadvpn.openvpn.core.OpenVPNService.DISCONNECT_VPN;
+
 /**
  * Created by arne on 13.10.13.
  */
@@ -78,13 +80,11 @@ public class DisconnectVPN extends Activity implements DialogInterface.OnClickLi
             if (mService != null) {
                 try {
                     mService.stopVPN(false);
-                    returnIntent.putExtra("toDisconnect", true);
+                    returnIntent.setAction(DISCONNECT_VPN);
                 } catch (RemoteException e) {
                     VpnStatus.logException(e);
                 }
             }
-        } else {
-            returnIntent.putExtra("toDisconnect", false);
         }
 
         setResult(Activity.RESULT_OK, returnIntent);

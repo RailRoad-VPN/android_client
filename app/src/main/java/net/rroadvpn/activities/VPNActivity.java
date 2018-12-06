@@ -9,6 +9,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,10 @@ public class VPNActivity extends BaseActivity {
     private ConnectVPNTask connectVPNTask;
     private LogoutTask logoutTask;
 
+    ImageButton connectToVPNBtn;
+
+    private PreferencesService preferencesService;
+
     private Integer MENU_MARGIN_LEFT = 133;
 
     protected void onCreate(android.os.Bundle savedInstanceState) {
@@ -57,7 +62,7 @@ public class VPNActivity extends BaseActivity {
         log.info("VPNActivity onCreate enter");
         this.ovcs = new OpenVPNControlService(this);
 
-        PreferencesService preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
+        this.preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
 
         this.userVPNPolicy = new UserVPNPolicy(preferencesService);
 
@@ -119,17 +124,10 @@ public class VPNActivity extends BaseActivity {
             }
         });
 
-        ImageButton connectToVPNBtn = (ImageButton) findViewById(R.id.connect_to_vpn);
-        if (ovcs.isVPNActive()) {
-            if (ovcs.isVPNConnected()) {
-                connectToVPNBtn.setBackgroundResource(R.drawable.ic_green_semaphore);
-            } else {
-                connectToVPNBtn.setBackgroundResource(R.drawable.black_yellow_semaphore_animation);
-                ((AnimationDrawable) connectToVPNBtn.getBackground()).start();
-            }
-        }
+        this.connectToVPNBtn = findViewById(R.id.connect_to_vpn);
+        calcSemaphoreState();
 
-        connectToVPNBtn.setOnClickListener(new View.OnClickListener() {
+        this.connectToVPNBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 log.info("connectToVPNBtn button click");
@@ -199,6 +197,25 @@ public class VPNActivity extends BaseActivity {
                 }
             }
         });
+
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        if (action != null && action.equals(DISCONNECT_VPN)) {
+            showDisconnectDialogVPN(DISCONNECT_VPN_REQUEST_CODE);
+        }
+    }
+
+    private void calcSemaphoreState() {
+        if (ovcs.isVPNActive() || (this.connectVPNTask != null && this.connectVPNTask.getStatus().equals(AsyncTask.Status.RUNNING))) {
+            if (ovcs.isVPNConnected()) {
+                connectToVPNBtn.setBackgroundResource(R.drawable.ic_green_semaphore);
+            } else {
+                connectToVPNBtn.setBackgroundResource(R.drawable.black_yellow_semaphore_animation);
+                ((AnimationDrawable) connectToVPNBtn.getBackground()).start();
+            }
+        } else {
+            connectToVPNBtn.setBackgroundResource(R.drawable.ic_red_semaphore);
+        }
     }
 
     private void logoutUser() {
@@ -206,12 +223,16 @@ public class VPNActivity extends BaseActivity {
         logoutTask.setListener(new LogoutTask.LogoutTaskListener() {
             @Override
             public void onLogoutTask(Boolean value) {
-                findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.ic_red_semaphore);
-                Intent intent = new Intent(getBaseContext(), InputPinView.class);
-                startActivity(intent);
+                goToPin();
             }
         });
         logoutTask.execute();
+    }
+
+    private void goToPin() {
+        findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.ic_red_semaphore);
+        Intent intent = new Intent(getBaseContext(), InputPinView.class);
+        startActivity(intent);
     }
 
     private void connectToVPN() {
@@ -229,6 +250,13 @@ public class VPNActivity extends BaseActivity {
         });
         connectVPNTask.execute();
         log.info("connectToVPN exit");
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            calcSemaphoreState();
+        }
     }
 
     private void showDisconnectDialogVPN(int requestCode) {
@@ -253,11 +281,9 @@ public class VPNActivity extends BaseActivity {
         if (requestCode == VPN_SERVICE_INTENT_PERMISSION) {
             if (resultCode == Activity.RESULT_OK) {
                 connectToVPN();
-            } else {
-                // TODO make error
             }
         } else if (requestCode == DISCONNECT_VPN_REQUEST_CODE) {
-            if (data.getExtras() != null && data.getExtras().getBoolean("toDisconnect")) {
+            if (data != null && data.getAction() != null && data.getAction().equals(DISCONNECT_VPN)) {
                 afterDisconnectVPNTask = new AfterDisconnectVPNTask(userVPNPolicy);
                 afterDisconnectVPNTask.setListener(new AfterDisconnectVPNTask.AfterDisconnectVPNTaskListener() {
                     @Override
@@ -277,8 +303,6 @@ public class VPNActivity extends BaseActivity {
                 }
             });
             afterDisconnectVPNTask.execute();
-        } else {
-            // TODO make error
         }
     }
 
@@ -288,6 +312,15 @@ public class VPNActivity extends BaseActivity {
 
         if (ovcs != null) {
             ovcs.bindService();
+        }
+
+        calcSemaphoreState();
+
+        String userUUid = preferencesService.getString(VPNAppPreferences.USER_UUID);
+        String userEmail = preferencesService.getString(VPNAppPreferences.USER_EMAIL);
+
+        if (userUUid == null || userEmail == null) {
+            goToPin();
         }
     }
 

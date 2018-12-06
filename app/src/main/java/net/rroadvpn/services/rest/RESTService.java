@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.SocketFactory;
 
 import okhttp3.FormBody;
 import okhttp3.Headers;
@@ -65,6 +68,8 @@ public class RESTService implements RESTServiceI {
     @Override
     public RESTResponse get(String url, Map<String, String> headers) throws RESTException {
         log.debug("get request with parameters: url={}, headers={}", url, headers);
+
+        this.rebuildClient();
 
         if (url == null) {
             url = this.serviceURL;
@@ -120,9 +125,21 @@ public class RESTService implements RESTServiceI {
         }
     }
 
+    private void rebuildClient() {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        builder.connectTimeout(30, TimeUnit.SECONDS);
+        builder.readTimeout(30, TimeUnit.SECONDS);
+        builder.writeTimeout(30, TimeUnit.SECONDS);
+        builder.retryOnConnectionFailure(true);
+        this.client = builder.build();
+    }
+
     @Override
     public RESTResponse put(String url, Map<String, Object> data, Map<String, String> headers) throws RESTException {
         log.debug("put request with parameters: url={}, data={}, headers={}", url, data, headers);
+
+        this.rebuildClient();
+
         if (url == null) {
             url = this.serviceURL;
         }
@@ -183,6 +200,8 @@ public class RESTService implements RESTServiceI {
     public RESTResponse post(String url, Map<String, Object> data, Map<String, String> headers) throws RESTException {
         log.debug("post request with parameters: url={}, data={}, headers={}", url, data, headers);
 
+        this.rebuildClient();
+
         if (url == null) {
             url = this.serviceURL;
         }
@@ -242,6 +261,9 @@ public class RESTService implements RESTServiceI {
 
     @Override
     public RESTResponse delete(String url, Map<String, Object> data, Map<String, String> headers) {
+
+        this.rebuildClient();
+
         if (url == null) {
             url = this.serviceURL;
         }

@@ -36,6 +36,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import net.rroadvpn.activities.VPNActivity;
 import net.rroadvpn.openvpn.VpnProfile;
 
 import java.io.IOException;
@@ -46,6 +47,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Vector;
 
 import net.rroadvpn.openvpn.R;
@@ -338,9 +340,7 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
 
                 Method setUsesChronometer = nbuilder.getClass().getMethod("setUsesChronometer", boolean.class);
                 setUsesChronometer.invoke(nbuilder, true);
-
             }
-
             //ignore exception
         } catch (NoSuchMethodException | IllegalArgumentException |
                 InvocationTargetException | IllegalAccessException e) {
@@ -351,9 +351,9 @@ public class OpenVPNService extends VpnService implements VpnStatus.StateListene
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void addVpnActionsToNotification(Notification.Builder nbuilder) {
-        Intent disconnectVPN = new Intent(this, DisconnectVPN.class);
-        disconnectVPN.setAction(DISCONNECT_VPN);
-        PendingIntent disconnectPendingIntent = PendingIntent.getActivity(this, 0, disconnectVPN, 0);
+        Intent vpnActivityDisconnectAction = new Intent(this, VPNActivity.class);
+        vpnActivityDisconnectAction.setAction(DISCONNECT_VPN);
+        PendingIntent disconnectPendingIntent = PendingIntent.getActivity(this, 0, vpnActivityDisconnectAction, 0);
 
         nbuilder.addAction(R.drawable.ic_menu_close_clear_cancel,
                 getString(R.string.cancel_connection), disconnectPendingIntent);

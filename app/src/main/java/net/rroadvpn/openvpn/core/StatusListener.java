@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2012-2016 Arne Schwabe
- * Distributed under the GNU GPL v2 with additional terms. For full terms see the file doc/LICENSE.txt
- */
-
 package net.rroadvpn.openvpn.core;
 
 import android.content.ComponentName;
@@ -20,14 +15,9 @@ import java.io.IOException;
 import net.rroadvpn.openvpn.core.IServiceStatus;
 import net.rroadvpn.openvpn.core.IStatusCallbacks;
 
-/**
- * Created by arne on 09.11.16.
- */
-
 public class StatusListener {
     private File mCacheDir;
     private ServiceConnection mConnection = new ServiceConnection() {
-
 
         @Override
         public void onServiceConnected(ComponentName className,
@@ -54,7 +44,6 @@ public class StatusListener {
                     fd.close();
 
 
-
                 } else {
                     VpnStatus.initLogCache(mCacheDir);
                 }
@@ -73,20 +62,15 @@ public class StatusListener {
     };
 
     void init(Context c) {
-
         Intent intent = new Intent(c, OpenVPNStatusService.class);
         intent.setAction(OpenVPNService.START_SERVICE);
         mCacheDir = c.getCacheDir();
 
         c.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-
-
     }
 
 
-    private IStatusCallbacks mCallback = new IStatusCallbacks.Stub()
-
-    {
+    private IStatusCallbacks mCallback = new IStatusCallbacks.Stub() {
         @Override
         public void newLogItem(LogItem item) throws RemoteException {
             VpnStatus.newLogItem(item);

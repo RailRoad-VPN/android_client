@@ -17,10 +17,15 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Vector;
 
+import net.rroadvpn.activities.VPNActivity;
 import net.rroadvpn.openvpn.R;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class VpnStatus {
 
+    private static Logger log = LoggerFactory.getLogger(VpnStatus.class);
 
     private static final LinkedList<LogItem> logbuffer;
 
@@ -66,10 +71,14 @@ public class VpnStatus {
     static final int MAXLOGENTRIES = 1000;
 
     public static boolean isVPNActive() {
-        return mLastLevel != ConnectionStatus.LEVEL_AUTH_FAILED && !(mLastLevel == ConnectionStatus.LEVEL_NOTCONNECTED);
+        log.debug("isVPNActive method");
+        log.debug("mLastLevel: {}", mLastLevel);
+        return mLastLevel != ConnectionStatus.LEVEL_AUTH_FAILED && !(mLastLevel == ConnectionStatus.LEVEL_NOTCONNECTED) && !(mLastLevel == ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
     }
 
     public static boolean isVPNConnected() {
+        log.debug("isVPNConnected method");
+        log.debug("mLastLevel: {}", mLastLevel);
         return mLastLevel == ConnectionStatus.LEVEL_CONNECTED;
     }
 
