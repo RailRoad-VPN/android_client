@@ -58,9 +58,9 @@ public class RESTService implements RESTServiceI {
 
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        builder.connectTimeout(30, TimeUnit.SECONDS);
-        builder.readTimeout(30, TimeUnit.SECONDS);
-        builder.writeTimeout(30, TimeUnit.SECONDS);
+        builder.connectTimeout(5, TimeUnit.SECONDS);
+        builder.readTimeout(5, TimeUnit.SECONDS);
+        builder.writeTimeout(5, TimeUnit.SECONDS);
         builder.retryOnConnectionFailure(true);
         this.client = builder.build();
     }

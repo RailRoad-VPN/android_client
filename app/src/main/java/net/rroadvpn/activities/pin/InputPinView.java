@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.rroadvpn.activities.VPNActivity;
+import net.rroadvpn.exception.UserPolicyException;
 import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.model.VPNAppPreferences;
 import net.rroadvpn.openvpn.R;
@@ -178,14 +179,14 @@ public class InputPinView extends BaseActivity {
         protected Boolean doInBackground(Void... voids) {
             try {
                 userVPNPolicy.checkPinCode(Integer.valueOf(userPincode.toString()));
-            } catch (UserServiceException e) {
+            } catch (UserPolicyException e) {
                 log.error("UserServiceException: {}", e);
                 return false;
             }
 
             try {
                 userVPNPolicy.createUserDevice();
-            } catch (UserServiceException e) {
+            } catch (UserPolicyException e) {
                 log.error("UserServiceException: {}", e);
                 return false;
             }

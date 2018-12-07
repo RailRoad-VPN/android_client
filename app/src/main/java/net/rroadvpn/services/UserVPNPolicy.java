@@ -2,6 +2,7 @@ package net.rroadvpn.services;
 
 import android.content.Context;
 
+import net.rroadvpn.exception.UserPolicyException;
 import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.model.User;
 import net.rroadvpn.model.VPNAppPreferences;
@@ -35,47 +36,53 @@ public class UserVPNPolicy {
         this.us = new UsersAPIService(preferencesService, userServiceURL);
     }
 
-    public void checkPinCode(Integer pinCode) throws UserServiceException {
+    public void checkPinCode(Integer pinCode) throws UserPolicyException {
         log.debug("checkPinCode method enter. Pin:" + String.valueOf(pinCode));
-        user = us.getUserByPinCode(pinCode);
-        log.debug("email:" + user.getEmail() +
-                ", userUuid:" + user.getUuid()
-        );
+        try {
+            user = us.getUserByPinCode(pinCode);
+        } catch (UserServiceException e) {
+            throw new UserPolicyException(e);
+        }
+        log.debug("email: {}, userUuid: {}", user.getEmail(), user.getUuid());
+        log.debug("checkPinCode method exit");
 
     }
 
-    public void createUserDevice() throws UserServiceException {
+    public void createUserDevice() throws UserPolicyException {
         log.info("createUserDevice method enter");
-        us.createUserDevice(user.getUuid());
+        try {
+            us.createUserDevice(user.getUuid());
+        } catch (UserServiceException e) {
+            throw new UserPolicyException(e);
+        }
         log.info("createUserDevice method exit");
     }
 
     public void afterDisconnectVPN() {
         log.info("afterDisconnectVPN method enter");
+        // TODO
 //        us.deleteConnection(serverUuid, user.getEmail());
         log.info("afterDisconnectVPN method exit");
     }
 
 
-    public String getNewRandomVPNServer() {
+    public String getNewRandomVPNServer() throws UserPolicyException {
         log.info("getNewRandomVPNServer method enter");
+        String vpnConfig;
         try {
             this.serverUuid = us.getRandomServerUuid(user.getUuid());
             // TODO проверить наличие профиля в ПрофильМенеджере и если нет то получать через API
-            String vpnConfig = us.getVPNConfigurationByUserAndServer(user.getUuid(), serverUuid);
+            vpnConfig = us.getVPNConfigurationByUserAndServer(user.getUuid(), serverUuid);
             log.debug("MY CONFIG" + vpnConfig);
-            log.info("getNewRandomVPNServer method exit");
-            return vpnConfig;
         } catch (UserServiceException e) {
-            log.error(String.format("Message: %s\nStackTrace: %s"
-                    , e.getMessage()
-                    , Arrays.toString(e.getStackTrace())
-            ));
+            log.error("UserServiceException: {}", e);
+            throw new UserPolicyException(e);
         }
-        return null;
+        log.info("getNewRandomVPNServer method exit");
+        return vpnConfig;
     }
 
-    public void afterConnectedToVPN(String virtualIP) {
+    public void afterConnectedToVPN(String virtualIP) throws UserPolicyException {
         log.info("afterConnectedToVPN method enter");
 
         try {
@@ -87,21 +94,18 @@ public class UserVPNPolicy {
             this.us.createConnection(this.serverUuid, virtualIP, "1.1.1.1", email);
         } catch (UserServiceException e) {
             log.error("UserServiceException: {}", e);
+            throw new UserPolicyException(e);
         }
         log.info("afterConnectedToVPN method exit");
     }
 
-//    private void reInitUserServiceCrutch() {
-//        log.info("reInitUserServiceCrutch method enter");
-//        String userServiceURL = VPNAppPreferences.getUserServiceURL("users");
-//
-//        this.us = new UsersAPIService(preferencesService, userServiceURL);
-//        log.info("reInitUserServiceCrutch method exit");
-//    }
-
-    public void deleteUserSettings() {
+    public void deleteUserSettings() throws UserPolicyException {
         log.info("deleteUserSettings method enter");
-        this.us.deleteUserDevice(user.getUuid(), this.preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID));
+        try {
+            this.us.deleteUserDevice(this.user.getUuid(), this.preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID));
+        } catch (UserServiceException e) {
+            throw new UserPolicyException(e);
+        }
         this.preferencesService.clear();
         log.info("deleteUserSettings method exit");
     }

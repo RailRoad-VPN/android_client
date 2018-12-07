@@ -20,13 +20,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="10sp"
                 android:text="RAILROAD VPN"
-                android:textFontWeight="900"
+                android:textAllCaps="false"
                 android:textColor="@android:color/black"
-                android:textSize="18dp" />
+                android:textFontWeight="900"
+                android:textSize="18dp"
+                android:typeface="normal" />
         </LinearLayout>
 
         <LinearLayout
@@ -45,7 +48,7 @@
                 android:background="@android:color/transparent"
                 android:text="@string/side_menu_btn_profile"
                 android:textAlignment="textStart"
-                android:textAllCaps="false"
+                android:textAllCaps="true"
                 android:textColor="@android:color/black"
 
                 />
@@ -67,8 +70,8 @@
                 android:background="@android:color/transparent"
                 android:text="@string/side_menu_btn_log_out"
                 android:textAlignment="textStart"
-                android:textAllCaps="false"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
 
             <RelativeLayout
                 android:layout_width="100dp"
@@ -89,17 +92,37 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/rroad_main_background">
+            android:background="@drawable/vpn_bg_cartoon">
 
-            <ImageButton
-                android:id="@+id/connect_to_vpn"
-                android:layout_width="170dp"
-                android:layout_height="117dp"
-                android:layout_alignParentTop="true"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="60dp"
-                android:background="@drawable/ic_red_semaphore"
-                android:contentDescription="@string/connect_disconnect" />
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:text="Connecting.."
+                        android:textColor="@android:color/white"
+                        android:textSize="24sp" />
+                </RelativeLayout>
+
+                <ImageButton
+                    android:id="@+id/connect_to_vpn"
+                    android:layout_width="170dp"
+                    android:layout_height="117dp"
+                    android:background="@drawable/semaphore_red"
+                    android:baselineAlignBottom="false"
+                    android:contentDescription="@string/connect_disconnect" />
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/side_menu_btn"
@@ -108,7 +131,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/vpn_item_settings"
+                android:background="@drawable/ic_menu"
                 android:contentDescription="TODO" />
 
         </RelativeLayout>

@@ -5,22 +5,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/pin_cropped"
+    android:background="@drawable/input_pin_bg_cartoon"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="TODO"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:src="@drawable/logo" />
-    </LinearLayout>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:layout_marginTop="40dp"
+        android:contentDescription="TODO"
+        android:src="@drawable/logo" />
 
     <LinearLayout
         android:layout_width="match_parent"

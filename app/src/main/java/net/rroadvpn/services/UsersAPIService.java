@@ -29,7 +29,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     private Logger log = LoggerFactory.getLogger(UsersAPIService.class);
 
 
-    public UsersAPIService(PreferencesService preferencesService, String serviceURL) {
+    UsersAPIService(PreferencesService preferencesService, String serviceURL) {
         super(preferencesService, serviceURL);
         this.deviceToken = this.preferencesService.getString(VPNAppPreferences.DEVICE_TOKEN);
         this.deviceId = this.preferencesService.getString(VPNAppPreferences.DEVICE_ID);
@@ -48,8 +48,13 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         log.debug("generate auth token");
         headers.put("x-auth-token", this.utilities.generateAuthToken());
 
-        log.debug("do get call");
-        RESTResponse ur = this.get(url, headers);
+        RESTResponse ur;
+        try {
+            log.debug("do get call");
+            ur = this.get(url, headers);
+        } catch (RESTException e) {
+            throw new UserServiceException(e);
+        }
 
         log.debug("check is request is ok");
         if (ur.getOk()) {
@@ -96,7 +101,13 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         }
         headers.put("x-auth-token", this.utilities.generateAuthToken());
 
-        RESTResponse ur = this.get(url, headers);
+        RESTResponse ur;
+        try {
+            log.debug("do get call");
+            ur = this.get(url, headers);
+        } catch (RESTException e) {
+            throw new UserServiceException(e);
+        }
 
         if (ur.getOk()) {
             Object valueObj = ur.getData();
@@ -105,19 +116,17 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
                 try {
                     return new User(data);
                 } catch (JSONException e) {
-                    log.error(String.format("Message: %s\nStackTrace: %s"
-                            , e.getMessage()
-                            , Arrays.toString(e.getStackTrace())
-                    ));
-                    return null;
+                    log.error("JSONException: {}", e);
+                    throw new UserServiceException(e);
                 }
             } else if (valueObj instanceof JSONArray) {
                 throw new UserServiceException("got more than one user by pincode");
+            } else {
+                throw new UserServiceException("unknown type of data");
             }
         } else {
             throw new UserServiceException("user is not OK");
         }
-        return null;
 
     }
 
@@ -143,7 +152,12 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         userDevice.put("location", "test_android2");
         log.debug("Prepared: {}", userDevice.toString());
 
-        RESTResponse ur = this.post(url, userDevice, headers);
+        RESTResponse ur;
+        try {
+            ur = this.post(url, userDevice, headers);
+        } catch (RESTException e) {
+            throw new UserServiceException(e);
+        }
 
         List<String> xDeviceTokenList = ur.getHeaders().get("x-device-token");
         if (xDeviceTokenList != null) {
@@ -172,7 +186,14 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         }
 
         headers.put("x-auth-token", this.utilities.generateAuthToken());
-        RESTResponse ur = this.get(url, headers);
+
+        RESTResponse ur;
+        try {
+            ur = this.get(url, headers);
+        } catch (RESTException e) {
+            log.error("RESTException: {}", e);
+            throw new UserServiceException(e);
+        }
 
         if (ur.getStatus().equals("success")) {
             Object valueObj = ur.getData();
@@ -183,26 +204,21 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
                     log.info("getRandomServerUuid method exit");
                     return serverUuid;
                 } catch (JSONException e) {
-                    log.error(String.format("Message: %s\nStackTrace: %s"
-                            , e.getMessage()
-                            , Arrays.toString(e.getStackTrace())
-                    ));
-                    return null;
+                    log.error("JSONException: {}", e);
+                    throw new UserServiceException(e);
                 }
             } else if (valueObj instanceof JSONArray) {
                 throw new UserServiceException("got more than one random server");
+            } else {
+                throw new UserServiceException("unknown type of data");
             }
         } else {
             throw new UserServiceException("get random server failed");
         }
-        return null;
     }
 
     public String getVPNConfigurationByUserAndServer(String userUuid, String serverUuid) throws UserServiceException {
-        log.info(String
-                .format("getVPNConfigurationByUserAndServer method enter. userUuid = %s; serverUuid = %s"
-                        , userUuid, serverUuid)
-        );
+        log.info("getVPNConfigurationByUserAndServer method enter. userUuid: {}, serverUuid: {}", userUuid, serverUuid);
 
         String url = String.format("%s/%s/servers/%s/configurations?vpn_type_id=%s&platform_id=%s",
                 this.getServiceURL(), userUuid, serverUuid, VPNAppPreferences.VPN_TYPE_ID,
@@ -215,15 +231,19 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         }
         headers.put("x-auth-token", this.utilities.generateAuthToken());
 
-        RESTResponse ur = this.get(url, headers);
+        RESTResponse ur;
+        try {
+            ur = this.get(url, headers);
+        } catch (RESTException e) {
+            log.error("RESTException: {}", e);
+            throw new UserServiceException(e);
+        }
 
         if (ur.getStatus().equals("success")) {
             JSONObject valueObj = (JSONObject) ur.getData();
             if (valueObj.has("configuration")) {
-                String configuration = valueObj.optString("configuration");
                 log.info("getVPNConfigurationByUserAndServer method exit");
-                return configuration;
-
+                return valueObj.optString("configuration");
             }
         }
         throw new UserServiceException("get vpn config failed");
@@ -252,7 +272,12 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         userDevice.put("vpn_type_id", VPNAppPreferences.VPN_TYPE_ID);
         userDevice.put("modify_reason", "set virtual_ip");
 
-        RESTResponse ur = this.put(url, userDevice, headers);
+        try {
+            RESTResponse ur = this.put(url, userDevice, headers);
+        } catch (RESTException e) {
+            throw new UserServiceException(e);
+        }
+
         log.info("updateUserDevice method exit");
     }
 
@@ -300,13 +325,17 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         connection.put("server", server);
         connection.put("users", users);
 
-        RESTResponse ur = this.post(url, connection, headers);
+        try {
+            RESTResponse ur = this.post(url, connection, headers);
+        } catch (RESTException e) {
+            throw new UserServiceException(e);
+        }
 
         log.info("updateUserDevice method exit");
     }
 
 
-    public void deleteConnection(String serverUuid, String email) {
+    public void deleteConnection(String serverUuid, String email) throws UserServiceException {
         log.info("deleteConnection method enter");
 
         String url = String.format("%s/%s/connections", this.getServiceURL().replace("users", "vpns/servers"), serverUuid);
@@ -349,13 +378,16 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         log.debug(String.format("url: %s\nheaders: %s\nhasmap: %s", url, headers, connection));
         System.out.println();
 
-        RESTResponse ur = this.delete(url, connection, headers);
-
+        try {
+            RESTResponse ur = this.delete(url, connection, headers);
+        } catch (RESTException e) {
+            throw new UserServiceException(e);
+        }
 
         log.info("deleteConnection method exit");
     }
 
-    public void deleteUserDevice(String userUuid, String userDeviceUuid) {
+    public void deleteUserDevice(String userUuid, String userDeviceUuid) throws UserServiceException {
         log.info("deleteUserDevice method enter");
         String url = String.format("%s/%s/devices/%s", this.getServiceURL(), userUuid, userDeviceUuid);
 
@@ -371,7 +403,12 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         userDevice.put("user_uuid", userUuid);
         userDevice.put("modify_reason", "log out");
 
-        RESTResponse ur = this.delete(url, userDevice, headers);
+        try {
+            RESTResponse ur = this.delete(url, userDevice, headers);
+        } catch (RESTException e) {
+            throw new UserServiceException(e);
+        }
+
         log.info("deleteUserDevice method exit");
     }
 }
