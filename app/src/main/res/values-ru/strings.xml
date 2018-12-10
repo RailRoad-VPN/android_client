@@ -114,4 +114,7 @@
     <string name="welcome">Добро пожаловать!</string>
   <string name="enter_pin_welcome">Введите ваш пинкод</string>
   <string name="enter_pin_new_user">Нет аккаунта?</string>
+    <string name="state_user_vpn_permission">Ожидание разрешения запустить VPN</string>
+  <string name="apprest_vpnconf">VPN конфигурация</string>
+  <string name="unknown_state">Обратитесь в службу поддержки</string>
 </resources>

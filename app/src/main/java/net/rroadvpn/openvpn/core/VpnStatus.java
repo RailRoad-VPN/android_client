@@ -45,8 +45,9 @@ public class VpnStatus {
     static boolean readFileLog =false;
     final static java.lang.Object readFileLock = new Object();
 
-
     public static TrafficHistory trafficHistory;
+
+    public static OnChangeStatusListener onChangeStatusListener = null;
 
     public static void logException(LogLevel ll, String context, Exception e) {
         StringWriter sw = new StringWriter();
@@ -71,14 +72,10 @@ public class VpnStatus {
     static final int MAXLOGENTRIES = 1000;
 
     public static boolean isVPNActive() {
-        log.debug("isVPNActive method");
-        log.debug("mLastLevel: {}", mLastLevel);
         return mLastLevel != ConnectionStatus.LEVEL_AUTH_FAILED && !(mLastLevel == ConnectionStatus.LEVEL_NOTCONNECTED) && !(mLastLevel == ConnectionStatus.LEVEL_WAITING_FOR_USER_INPUT);
     }
 
     public static boolean isVPNConnected() {
-        log.debug("isVPNConnected method");
-        log.debug("mLastLevel: {}", mLastLevel);
         return mLastLevel == ConnectionStatus.LEVEL_CONNECTED;
     }
 
@@ -394,6 +391,20 @@ public class VpnStatus {
         mLastLevel = level;
 
 
+        if (onChangeStatusListener!= null) {
+            switch (level) {
+                case LEVEL_CONNECTED:
+                    onChangeStatusListener.onConnect(resid);
+                    break;
+                case LEVEL_NOTCONNECTED:
+                    onChangeStatusListener.onDisconnect(resid);
+                    break;
+                default:
+                    onChangeStatusListener.onChangeStatus(resid);
+                    break;
+            }
+        }
+
         for (StateListener sl : stateListener) {
             sl.updateState(state, msg, resid, level);
         }
@@ -483,5 +494,12 @@ public class VpnStatus {
         for (ByteCountListener bcl : byteCountListener) {
             bcl.updateByteCount(in, out, diff.getDiffIn(), diff.getDiffOut());
         }
+    }
+
+    public interface OnChangeStatusListener {
+        void onConnect(int statusTextResourceId);
+        void onDisconnect(int statusTextResourceId);
+        void onChangeStatus(int statusTextResourceId);
+        void onStartConnecting();
     }
 }

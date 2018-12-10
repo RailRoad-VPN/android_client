@@ -4,6 +4,7 @@ package net.rroadvpn.activities;
 import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.AnimationDrawable;
@@ -17,6 +18,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import net.rroadvpn.activities.pin.InputPinView;
 import net.rroadvpn.exception.UserPolicyException;
@@ -30,6 +33,7 @@ import net.rroadvpn.services.UserVPNPolicy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Text;
 
 import java.lang.ref.WeakReference;
 
@@ -50,6 +54,7 @@ public class VPNActivity extends BaseActivity {
     private AfterDisconnectVPNTask afterDisconnectVPNTask;
     private ConnectVPNTask connectVPNTask;
     private LogoutTask logoutTask;
+//    private VPNConnectStatusTask vpnConnectStatusTask;
 
     ImageButton connectToVPNBtn;
 
@@ -139,40 +144,7 @@ public class VPNActivity extends BaseActivity {
             }
         });
 
-//        Button testAPIBtn = (Button) findViewById(R.id.test_api);
-//        testAPIBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                log.info("1");
-//
-//                System.out.println();
-//
-//
-//////TODO read from file (DO NOT HARDCODE /sdcard/)
-////                StringBuilder text = new StringBuilder();
-////                try {
-//////                    File sdcard = Environment.getExternalStorageDirectory();
-////                    File sdcard = new File("/sdcard/Android/data/files");
-////                    File file = new File(sdcard, "rroadVPN_openVPN_log.2018_10_25.log");
-////
-////                    BufferedReader br = new BufferedReader(new FileReader(file));
-////                    String line;
-////                    while ((line = br.readLine()) != null) {
-////                        text.append(line);
-////                        text.append('\n');
-////                    }
-////                    br.close();
-//////                    log.info(String.valueOf(text));
-////                    System.out.println(text);
-////                } catch (IOException e) {
-////                    e.printStackTrace();
-////                }
-//////<<<<<<<<<<<<<<<<<<<<<
-//            }
-//        });
-
-
-        Button logOut = (Button) findViewById(R.id.side_menu_btn_log_out);
+        Button logOut = findViewById(R.id.side_menu_btn_log_out);
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,126 +163,127 @@ public class VPNActivity extends BaseActivity {
         if (action != null && action.equals(DISCONNECT_VPN)) {
             showDisconnectDialogVPN(DISCONNECT_VPN_REQUEST_CODE);
         }
-    }
 
-    private void calcSemaphoreState() {
-        if (ovcs.isVPNActive() || (this.connectVPNTask != null && this.connectVPNTask.getStatus().equals(AsyncTask.Status.RUNNING))) {
-            if (ovcs.isVPNConnected()) {
-                connectToVPNBtn.setBackgroundResource(R.drawable.semaphore_green);
-            } else {
-                connectToVPNBtn.setBackgroundResource(R.drawable.blink_semaphore_animation);
-                ((AnimationDrawable) connectToVPNBtn.getBackground()).start();
-            }
-        } else {
-            connectToVPNBtn.setBackgroundResource(R.drawable.semaphore_red);
-        }
-    }
+        TextView statusTextView = findViewById(R.id.vpn_connect_status);
 
-    private void logoutUser() {
-        logoutTask = new LogoutTask(userVPNPolicy);
-        logoutTask.setListener(new LogoutTask.LogoutTaskListener() {
+        VpnStatus.onChangeStatusListener = new VpnStatus.OnChangeStatusListener() {
             @Override
-            public void onLogoutTask(Boolean value) {
-                goToPin();
-            }
-        });
-        logoutTask.execute();
-    }
+            public void onConnect(int statusTextResourceId) {
+                String status = VpnStatus.getLastCleanLogMessage(getApplicationContext());
+                String virtualIP = status.split(",")[1];
 
-    private void goToPin() {
-        findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.semaphore_red);
-        Intent intent = new Intent(getBaseContext(), InputPinView.class);
-        startActivity(intent);
+                log.debug("virtualIP: {}", virtualIP);
+                log.debug("do after connect staff");
+                try {
+                    userVPNPolicy.afterConnectedToVPN(virtualIP);
+                } catch (UserPolicyException e) {
+                    e.printStackTrace();
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.semaphore_green);
+                        statusTextView.setText(getResources().getString(statusTextResourceId));
+                    }
+                });
+            }
+
+            @Override
+            public void onDisconnect(int statusTextResourceId) {
+                afterDisconnectVPNTask = new AfterDisconnectVPNTask(userVPNPolicy);
+                afterDisconnectVPNTask.execute();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.semaphore_red);
+                        statusTextView.setText(getResources().getString(statusTextResourceId));
+                    }
+                });
+            }
+
+            @Override
+            public void onChangeStatus(int statusTextResourceId) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        statusTextView.setText(getResources().getString(statusTextResourceId));
+                    }
+                });
+            }
+
+            @Override
+            public void onStartConnecting() {
+                Toast.makeText(getApplicationContext(), "onStartConnecting", Toast.LENGTH_SHORT).show();
+            }
+        };
     }
 
     private void connectToVPN() {
-        log.info("connectToVPN enter.  AsyncTask connectToVPN enter.");
+        this.log.info("connectToVPN enter. AsyncTask connectToVPN enter.");
 
-        log.debug("check is connect vpn task is running");
-        if (connectVPNTask != null) {
-            log.debug("connect vpn task is running. try to cancel it.");
-            connectVPNTask.cancel(true);
-
-        }
-
-        log.debug("create new connect vpn task");
-        connectVPNTask = new ConnectVPNTask(this, userVPNPolicy, ovcs);
-        connectVPNTask.setListener(new ConnectVPNTask.ConnectVPNTaskListener() {
-            @Override
-            public void onConnectVPNTaskListener(Boolean value) {
-                findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.semaphore_green);
-            }
-        });
-        connectVPNTask.execute();
-        log.info("connectToVPN exit");
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        if (hasFocus) {
-            calcSemaphoreState();
-        }
-    }
-
-    private void showDisconnectDialogVPN(int requestCode) {
-        if (connectVPNTask != null) {
-            connectVPNTask.cancel(true);
-            if (!connectVPNTask.isCancelled()) {
-                AsyncTask.Status status = connectVPNTask.getStatus();
+        if (this.connectVPNTask != null) {
+            this.connectVPNTask.cancel(true);
+            if (!this.connectVPNTask.isCancelled()) {
+                AsyncTask.Status status = this.connectVPNTask.getStatus();
                 if (status == AsyncTask.Status.RUNNING || status == AsyncTask.Status.PENDING) {
-                    connectVPNTask.cancel(true);
+                    this.connectVPNTask.cancel(true);
                 }
             }
         }
+
+        this.log.debug("create new connect vpn task");
+        this.connectVPNTask = new ConnectVPNTask(this.userVPNPolicy, this.ovcs);
+        this.connectVPNTask.execute();
+        this.log.info("connectToVPN exit");
+    }
+
+    private void showDisconnectDialogVPN(int requestCode) {
+        this.log.info("showDisconnectDialogVPN enter");
+
+        if (this.connectVPNTask != null) {
+            AsyncTask.Status status = this.connectVPNTask.getStatus();
+            if (status == AsyncTask.Status.RUNNING || status == AsyncTask.Status.PENDING) {
+                this.connectVPNTask.cancel(true);
+            }
+        }
+
         Intent disconnectVPN = new Intent(getBaseContext(), DisconnectVPN.class);
         disconnectVPN.setAction(DISCONNECT_VPN);
+        this.log.info("showDisconnectDialogVPN exit");
         startActivityForResult(disconnectVPN, requestCode);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        this.log.info("onActivityResult enter");
+
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == VPN_SERVICE_INTENT_PERMISSION) {
             if (resultCode == Activity.RESULT_OK) {
                 connectToVPN();
             }
-        } else if (requestCode == DISCONNECT_VPN_REQUEST_CODE) {
-            if (data != null && data.getAction() != null && data.getAction().equals(DISCONNECT_VPN)) {
-                afterDisconnectVPNTask = new AfterDisconnectVPNTask(userVPNPolicy);
-                afterDisconnectVPNTask.setListener(new AfterDisconnectVPNTask.AfterDisconnectVPNTaskListener() {
-                    @Override
-                    public void onAfterDisconnectVPNTaskListener(Boolean value) {
-                        findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.semaphore_red);
-                    }
-                });
-                afterDisconnectVPNTask.execute();
-            }
         } else if (requestCode == LOGOUT_DISCONNECT_VPN_REQUEST_CODE) {
-            afterDisconnectVPNTask = new AfterDisconnectVPNTask(userVPNPolicy);
-            afterDisconnectVPNTask.setListener(new AfterDisconnectVPNTask.AfterDisconnectVPNTaskListener() {
-                @Override
-                public void onAfterDisconnectVPNTaskListener(Boolean value) {
-                    findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.semaphore_red);
-                    logoutUser();
-                }
-            });
-            afterDisconnectVPNTask.execute();
+            logoutUser();
         }
+
+        this.log.info("onActivityResult exit");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        if (ovcs != null) {
-            ovcs.bindService();
+        if (this.ovcs != null) {
+            this.ovcs.bindService();
         }
 
         calcSemaphoreState();
 
-        String userUUid = preferencesService.getString(VPNAppPreferences.USER_UUID);
-        String userEmail = preferencesService.getString(VPNAppPreferences.USER_EMAIL);
+        String userUUid = this.preferencesService.getString(VPNAppPreferences.USER_UUID);
+        String userEmail = this.preferencesService.getString(VPNAppPreferences.USER_EMAIL);
 
         if (userUUid == null || userEmail == null) {
             goToPin();
@@ -322,18 +295,68 @@ public class VPNActivity extends BaseActivity {
         super.onDestroy();
 
         // prevent memory leak
-        if (afterDisconnectVPNTask != null) {
-            afterDisconnectVPNTask.setListener(null);
+        if (this.connectVPNTask != null) {
+            this.connectVPNTask.setListener(null);
         }
-        if (connectVPNTask != null) {
-            connectVPNTask.setListener(null);
+        if (this.logoutTask != null) {
+            this.logoutTask.setListener(null);
         }
-        if (logoutTask != null) {
-            logoutTask.setListener(null);
+        if (this.ovcs != null) {
+            this.ovcs.unBindService();
         }
-        if (ovcs != null) {
-            ovcs.unBindService();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            calcSemaphoreState();
         }
+    }
+
+    private void calcSemaphoreState() {
+        this.log.info("calcSemaphoreState enter");
+
+        if (this.ovcs.isVPNActive() || (this.connectVPNTask != null && this.connectVPNTask.getStatus().equals(AsyncTask.Status.RUNNING))) {
+            if (this.ovcs.isVPNConnected()) {
+                this.connectToVPNBtn.setBackgroundResource(R.drawable.semaphore_green);
+            } else {
+                this.connectToVPNBtn.setBackgroundResource(R.drawable.blink_semaphore_animation);
+                ((AnimationDrawable) this.connectToVPNBtn.getBackground()).start();
+            }
+        } else {
+            this.connectToVPNBtn.setBackgroundResource(R.drawable.semaphore_red);
+        }
+
+        this.log.info("calcSemaphoreState exit");
+    }
+
+    private void logoutUser() {
+        this.log.info("logoutUser enter");
+
+
+        if (this.logoutTask != null) {
+            AsyncTask.Status status = this.logoutTask.getStatus();
+            if (status == AsyncTask.Status.RUNNING || status == AsyncTask.Status.PENDING) {
+                this.logoutTask.cancel(true);
+            }
+        }
+
+        this.logoutTask = new LogoutTask(this.userVPNPolicy);
+        this.logoutTask.setListener(new LogoutTask.LogoutTaskListener() {
+            @Override
+            public void onLogoutTask(Boolean value) {
+                goToPin();
+            }
+        });
+        this.logoutTask.execute();
+
+        this.log.info("logoutUser exit");
+    }
+
+    private void goToPin() {
+        findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.semaphore_red);
+        Intent intent = new Intent(getBaseContext(), InputPinView.class);
+        startActivity(intent);
     }
 
     private static class LogoutTask extends AsyncTask<Void, Void, Boolean> {
@@ -349,9 +372,9 @@ public class VPNActivity extends BaseActivity {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            log.debug("clean user settings");
+            this.log.debug("clean user settings");
             try {
-                userVPNPolicy.deleteUserSettings();
+                this.userVPNPolicy.deleteUserSettings();
             } catch (UserPolicyException e) {
                 e.printStackTrace();
             }
@@ -361,8 +384,8 @@ public class VPNActivity extends BaseActivity {
         @Override
         protected void onPostExecute(Boolean isOk) {
             super.onPostExecute(isOk);
-            if (listener != null) {
-                listener.onLogoutTask(isOk);
+            if (this.listener != null) {
+                this.listener.onLogoutTask(isOk);
             }
         }
 
@@ -377,8 +400,6 @@ public class VPNActivity extends BaseActivity {
 
     private static class AfterDisconnectVPNTask extends AsyncTask<Void, Void, Boolean> {
         private Logger log = LoggerFactory.getLogger(AfterDisconnectVPNTask.class);
-
-        private AfterDisconnectVPNTaskListener listener;
 
         private UserVPNPolicy userVPNPolicy;
 
@@ -396,17 +417,6 @@ public class VPNActivity extends BaseActivity {
         @Override
         protected void onPostExecute(Boolean isOk) {
             super.onPostExecute(isOk);
-            if (listener != null) {
-                listener.onAfterDisconnectVPNTaskListener(isOk);
-            }
-        }
-
-        void setListener(AfterDisconnectVPNTaskListener listener) {
-            this.listener = listener;
-        }
-
-        public interface AfterDisconnectVPNTaskListener {
-            void onAfterDisconnectVPNTaskListener(Boolean value);
         }
     }
 
@@ -420,8 +430,7 @@ public class VPNActivity extends BaseActivity {
         private UserVPNPolicy userVPNPolicy;
         private OpenVPNControlService ovcs;
 
-        ConnectVPNTask(VPNActivity context, UserVPNPolicy userVPNPolicy, OpenVPNControlService ovcs) {
-            this.activityReference = new WeakReference<>(context);
+        ConnectVPNTask(UserVPNPolicy userVPNPolicy, OpenVPNControlService ovcs) {
             this.userVPNPolicy = userVPNPolicy;
             this.ovcs = ovcs;
         }
@@ -449,28 +458,6 @@ public class VPNActivity extends BaseActivity {
             log.debug("connect to VPN");
             ovcs.connectToVPN();
 
-            String status = VpnStatus.getLastCleanLogMessage(this.activityReference.get());
-            boolean gotVirtualIP = false;
-            while (!gotVirtualIP) {
-                status = VpnStatus.getLastCleanLogMessage(activityReference.get());
-                gotVirtualIP = status.contains("Connected: SUCCESS");
-                if (isCancelled()) {
-                    break;
-                }
-            }
-
-            if (gotVirtualIP) {
-                log.info("Status contains SUCCESS");
-                String virtualIP = status.split(",")[1];
-
-                log.debug("virtualIP: {}", virtualIP);
-                log.debug("do after connect staff");
-                try {
-                    userVPNPolicy.afterConnectedToVPN(virtualIP);
-                } catch (UserPolicyException e) {
-                    e.printStackTrace();
-                }
-            }
             return true;
         }
 

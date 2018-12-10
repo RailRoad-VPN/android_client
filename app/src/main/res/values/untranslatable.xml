@@ -5,10 +5,10 @@
 
 <resources>
 
-    <string name="unknown_state" translatable="false">Unknown state</string>
+    <string name="unknown_state">Contact the support service</string>
 
     <!-- These strings should not be visible to the user -->
-    <string name="state_user_vpn_permission" translatable="false">Waiting for user permission to use VPN API</string>
+    <string name="state_user_vpn_permission">Waiting for permission to start VPN</string>
     <string name="default_cipherlist_test" translatable="false">aes-256-gcm bf-cbc sha1</string>
 
     <!-- APP restriction strings -->
