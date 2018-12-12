@@ -123,5 +123,13 @@
     <string name="side_menu_btn_log_out">Log out</string>
     <string name="side_menu_btn_profile">Profile</string>
     <string name="welcome">Welcome!</string>
+    <string name="side_menu_btn_support">Support</string>
+    <string name="side_menu_btn_faq">FAQ</string>
+    <string name="status">Status</string>
+    <string name="tap">Tap</string>
+    <string name="red_semaphore">red semaphore</string>
+    <string name="to_connect">to connect</string>
+    <string name="green_semaphore">green semaphore</string>
+    <string name="to_disconnect">to disconnect</string>
 
 </resources>

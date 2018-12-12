@@ -1,6 +1,8 @@
 package net.rroadvpn.activities;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -17,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,9 +57,10 @@ public class VPNActivity extends BaseActivity {
     private AfterDisconnectVPNTask afterDisconnectVPNTask;
     private ConnectVPNTask connectVPNTask;
     private LogoutTask logoutTask;
-//    private VPNConnectStatusTask vpnConnectStatusTask;
 
-    ImageButton connectToVPNBtn;
+    private ImageButton connectToVPNBtn;
+    private LinearLayout connectHintLayout;
+    private LinearLayout disconnectHintLayout;
 
     private PreferencesService preferencesService;
 
@@ -75,6 +79,9 @@ public class VPNActivity extends BaseActivity {
         setContentView(R.layout.vpn_activity);
 
         MENU_MARGIN_LEFT = convertDpToPx(21);
+
+        this.connectHintLayout = findViewById(R.id.connect_hint_layout);
+        this.disconnectHintLayout = findViewById(R.id.disconnect_hint_layout);
 
         ImageButton menuBtn = findViewById(R.id.side_menu_btn);
         RelativeLayout mainLayout = findViewById(R.id.main_wrapper);
@@ -185,6 +192,8 @@ public class VPNActivity extends BaseActivity {
                     public void run() {
                         findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.semaphore_green);
                         statusTextView.setText(getResources().getString(statusTextResourceId));
+
+                        hideConnectHint();
                     }
                 });
             }
@@ -199,6 +208,8 @@ public class VPNActivity extends BaseActivity {
                     public void run() {
                         findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.semaphore_red);
                         statusTextView.setText(getResources().getString(statusTextResourceId));
+
+                        showConnectHint();
                     }
                 });
             }
@@ -218,6 +229,16 @@ public class VPNActivity extends BaseActivity {
                 Toast.makeText(getApplicationContext(), "onStartConnecting", Toast.LENGTH_SHORT).show();
             }
         };
+    }
+
+    private void showConnectHint() {
+        connectHintLayout.setVisibility(View.VISIBLE);
+        disconnectHintLayout.setVisibility(View.GONE);
+    }
+
+    private void hideConnectHint() {
+        connectHintLayout.setVisibility(View.GONE);
+        disconnectHintLayout.setVisibility(View.VISIBLE);
     }
 
     private void connectToVPN() {
@@ -286,6 +307,7 @@ public class VPNActivity extends BaseActivity {
         String userEmail = this.preferencesService.getString(VPNAppPreferences.USER_EMAIL);
 
         if (userUUid == null || userEmail == null) {
+            // TODO logout
             goToPin();
         }
     }
@@ -319,12 +341,15 @@ public class VPNActivity extends BaseActivity {
         if (this.ovcs.isVPNActive() || (this.connectVPNTask != null && this.connectVPNTask.getStatus().equals(AsyncTask.Status.RUNNING))) {
             if (this.ovcs.isVPNConnected()) {
                 this.connectToVPNBtn.setBackgroundResource(R.drawable.semaphore_green);
+                hideConnectHint();
             } else {
                 this.connectToVPNBtn.setBackgroundResource(R.drawable.blink_semaphore_animation);
                 ((AnimationDrawable) this.connectToVPNBtn.getBackground()).start();
+                showConnectHint();
             }
         } else {
             this.connectToVPNBtn.setBackgroundResource(R.drawable.semaphore_red);
+            showConnectHint();
         }
 
         this.log.info("calcSemaphoreState exit");
@@ -495,12 +520,12 @@ public class VPNActivity extends BaseActivity {
         mainLayout.setLayoutParams(margins);
     }
 
-    private int convertDpToPx(int dp){
-        return Math.round(dp*(getResources().getDisplayMetrics().xdpi/DisplayMetrics.DENSITY_DEFAULT));
+    private int convertDpToPx(int dp) {
+        return Math.round(dp * (getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
 
     }
 
-    private int convertPxToDp(int px){
-        return Math.round(px/(Resources.getSystem().getDisplayMetrics().xdpi/DisplayMetrics.DENSITY_DEFAULT));
+    private int convertPxToDp(int px) {
+        return Math.round(px / (Resources.getSystem().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 }

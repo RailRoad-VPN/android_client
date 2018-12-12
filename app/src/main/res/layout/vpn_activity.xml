@@ -32,25 +32,23 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <Button
                 android:id="@+id/side_menu_btn_profile"
+                android:text="@string/side_menu_btn_profile"
+                android:background="@android:color/transparent"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_gravity="start"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
-                android:background="@android:color/transparent"
-                android:text="@string/side_menu_btn_profile"
                 android:textAlignment="textStart"
-                android:textAllCaps="true"
-                android:textColor="@android:color/black"
-
-                />
+                android:textAllCaps="false"
+                android:textColor="@android:color/black" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -60,17 +58,65 @@
                 android:background="@android:color/darker_gray" />
 
             <Button
-                android:id="@+id/side_menu_btn_log_out"
+                android:id="@+id/side_menu_btn_support"
+                android:text="@string/side_menu_btn_support"
+                android:background="@android:color/transparent"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_gravity="start"
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
-                android:background="@android:color/transparent"
-                android:text="@string/side_menu_btn_log_out"
+                android:layout_marginTop="20dp"
                 android:textAlignment="textStart"
-                android:textColor="@android:color/black"
-                android:textStyle="bold" />
+                android:textAllCaps="false"
+                android:textColor="@android:color/black" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@android:color/darker_gray" />
+
+            <Button
+                android:id="@+id/side_menu_btn_faq"
+                android:text="@string/side_menu_btn_faq"
+                android:background="@android:color/transparent"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="start"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
+                android:textColor="@android:color/black" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@android:color/darker_gray" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/side_menu_btn_log_out"
+                android:text="@string/side_menu_btn_log_out"
+                android:background="@android:color/transparent"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="start"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:textAlignment="textStart"
+                android:textAllCaps="false"
+                android:textColor="@android:color/black" />
 
             <RelativeLayout
                 android:layout_width="100dp"
@@ -108,7 +154,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:text="Status"
+                        android:layout_marginBottom="15dp"
+                        android:text="@string/status"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
                 </RelativeLayout>
@@ -116,6 +163,7 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
                     <ImageButton
                         android:id="@+id/connect_to_vpn"
                         android:layout_width="170dp"
@@ -133,39 +181,84 @@
                     <ImageView
                         android:layout_width="88dp"
                         android:layout_height="88dp"
-                        android:layout_marginLeft="35dp"
                         android:layout_marginStart="35dp"
+                        android:layout_marginLeft="35dp"
                         android:contentDescription="TODO"
-                        android:src="@drawable/arrow_ye"
-                        android:rotation="130"/>
+                        android:rotation="130"
+                        android:src="@drawable/arrow_ye" />
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+
                     <LinearLayout
+                        android:id="@+id/connect_hint_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="90dp"
                             android:layout_marginStart="90dp"
+                            android:layout_marginLeft="90dp"
+                            android:text="@string/tap"
                             android:textColor="@color/white"
-                            android:textColorHighlight="@color/colorPrimary"
-                            android:text="Tap "/>
+                            android:textColorHighlight="@color/colorPrimary" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginLeft="3dp"
+                            android:layout_marginEnd="3dp"
+                            android:layout_marginRight="3dp"
+                            android:text="@string/red_semaphore"
                             android:textColor="@color/red"
                             android:textColorHighlight="@color/colorPrimary"
-                            android:text="red semaphore "/>
+                            android:textStyle="italic" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="@string/to_connect"
                             android:textColor="@color/white"
+                            android:textColorHighlight="@color/colorPrimary" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/disconnect_hint_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="90dp"
+                            android:layout_marginLeft="90dp"
+                            android:text="@string/tap"
+                            android:textColor="@color/white"
+                            android:textColorHighlight="@color/colorPrimary" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="3dp"
+                            android:layout_marginLeft="3dp"
+                            android:layout_marginEnd="3dp"
+                            android:layout_marginRight="3dp"
+                            android:text="@string/green_semaphore"
+                            android:textColor="@color/green"
                             android:textColorHighlight="@color/colorPrimary"
-                            android:text="to connect"/>
+                            android:textStyle="italic" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/to_disconnect"
+                            android:textColor="@color/white"
+                            android:textColorHighlight="@color/colorPrimary" />
                     </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
