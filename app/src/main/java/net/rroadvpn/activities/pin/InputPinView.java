@@ -3,33 +3,26 @@ package net.rroadvpn.activities.pin;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.icu.util.MeasureUnit;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextPaint;
 import android.text.TextWatcher;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.WebSettings;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import net.rroadvpn.activities.VPNActivity;
 import net.rroadvpn.exception.UserPolicyException;
-import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.model.VPNAppPreferences;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.activities.BaseActivity;
 import net.rroadvpn.services.PreferencesService;
+import net.rroadvpn.services.UserVPNPolicyI;
 import net.rroadvpn.services.UserVPNPolicy;
 
 import org.slf4j.Logger;
@@ -44,12 +37,14 @@ public class InputPinView extends BaseActivity {
 
     private ProcessUserPincodeTask processUserPincodeTaskTask;
 
+    private static String location;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         PreferencesService preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
-        UserVPNPolicy userVPNPolicy = new UserVPNPolicy(preferencesService);
+        UserVPNPolicyI userVPNPolicyI = new UserVPNPolicy(preferencesService);
 
         setContentView(R.layout.input_pin_view);
 
@@ -92,7 +87,7 @@ public class InputPinView extends BaseActivity {
             public void afterTextChanged(Editable userPincodeValue) {
                 if (userPincodeValue.length() == 4) {
                     log.info(String.format("Pin typed: %s. AsyncTask check pin enter", userPincodeValue.toString()));
-                    processUserPincodeTaskTask = new ProcessUserPincodeTask(userVPNPolicy, userPincodeValue);
+                    processUserPincodeTaskTask = new ProcessUserPincodeTask(userVPNPolicyI, userPincodeValue);
                     processUserPincodeTaskTask.setListener(new ProcessUserPincodeTask.ProcessUserPincodeListener() {
                         @Override
                         public void onProcessUserPincodeListener(Boolean isOk) {
@@ -128,6 +123,8 @@ public class InputPinView extends BaseActivity {
                 startActivity(browserIntent);
             }
         });
+
+        location = getApplicationContext().getResources().getConfiguration().locale.getDisplayCountry();
     }
 
     @Override
@@ -167,25 +164,26 @@ public class InputPinView extends BaseActivity {
 
         private ProcessUserPincodeListener listener;
 
-        private UserVPNPolicy userVPNPolicy;
+        private UserVPNPolicyI userVPNPolicyI;
         private Editable userPincode;
 
-        ProcessUserPincodeTask(UserVPNPolicy userVPNPolicy, Editable userPincode) {
-            this.userVPNPolicy = userVPNPolicy;
+        ProcessUserPincodeTask(UserVPNPolicyI userVPNPolicyI, Editable userPincode) {
+            this.userVPNPolicyI = userVPNPolicyI;
             this.userPincode = userPincode;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
-                userVPNPolicy.checkPinCode(Integer.valueOf(userPincode.toString()));
+                userVPNPolicyI.checkPinCode(Integer.valueOf(userPincode.toString()));
             } catch (UserPolicyException e) {
                 log.error("UserServiceException: {}", e);
                 return false;
             }
 
             try {
-                userVPNPolicy.createUserDevice();
+
+                userVPNPolicyI.createUserDevice(location);
             } catch (UserPolicyException e) {
                 log.error("UserServiceException: {}", e);
                 return false;

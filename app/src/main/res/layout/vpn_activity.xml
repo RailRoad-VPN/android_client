@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- menu -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,6 +32,7 @@
                 android:typeface="normal" />
         </LinearLayout>
 
+        <!-- menu items -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -58,7 +60,7 @@
                 android:background="@android:color/darker_gray" />
 
             <Button
-                android:id="@+id/side_menu_btn_support"
+                    android:id="@+id/side_menu_btn_support"
                 android:text="@string/side_menu_btn_support"
                 android:background="@android:color/transparent"
                 android:layout_width="wrap_content"
@@ -127,6 +129,7 @@
         </LinearLayout>
     </LinearLayout>
 
+    <!-- main-wrapper -->
     <RelativeLayout
         android:id="@+id/main_wrapper"
         android:layout_width="match_parent"

@@ -1,14 +1,13 @@
 package net.rroadvpn.activities;
 
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.LayoutTransition;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Rect;
 import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -16,11 +15,14 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,11 +34,11 @@ import net.rroadvpn.openvpn.core.OpenVPNManagement;
 import net.rroadvpn.openvpn.core.VpnStatus;
 import net.rroadvpn.services.OpenVPNControlService;
 import net.rroadvpn.services.PreferencesService;
+import net.rroadvpn.services.UserVPNPolicyI;
 import net.rroadvpn.services.UserVPNPolicy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Text;
 
 import java.lang.ref.WeakReference;
 
@@ -46,7 +48,7 @@ import static net.rroadvpn.services.OpenVPNControlService.VPN_SERVICE_INTENT_PER
 
 public class VPNActivity extends BaseActivity {
     private OpenVPNControlService ovcs;
-    private UserVPNPolicy userVPNPolicy;
+    private UserVPNPolicyI userVPNPolicyI;
     private Logger log = LoggerFactory.getLogger(VPNActivity.class);
 
     private boolean MENU_VISIBLE = false;
@@ -74,7 +76,7 @@ public class VPNActivity extends BaseActivity {
 
         this.preferencesService = new PreferencesService(this, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
 
-        this.userVPNPolicy = new UserVPNPolicy(preferencesService);
+        this.userVPNPolicyI = new UserVPNPolicy(preferencesService);
 
         setContentView(R.layout.vpn_activity);
 
@@ -119,7 +121,7 @@ public class VPNActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 log.debug("click profile button");
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://rroadvpn.net/en/profile"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://rroadvpn.net/profile"));
                 startActivity(browserIntent);
             }
         });
@@ -181,8 +183,9 @@ public class VPNActivity extends BaseActivity {
 
                 log.debug("virtualIP: {}", virtualIP);
                 log.debug("do after connect staff");
+                // TODO deviceip
                 try {
-                    userVPNPolicy.afterConnectedToVPN(virtualIP);
+                    userVPNPolicyI.afterConnectedToVPN(virtualIP, null);
                 } catch (UserPolicyException e) {
                     e.printStackTrace();
                 }
@@ -191,6 +194,7 @@ public class VPNActivity extends BaseActivity {
                     @Override
                     public void run() {
                         findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.semaphore_green);
+                        System.out.println("onConnect TEXT RESOURCE ID: " + String.valueOf(statusTextResourceId));
                         statusTextView.setText(getResources().getString(statusTextResourceId));
 
                         hideConnectHint();
@@ -200,7 +204,7 @@ public class VPNActivity extends BaseActivity {
 
             @Override
             public void onDisconnect(int statusTextResourceId) {
-                afterDisconnectVPNTask = new AfterDisconnectVPNTask(userVPNPolicy);
+                afterDisconnectVPNTask = new AfterDisconnectVPNTask(userVPNPolicyI);
                 afterDisconnectVPNTask.execute();
 
                 runOnUiThread(new Runnable() {
@@ -219,6 +223,7 @@ public class VPNActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        System.out.println("onChangeStatus TEXT RESOURCE ID: " + String.valueOf(statusTextResourceId));
                         statusTextView.setText(getResources().getString(statusTextResourceId));
                     }
                 });
@@ -229,6 +234,52 @@ public class VPNActivity extends BaseActivity {
                 Toast.makeText(getApplicationContext(), "onStartConnecting", Toast.LENGTH_SHORT).show();
             }
         };
+
+        VpnStatus.addByteCountListener(new VpnStatus.ByteCountListener() {
+            @Override
+            public void updateByteCount(long in, long out, long diffIn, long diffOut) {
+                if (diffIn > 5000 || diffOut > 5000) {
+                    try {
+                        log.debug("updating connection");
+                        userVPNPolicyI.updateConnection(in, out, null, "update traffic");
+                    } catch (UserPolicyException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        Button supportBtn = findViewById(R.id.side_menu_btn_support);
+        supportBtn.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(VPNActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.support_dialog);
+                dialog.setCancelable(true);
+
+                Rect displayRectangle = new Rect();
+                Window window = getWindow();
+
+                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+                dialog.getWindow().setLayout((int)(displayRectangle.width() *
+                        0.8f), (int)(displayRectangle.height() * 0.8f));
+
+                final EditText emailET = dialog.findViewById(R.id.help_form_email_input);
+                final EditText descriptonET = dialog.findViewById(R.id.help_form_description_input);
+                final Button sendBtn = dialog.findViewById(R.id.help_form_send_btn);
+
+                sendBtn.setOnClickListener(new Button.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
     }
 
     private void showConnectHint() {
@@ -255,7 +306,7 @@ public class VPNActivity extends BaseActivity {
         }
 
         this.log.debug("create new connect vpn task");
-        this.connectVPNTask = new ConnectVPNTask(this.userVPNPolicy, this.ovcs);
+        this.connectVPNTask = new ConnectVPNTask(this.userVPNPolicyI, this.ovcs);
         this.connectVPNTask.execute();
         this.log.info("connectToVPN exit");
     }
@@ -366,7 +417,7 @@ public class VPNActivity extends BaseActivity {
             }
         }
 
-        this.logoutTask = new LogoutTask(this.userVPNPolicy);
+        this.logoutTask = new LogoutTask(this.userVPNPolicyI);
         this.logoutTask.setListener(new LogoutTask.LogoutTaskListener() {
             @Override
             public void onLogoutTask(Boolean value) {
@@ -389,17 +440,17 @@ public class VPNActivity extends BaseActivity {
 
         private LogoutTaskListener listener;
 
-        private UserVPNPolicy userVPNPolicy;
+        private UserVPNPolicyI userVPNPolicyI;
 
-        LogoutTask(UserVPNPolicy userVPNPolicy) {
-            this.userVPNPolicy = userVPNPolicy;
+        LogoutTask(UserVPNPolicyI userVPNPolicyI) {
+            this.userVPNPolicyI = userVPNPolicyI;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
             this.log.debug("clean user settings");
             try {
-                this.userVPNPolicy.deleteUserSettings();
+                this.userVPNPolicyI.deleteUserSettings();
             } catch (UserPolicyException e) {
                 e.printStackTrace();
             }
@@ -426,16 +477,20 @@ public class VPNActivity extends BaseActivity {
     private static class AfterDisconnectVPNTask extends AsyncTask<Void, Void, Boolean> {
         private Logger log = LoggerFactory.getLogger(AfterDisconnectVPNTask.class);
 
-        private UserVPNPolicy userVPNPolicy;
+        private UserVPNPolicyI userVPNPolicyI;
 
-        AfterDisconnectVPNTask(UserVPNPolicy userVPNPolicy) {
-            this.userVPNPolicy = userVPNPolicy;
+        AfterDisconnectVPNTask(UserVPNPolicyI userVPNPolicyI) {
+            this.userVPNPolicyI = userVPNPolicyI;
         }
 
         @Override
         protected Boolean doInBackground(Void... voids) {
             log.debug("do after disconnect vpn staff");
-            userVPNPolicy.afterDisconnectVPN();
+            try {
+                userVPNPolicyI.afterDisconnectVPN(null, null);
+            } catch (UserPolicyException e) {
+                e.printStackTrace();
+            }
             return true;
         }
 
@@ -452,11 +507,11 @@ public class VPNActivity extends BaseActivity {
 
         private WeakReference<VPNActivity> activityReference;
 
-        private UserVPNPolicy userVPNPolicy;
+        private UserVPNPolicyI userVPNPolicyI;
         private OpenVPNControlService ovcs;
 
-        ConnectVPNTask(UserVPNPolicy userVPNPolicy, OpenVPNControlService ovcs) {
-            this.userVPNPolicy = userVPNPolicy;
+        ConnectVPNTask(UserVPNPolicyI userVPNPolicyI, OpenVPNControlService ovcs) {
+            this.userVPNPolicyI = userVPNPolicyI;
             this.ovcs = ovcs;
         }
 
@@ -465,7 +520,7 @@ public class VPNActivity extends BaseActivity {
             log.debug("get new random server");
             String vpnConfig = null;
             try {
-                vpnConfig = userVPNPolicy.getNewRandomVPNServer();
+                vpnConfig = userVPNPolicyI.getNewRandomVPNServer();
             } catch (UserPolicyException e) {
                 log.debug("UserPolicyException: {}", e);
                 VpnStatus.updateStatePause(OpenVPNManagement.pauseReason.noNetwork);
@@ -500,6 +555,48 @@ public class VPNActivity extends BaseActivity {
 
         public interface ConnectVPNTaskListener {
             void onConnectVPNTaskListener(Boolean value);
+        }
+    }
+
+    private static class SupportDialogSendTask extends AsyncTask<Void, Void, Boolean> {
+        private Logger log = LoggerFactory.getLogger(SupportDialogSendTask.class);
+
+        private SupportDialogSendTaskListener listener;
+
+        private WeakReference<VPNActivity> activityReference;
+
+        private UserVPNPolicyI userVPNPolicyI;
+
+        SupportDialogSendTask(UserVPNPolicyI userVPNPolicyI) {
+            this.userVPNPolicyI = userVPNPolicyI;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            log.debug("support dialog send request async task start");
+//            try {
+//                this.userVPNPolicyI.sendSupportTicket();
+//            } catch (UserPolicyException e) {
+//                e.printStackTrace();
+//            }
+
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isOk) {
+            super.onPostExecute(isOk);
+            if (listener != null) {
+                listener.onSupportDialogSendTaskListener(isOk);
+            }
+        }
+
+        void setListener(SupportDialogSendTaskListener listener) {
+            this.listener = listener;
+        }
+
+        public interface SupportDialogSendTaskListener {
+            void onSupportDialogSendTaskListener(Boolean value);
         }
     }
 

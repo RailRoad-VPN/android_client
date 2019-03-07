@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.HttpURLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 public class UsersAPIService extends RESTService implements UsersAPIServiceI {
+
     private Utilities utilities;
     private String deviceToken;
     private String deviceId;
@@ -130,15 +132,13 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
 
     }
 
-    public void createUserDevice(String userUuid) throws UserServiceException {
+    public void createUserDevice(String userUuid, String deviceId, String location,
+                                 boolean isActive) throws UserServiceException {
         log.info("createUserDevice method enter");
 
         String url = String.format("%s/%s/devices", this.getServiceURL(), String.valueOf(userUuid));
 
         log.debug("URL for request: {}", url);
-        String deviceId = String.valueOf(utilities.getRandomInt(100000, 999999));
-        log.debug("Save to preference generated device id: {}", deviceId);
-        this.preferencesService.save(VPNAppPreferences.DEVICE_ID, deviceId);
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("x-auth-token", this.utilities.generateAuthToken());
 
@@ -149,7 +149,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         userDevice.put("platform_id", VPNAppPreferences.DEVICE_PLATFORM_ID);
         userDevice.put("vpn_type_id", VPNAppPreferences.VPN_TYPE_ID);
         userDevice.put("is_active", true);
-        userDevice.put("location", "test_android2");
+        userDevice.put("location", location);
         log.debug("Prepared: {}", userDevice.toString());
 
         RESTResponse ur;
@@ -157,6 +157,10 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
             ur = this.post(url, userDevice, headers);
         } catch (RESTException e) {
             throw new UserServiceException(e);
+        }
+
+        if (ur.code != HttpURLConnection.HTTP_CREATED || !ur.getStatus().equals("success")) {
+            throw new UserServiceException("we can't create user device");
         }
 
         List<String> xDeviceTokenList = ur.getHeaders().get("x-device-token");
@@ -167,8 +171,8 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
 
         List<String> userDeviceLocation = ur.getHeaders().get("Location");
         if (userDeviceLocation != null) {
-            String location = userDeviceLocation.get(0);
-            String userDeviceUuid = location.substring(location.lastIndexOf("/") + 1);
+            String locationUrl = userDeviceLocation.get(0);
+            String userDeviceUuid = locationUrl.substring(locationUrl.lastIndexOf("/") + 1);
             this.preferencesService.save(VPNAppPreferences.USER_DEVICE_UUID, userDeviceUuid);
         }
         log.info("createUserDevice method exit");
@@ -195,25 +199,25 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
             throw new UserServiceException(e);
         }
 
-        if (ur.getStatus().equals("success")) {
-            Object valueObj = ur.getData();
-            if (valueObj instanceof JSONObject) {
-                JSONObject data = (JSONObject) valueObj;
-                try {
-                    String serverUuid = data.getString("uuid");
-                    log.info("getRandomServerUuid method exit");
-                    return serverUuid;
-                } catch (JSONException e) {
-                    log.error("JSONException: {}", e);
-                    throw new UserServiceException(e);
-                }
-            } else if (valueObj instanceof JSONArray) {
-                throw new UserServiceException("got more than one random server");
-            } else {
-                throw new UserServiceException("unknown type of data");
+        if (ur.code != HttpURLConnection.HTTP_OK || !ur.getStatus().equals("success")) {
+            throw new UserServiceException("we can't get random server");
+        }
+
+        Object valueObj = ur.getData();
+        if (valueObj instanceof JSONObject) {
+            JSONObject data = (JSONObject) valueObj;
+            try {
+                String serverUuid = data.getString("uuid");
+                log.info("getRandomServerUuid method exit");
+                return serverUuid;
+            } catch (JSONException e) {
+                log.error("JSONException: {}", e);
+                throw new UserServiceException(e);
             }
+        } else if (valueObj instanceof JSONArray) {
+            throw new UserServiceException("got more than one random server");
         } else {
-            throw new UserServiceException("get random server failed");
+            throw new UserServiceException("unknown type of data");
         }
     }
 
@@ -239,19 +243,24 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
             throw new UserServiceException(e);
         }
 
-        if (ur.getStatus().equals("success")) {
-            JSONObject valueObj = (JSONObject) ur.getData();
-            if (valueObj.has("configuration")) {
-                log.info("getVPNConfigurationByUserAndServer method exit");
-                return valueObj.optString("configuration");
-            }
+        if (ur.code != HttpURLConnection.HTTP_OK || !ur.getStatus().equals("success")) {
+            throw new UserServiceException("get vpn config failed");
         }
-        throw new UserServiceException("get vpn config failed");
+
+        JSONObject valueObj = (JSONObject) ur.getData();
+        if (valueObj.has("configuration")) {
+            log.info("getVPNConfigurationByUserAndServer method exit");
+            return valueObj.optString("configuration");
+        } else {
+            throw new UserServiceException("get vpn config failed");
+        }
     }
 
-    public void updateUserDevice(String userUuid, String userDeviceUuid, String virtualIp, String deviceIp) throws UserServiceException {
+    public void updateUserDevice(String deviceUuid, String userUuid, String location, boolean isActive, String modifyReason)
+            throws UserServiceException {
         log.info("updateUserDevice method enter");
-        String url = String.format("%s/%s/devices/%s", this.getServiceURL(), userUuid, userDeviceUuid);
+
+        String url = String.format("%s/%s/devices/%s", this.getServiceURL(), userUuid, deviceUuid);
 
         Map<String, String> headers = new HashMap<String, String>();
         if (!this.deviceToken.equals("")) {
@@ -261,30 +270,36 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
 
 
         HashMap<String, Object> userDevice = new HashMap<String, Object>();
-        userDevice.put("uuid", userDeviceUuid);
+        userDevice.put("uuid", deviceUuid);
         userDevice.put("user_uuid", userUuid);
-        userDevice.put("virtual_ip", virtualIp);
-        userDevice.put("device_ip", deviceIp);
-        userDevice.put("is_active", true);
-        userDevice.put("location", "updated_test_android2");
+        userDevice.put("is_active", isActive);
+        userDevice.put("location", location);
         userDevice.put("device_id", this.deviceId);
         userDevice.put("platform_id", VPNAppPreferences.DEVICE_PLATFORM_ID);
         userDevice.put("vpn_type_id", VPNAppPreferences.VPN_TYPE_ID);
-        userDevice.put("modify_reason", "set virtual_ip");
+        userDevice.put("modify_reason", modifyReason);
 
+        RESTResponse ur;
         try {
-            RESTResponse ur = this.put(url, userDevice, headers);
+            ur = this.put(url, userDevice, headers);
         } catch (RESTException e) {
             throw new UserServiceException(e);
+        }
+
+
+        if (ur.code != HttpURLConnection.HTTP_OK || !ur.getStatus().equals("success")) {
+            throw new UserServiceException("we can't update connection");
         }
 
         log.info("updateUserDevice method exit");
     }
 
-    public void createConnection(String serverUuid, String virtualIp, String deviceIp, String email) throws UserServiceException {
+    public String createConnection(String userUuid, String serverUuid, String userDeviceUuid,
+                                   String deviceIp, String virtualIp, Long bytesI, Long bytesO)
+            throws UserServiceException {
         log.info("createConnection method enter");
 
-        String url = String.format("%s/%s/connections", this.getServiceURL().replace("users", "vpns/servers"), serverUuid);
+        String url = String.format("%s/%s/servers/%s/connections", this.getServiceURL(), userUuid, serverUuid);
         System.out.println(url);
 
         Map<String, String> headers = new HashMap<String, String>();
@@ -294,51 +309,55 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         headers.put("x-auth-token", this.utilities.generateAuthToken());
 
 
-        HashMap<String, Object> server = new HashMap<>();
+        HashMap<String, Object> connection = new HashMap<>();
 
-        server.put("uuid", serverUuid);
-        server.put("type", "openvpn");
-
-
-        HashMap<String, Object> users = new HashMap<String, Object>();
-        HashMap<String, Object> user = new HashMap<String, Object>();
-
-        user.put("email", email);
-        user.put("device_ip", deviceIp);
-        user.put("virtual_ip", virtualIp);
-        user.put("bytes_i", 0);
-        user.put("bytes_o", 0);
-        user.put("device_id", this.deviceId);
-
-        log.debug("DEVICE_ID " + this.deviceId + "\n VIRTUAL_IP " + virtualIp);
+        connection.put("user_uuid", userUuid);
+        connection.put("server_uuid", serverUuid);
+        connection.put("user_device_uuid", userDeviceUuid);
+        connection.put("device_ip", deviceIp);
+        connection.put("virtual_ip", virtualIp);
+        connection.put("bytes_i", bytesI);
+        connection.put("bytes_o", bytesO);
+        connection.put("device_id", this.deviceId);
+        connection.put("is_connected", true);
 
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
         df.setTimeZone(tz);
         String nowAsISO = df.format(new Date());
-        user.put("connected_since", nowAsISO);
+        connection.put("connected_since", nowAsISO);
 
-        users.put(email, user);
-
-        HashMap<String, Object> connection = new HashMap<String, Object>();
-
-        connection.put("server", server);
-        connection.put("users", users);
-
+        RESTResponse ur;
         try {
-            RESTResponse ur = this.post(url, connection, headers);
+            ur = this.post(url, connection, headers);
         } catch (RESTException e) {
             throw new UserServiceException(e);
         }
 
-        log.info("updateUserDevice method exit");
+        if (ur.code != HttpURLConnection.HTTP_CREATED || !ur.getStatus().equals("success")) {
+            throw new UserServiceException("we can't create user device");
+        }
+
+        List<String> connectionLocationHeaderList = ur.getHeaders().get("Location");
+        if (connectionLocationHeaderList != null) {
+            String locationUrl = connectionLocationHeaderList.get(0);
+            String connectionUuid = locationUrl.substring(locationUrl.lastIndexOf("/") + 1);
+            this.preferencesService.save(VPNAppPreferences.CONNECTION_UUID, connectionUuid);
+            log.info("createConnection method exit");
+            return connectionUuid;
+        } else {
+            throw new UserServiceException("there is no Location header in response");
+        }
     }
 
+    public void updateConnection(String connectionUuid, String userUuid, String serverUuid,
+                                 String userDeviceUuid, Long bytesI, Long bytesO,
+                                 Boolean isConnected, String modifyReason)
+            throws UserServiceException {
+        log.info("updateConnection method enter");
 
-    public void deleteConnection(String serverUuid, String email) throws UserServiceException {
-        log.info("deleteConnection method enter");
-
-        String url = String.format("%s/%s/connections", this.getServiceURL().replace("users", "vpns/servers"), serverUuid);
+        String url = String.format("%s/%s/servers/%s/connections/%s", this.getServiceURL(),
+                userUuid, serverUuid, connectionUuid);
 
         Map<String, String> headers = new HashMap<String, String>();
         if (!this.deviceToken.equals("")) {
@@ -346,45 +365,33 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         }
         headers.put("x-auth-token", this.utilities.generateAuthToken());
 
+        HashMap<String, Object> connection = new HashMap<>();
 
-        HashMap<String, Object> server = new HashMap<>();
+        connection.put("uuid", connectionUuid);
+        connection.put("user_uuid", userUuid);
+        connection.put("server_uuid", serverUuid);
+        connection.put("bytes_i", bytesI);
+        connection.put("bytes_o", bytesO);
+        connection.put("device_id", this.deviceId);
+        connection.put("is_connected", isConnected);
+        connection.put("user_device_uuid", userDeviceUuid);
+        connection.put("modify_reason", modifyReason);
 
-        server.put("uuid", serverUuid);
-        server.put("type", "openvpn");
-
-
-        HashMap<String, Object> users = new HashMap<String, Object>();
-        HashMap<String, Object> user = new HashMap<String, Object>();
-
-        user.put("email", email);
-        user.put("bytes_i", 0);
-        user.put("bytes_o", 0);
-        user.put("device_id", this.deviceId);
-
-        TimeZone tz = TimeZone.getTimeZone("UTC");
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC, no timezone offset
-        df.setTimeZone(tz);
-        String nowAsISO = df.format(new Date());
-
-        user.put("connected_since", nowAsISO);
-
-        users.put(email, user);
-
-        HashMap<String, Object> connection = new HashMap<String, Object>();
-
-        connection.put("server", server);
-        connection.put("users", users);
-
-        log.debug(String.format("url: %s\nheaders: %s\nhasmap: %s", url, headers, connection));
+        log.debug(String.format("url: %s\nheaders: %s\nhashmap: %s", url, headers, connection));
         System.out.println();
 
+        RESTResponse ur;
         try {
-            RESTResponse ur = this.delete(url, connection, headers);
+            ur = this.put(url, connection, headers);
         } catch (RESTException e) {
             throw new UserServiceException(e);
         }
 
-        log.info("deleteConnection method exit");
+        if (ur.code != HttpURLConnection.HTTP_OK || !ur.getStatus().equals("success")) {
+            throw new UserServiceException("we can't update connection");
+        }
+
+        log.info("updateConnection method exit");
     }
 
     public void deleteUserDevice(String userUuid, String userDeviceUuid) throws UserServiceException {
@@ -403,10 +410,15 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         userDevice.put("user_uuid", userUuid);
         userDevice.put("modify_reason", "log out");
 
+        RESTResponse ur;
         try {
-            RESTResponse ur = this.delete(url, userDevice, headers);
+            ur = this.delete(url, userDevice, headers);
         } catch (RESTException e) {
             throw new UserServiceException(e);
+        }
+
+        if (ur.code != HttpURLConnection.HTTP_OK || !ur.getStatus().equals("success")) {
+            throw new UserServiceException("we can't delete user device");
         }
 
         log.info("deleteUserDevice method exit");
