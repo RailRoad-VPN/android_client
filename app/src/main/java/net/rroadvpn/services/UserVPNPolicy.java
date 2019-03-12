@@ -1,12 +1,19 @@
 package net.rroadvpn.services;
 
+import net.rroadvpn.exception.UserDeviceNotFoundException;
 import net.rroadvpn.exception.UserPolicyException;
 import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.model.User;
+import net.rroadvpn.model.UserDevice;
 import net.rroadvpn.model.VPNAppPreferences;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class UserVPNPolicy implements UserVPNPolicyI {
@@ -146,11 +153,50 @@ public class UserVPNPolicy implements UserVPNPolicyI {
     }
 
     @Override
+    public UserDevice getUserDevice(String userUuid, String uuid) throws UserPolicyException, UserDeviceNotFoundException {
+        log.info("getUserDevice method enter");
+
+        UserDevice userDevice;
+        try {
+            userDevice = this.us.getUserDevice(userUuid, uuid);
+        } catch (UserServiceException e) {
+            log.error("UserServiceException: {}", e);
+            throw new UserPolicyException(e);
+        }
+
+        log.info("getUserDevice method exit");
+
+        return userDevice;
+    }
+
+    @Override
+    public boolean isUserDeviceActive() {
+        try {
+            String userDeviceUuid = preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID);
+            String userUuid = preferencesService.getString(VPNAppPreferences.USER_UUID);
+
+            UserDevice userDevice = this.getUserDevice(userUuid, userDeviceUuid);
+            log.error("check user device is active");
+            return userDevice.isActive();
+        } catch (UserPolicyException e) {
+            log.error("UserPolicyException when get user device: {}", e);
+            return false;
+        } catch (UserDeviceNotFoundException e) {
+            log.error("UserDeviceNotFoundException when get user device: {}", e);
+            return false;
+        } catch (Exception e) {
+            log.error("Exception when get user device: {}", e);
+            return true;
+        }
+    }
+
+    @Override
     public void deleteUserSettings() throws UserPolicyException {
         log.info("deleteUserSettings method enter");
         try {
             this.us.deleteUserDevice(this.user.getUuid(), this.preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID));
         } catch (UserServiceException e) {
+            log.error("UserServiceException: {}", e);
             throw new UserPolicyException(e);
         }
         this.preferencesService.clear();
@@ -158,14 +204,37 @@ public class UserVPNPolicy implements UserVPNPolicyI {
     }
 
     @Override
-    public void sendSupportTicket(String userUuid, String contactEmail, String description,
-                                  String extraInfo, byte[] zipFileBytesArr)
-            throws UserPolicyException {
+    public int sendSupportTicket(String contactEmail, String description, String logsDir) throws UserPolicyException {
+        log.info("sendSupportTicket method enter");
+
+        String userUuid = preferencesService.getString(VPNAppPreferences.USER_UUID);
+
+        byte[] zipWithFiles = null;
+        try {
+            log.debug("log dir list files");
+            File directory = new File(logsDir);
+            File[] files = directory.listFiles();
+            log.debug("create zip with log files. files count: " + files.length);
+            zipWithFiles = utilities.createZipWithFiles(files);
+        } catch (IOException e) {
+            log.error("can't create zip with log files for support ticket");
+        }
+
+        try {
+            log.debug("create ticket");
+            int supportTicket = us.createSupportTicket(userUuid, contactEmail, description,
+                    null, zipWithFiles);
+            log.info("sendSupportTicket method exit");
+            return supportTicket;
+        } catch (UserServiceException e) {
+            log.error("UserServiceException: {}", e);
+            throw new UserPolicyException(e);
+        }
     }
 
     @Override
-    public void sendAnonymousSupportTicket(String contactEmail, String description,
-                                           String extraInfo, byte[] zipFileBytesArr)
+    public int sendAnonymousSupportTicket(String contactEmail, String description, String logsDir)
             throws UserPolicyException {
+        return 0;
     }
 }

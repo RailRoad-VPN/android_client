@@ -1,5 +1,4 @@
 <configuration>
-    <!--<property name="LOG_DIR" value="/sdcard/Android/data/files" />-->
     <property scope="context" name="LOG_DIR" value="../logs" />
     <!-- Create a logcat appender -->
     <appender name="logcat" class="ch.qos.logback.classic.android.LogcatAppender">
@@ -13,7 +12,7 @@
         <!--<file>${LOG_DIR}/info.log</file>-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>${LOG_DIR}/app_%d{yyyyMMdd}.log</fileNamePattern>
+            <fileNamePattern>${LOG_DIR}/%d{yyyyMMdd}_app.log</fileNamePattern>
             <!-- keep 1 day worth of history -->
             <maxHistory>1</maxHistory>
         </rollingPolicy>
@@ -27,18 +26,17 @@
         <!--<file>${LOG_DIR}/info.log</file>-->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>${LOG_DIR}/openVPN_%d{yyyyMMdd}.log</fileNamePattern>
-            <!-- keep 30 days' worth of history capped at 3GB total size -->
+            <fileNamePattern>${LOG_DIR}/%d{yyyyMMdd}_vpn.log</fileNamePattern>
+            <!-- keep 1 day worth of history -->
             <maxHistory>1</maxHistory>
         </rollingPolicy>
-
 
         <encoder>
             <pattern>%date [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <logger name="net.rroadvpn.openvpn.core.OpenVPNStatusService" level="INFO">
+    <logger name="net.rroadvpn.openvpn.core.OpenVPNStatusService" level="DEBUG">
         <appender-ref ref="OpenVPNLog" />
     </logger>
 

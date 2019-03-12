@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:layout_margin="25dp">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/help_form_email_container">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -18,45 +19,55 @@
             android:id="@+id/help_form_email_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:inputType="textEmailAddress">
             <requestFocus />
         </EditText>
-    </RelativeLayout>
+    </LinearLayout>
 
     <View
-        android:id="@+id/divider"
+        android:id="@+id/help_form_email_divider"
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp"
-        android:layout_marginBottom="0dp" />
+        android:layout_marginBottom="0dp"
+        android:layout_below="@id/help_form_email_container"/>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Describe your problem and click Send button" />
+        android:orientation="vertical"
+        android:id="@+id/help_form_description_container"
+        android:layout_below="@id/help_form_email_divider">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Describe your problem and click Send button" />
 
-    <EditText
-        android:id="@+id/help_form_description_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:minLines="5"
-        android:inputType="text|textMultiLine">
+        <EditText
+            android:id="@+id/help_form_description_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:minLines="5"
+            android:inputType="text|textMultiLine">
+        </EditText>
+    </LinearLayout>
 
-        <requestFocus />
-    </EditText>
-    </RelativeLayout>
+    <View
+        android:id="@+id/help_form_description_divider"
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:layout_marginEnd="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_below="@id/help_form_description_container"/>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_below="@id/help_form_description_divider">
         <Button
             android:id="@+id/help_form_send_btn"
             android:layout_width="wrap_content"
@@ -67,9 +78,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="15dp"
+            android:layout_alignParentEnd="true"
             android:text="Cancel" />
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

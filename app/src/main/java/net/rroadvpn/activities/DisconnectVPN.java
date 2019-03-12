@@ -12,8 +12,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.widget.Button;
 
 import net.rroadvpn.openvpn.core.OpenVPNService;
 import net.rroadvpn.openvpn.core.ProfileManager;
@@ -21,6 +23,9 @@ import net.rroadvpn.openvpn.core.VpnStatus;
 
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.openvpn.core.IOpenVPNServiceInternal;
+
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import static net.rroadvpn.openvpn.core.OpenVPNService.DISCONNECT_VPN;
 
@@ -62,14 +67,49 @@ public class DisconnectVPN extends Activity implements DialogInterface.OnClickLi
     }
 
     private void showDisconnectDialog() {
+
+        boolean immediate = getIntent().getBooleanExtra("immediate", false);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.title_cancel);
         builder.setMessage(R.string.cancel_connection_query);
-        builder.setNegativeButton(android.R.string.cancel, this);
+        if (!immediate) {
+            builder.setNegativeButton(android.R.string.cancel, this);
+        }
         builder.setPositiveButton(R.string.cancel_connection, this);
         builder.setOnCancelListener(this);
 
-        builder.show();
+        AlertDialog dialog = builder.create();
+
+        if (immediate) {
+            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                private static final int AUTO_DISMISS_MILLIS = 6000;
+                @Override
+                public void onShow(final DialogInterface dialog) {
+                    final Button defaultButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                    final CharSequence positiveButtonText = defaultButton.getText();
+                    new CountDownTimer(AUTO_DISMISS_MILLIS, 100) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            defaultButton.setText(String.format(
+                                    Locale.getDefault(), "%s (%d)",
+                                    positiveButtonText,
+                                    TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) + 1 //add one so it never displays zero
+                            ));
+                        }
+                        @Override
+                        public void onFinish() {
+                            if (((AlertDialog) dialog).isShowing()) {
+                                dialog.dismiss();
+                            }
+                            defaultButton.performClick();
+                        }
+                    }.start();
+                }
+            });
+        }
+
+        dialog.show();
     }
 
     @Override

@@ -13,6 +13,11 @@ import net.rroadvpn.model.VPNAppPreferences;
 import net.rroadvpn.openvpn.R;
 import net.rroadvpn.services.PreferencesService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutionException;
 
@@ -31,10 +36,12 @@ public class MainActivity extends BaseActivity {
     }
 
     public static class ProgressBarTask extends AsyncTask<Void, Integer, String> {
+        private Logger log = LoggerFactory.getLogger(ProgressBarTask.class);
 
         private WeakReference<MainActivity> activityReference;
 
-        int count = 0;
+        private String logsDir;
+        private int count = 0;
 
         ProgressBarTask(MainActivity context) {
             activityReference = new WeakReference<>(context);
@@ -44,6 +51,8 @@ public class MainActivity extends BaseActivity {
         protected void onPreExecute() {
             ProgressBar pb = activityReference.get().findViewById(R.id.pbLoading);
             pb.setVisibility(ProgressBar.VISIBLE);
+
+//            this.logsDir = activityReference.get().getApplicationInfo().dataDir + "/logs";
         }
 
         @Override
@@ -54,6 +63,12 @@ public class MainActivity extends BaseActivity {
                 count += 10;
                 publishProgress(count);
             }
+//
+//            File directory = new File(logsDir);
+//            File[] files = directory.listFiles();
+//            for (File file : files) {
+//                boolean ok = file.delete();
+//            }
             return "Complete";
         }
 

@@ -3,10 +3,19 @@ package net.rroadvpn.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.UUID;
+import java.util.zip.Deflater;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class Utilities {
 
@@ -67,5 +76,40 @@ public class Utilities {
 
     public int getRandomInt(int min, int max) {
         return randomGenerator.nextInt((max - min) + 1) + min;
+    }
+
+    public String readFile(File file) throws IOException {
+        StringBuilder text = new StringBuilder();
+
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String line;
+
+        while ((line = br.readLine()) != null) {
+            text.append(line);
+            text.append('\n');
+        }
+        br.close();
+
+        return text.toString();
+    }
+
+    public byte[] createZipWithFiles(File[] files) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ZipOutputStream zos = new ZipOutputStream(baos);
+        zos.setLevel(Deflater.BEST_COMPRESSION);
+
+        for (File file : files) {
+            String fileContent = readFile(file);
+
+            ZipEntry entry = new ZipEntry(file.getName());
+            zos.putNextEntry(entry);
+            zos.write(fileContent.getBytes());
+            zos.closeEntry();
+        }
+
+        zos.finish();
+        zos.close();
+
+        return baos.toByteArray();
     }
 }

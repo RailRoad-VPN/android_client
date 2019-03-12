@@ -1,7 +1,11 @@
 package net.rroadvpn.services;
 
+import net.rroadvpn.exception.UserDeviceNotFoundException;
 import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.model.User;
+import net.rroadvpn.model.UserDevice;
+
+import java.util.Map;
 
 interface UsersAPIServiceI {
     User getUserByPinCode(Integer pincode) throws UserServiceException;
@@ -26,4 +30,10 @@ interface UsersAPIServiceI {
                           String modifyReason) throws UserServiceException;
 
     void deleteUserDevice(String userUuid, String userDeviceUuid) throws UserServiceException;
+
+    UserDevice getUserDevice(String userUuid, String uuid) throws UserServiceException, UserDeviceNotFoundException;
+
+    int createSupportTicket(String userUuid, String email, String description,
+                            Map<String, Object> extraInfo, byte[] zipFile)
+            throws UserServiceException;
 }

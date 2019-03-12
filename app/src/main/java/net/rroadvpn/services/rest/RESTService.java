@@ -355,7 +355,7 @@ public class RESTService implements RESTServiceI {
             log.info("Response success");
             if (jsonObj.has("data")) {
                 log.debug("JSONObject contains data");
-                JSONObject data = jsonObj.getJSONObject("data");
+                Object data = jsonObj.get("data");
                 restResponse.setData(data);
             }
 

@@ -1,7 +1,9 @@
 package net.rroadvpn.services;
 
 import net.rroadvpn.exception.RESTException;
+import net.rroadvpn.exception.UserDeviceNotFoundException;
 import net.rroadvpn.exception.UserServiceException;
+import net.rroadvpn.model.UserDevice;
 import net.rroadvpn.model.VPNAppPreferences;
 import net.rroadvpn.model.User;
 import net.rroadvpn.model.rest.RESTResponse;
@@ -335,7 +337,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         }
 
         if (ur.code != HttpURLConnection.HTTP_CREATED || !ur.getStatus().equals("success")) {
-            throw new UserServiceException("we can't create user device");
+            throw new UserServiceException("we can't create connection");
         }
 
         List<String> connectionLocationHeaderList = ur.getHeaders().get("Location");
@@ -422,5 +424,97 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         }
 
         log.info("deleteUserDevice method exit");
+    }
+
+    public UserDevice getUserDevice(String userUuid, String uuid) throws UserServiceException,
+            UserDeviceNotFoundException {
+        log.info("getUserByUuid method enter");
+
+        String url = String.format("%s/%s/devices/%s", this.getServiceURL(),
+                String.valueOf(userUuid), String.valueOf(uuid));
+
+        Map<String, String> headers = new HashMap<String, String>();
+        if (!this.deviceToken.equals("")) {
+            headers.put("x-device-token", this.deviceToken);
+        }
+        headers.put("x-auth-token", this.utilities.generateAuthToken());
+
+        RESTResponse ur;
+        try {
+            log.debug("do get call");
+            ur = this.get(url, headers);
+        } catch (RESTException e) {
+            throw new UserServiceException(e);
+        }
+
+        if (ur.getCode() == 404) {
+            throw new UserDeviceNotFoundException("user device WAS NOT found");
+        }
+
+        if (ur.getOk()) {
+            Object valueObj = ur.getData();
+            if (valueObj instanceof JSONObject) {
+                JSONObject data = (JSONObject) valueObj;
+                try {
+                    return new UserDevice(data);
+                } catch (JSONException e) {
+                    log.error("JSONException: {}", e);
+                    throw new UserServiceException(e);
+                }
+            } else if (valueObj instanceof JSONArray) {
+                throw new UserServiceException("got MORE THAN ONE user device by uuid");
+            } else {
+                throw new UserServiceException("unknown type of data");
+            }
+        } else {
+            throw new UserServiceException("user device IS NOT OK");
+        }
+    }
+
+    public int createSupportTicket(String userUuid, String email, String description,
+                                   Map<String, Object> extraInfo, byte[] zipFile)
+            throws UserServiceException {
+        log.info("createSupportTicket method enter");
+
+        String url = String.format("%s/%s/tickets", this.getServiceURL(), String.valueOf(userUuid));
+
+        Map<String, String> headers = new HashMap<String, String>();
+        if (!this.deviceToken.equals("")) {
+            headers.put("x-device-token", this.deviceToken);
+        }
+        headers.put("x-auth-token", this.utilities.generateAuthToken());
+
+        HashMap<String, Object> ticket = new HashMap<>();
+
+        ticket.put("contact_email", email);
+        ticket.put("description", description);
+        if (extraInfo != null) {
+            ticket.put("extra_info", extraInfo);
+        }
+        if (zipFile != null) {
+            ticket.put("zipfile", zipFile);
+        }
+
+        RESTResponse ur;
+        try {
+            ur = this.post(url, ticket, headers);
+        } catch (RESTException e) {
+            throw new UserServiceException(e);
+        }
+
+        if (ur.code != HttpURLConnection.HTTP_CREATED || !ur.getStatus().equals("success")) {
+            throw new UserServiceException("we can't create user ticket");
+        }
+
+        List<String> ticketLocationHeaderList = ur.getHeaders().get("Location");
+        if (ticketLocationHeaderList != null) {
+            String locationUrl = ticketLocationHeaderList.get(0);
+            int connectionUuid = Integer.valueOf(locationUrl.substring(locationUrl.lastIndexOf("/") + 1));
+
+            log.info("createSupportTicket method exit");
+            return connectionUuid;
+        } else {
+            throw new UserServiceException("there is no Location header in response");
+        }
     }
 }
