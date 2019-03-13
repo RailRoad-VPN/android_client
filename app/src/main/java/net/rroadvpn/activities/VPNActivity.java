@@ -493,6 +493,8 @@ public class VPNActivity extends BaseActivity {
             builder.setMessage(message);
         }
 
+        builder.setCancelable(false);
+
         String positiveButtonText = "OK";
         if (positiveButtonTextId != null) {
             positiveButtonText = getResources().getString(positiveButtonTextId);
@@ -870,6 +872,7 @@ public class VPNActivity extends BaseActivity {
             this.logsDir = activity.getApplicationInfo().dataDir + "/logs";
 
             dialog = new ProgressDialog(activity);
+            dialog.setCancelable(false);
         }
 
         @Override
