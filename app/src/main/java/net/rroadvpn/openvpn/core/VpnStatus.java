@@ -394,13 +394,13 @@ public class VpnStatus {
         if (onChangeStatusListener!= null) {
             switch (level) {
                 case LEVEL_CONNECTED:
-                    onChangeStatusListener.onConnect(resid);
+                    onChangeStatusListener.onConnect(state, msg, resid, level);
                     break;
                 case LEVEL_NOTCONNECTED:
-                    onChangeStatusListener.onDisconnect(resid);
+                    onChangeStatusListener.onDisconnect(state, msg, resid, level);
                     break;
                 default:
-                    onChangeStatusListener.onChangeStatus(resid);
+                    onChangeStatusListener.onChangeStatus(state, msg, resid, level);
                     break;
             }
         }
@@ -497,9 +497,8 @@ public class VpnStatus {
     }
 
     public interface OnChangeStatusListener {
-        void onConnect(int statusTextResourceId);
-        void onDisconnect(int statusTextResourceId);
-        void onChangeStatus(int statusTextResourceId);
-        void onStartConnecting();
+        void onConnect(String state, String msg, int resid, ConnectionStatus level);
+        void onDisconnect(String state, String msg, int resid, ConnectionStatus level);
+        void onChangeStatus(String state, String msg, int resid, ConnectionStatus level);
     }
 }

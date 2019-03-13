@@ -208,37 +208,31 @@ public class VPNActivity extends BaseActivity {
 
         VpnStatus.onChangeStatusListener = new VpnStatus.OnChangeStatusListener() {
             @Override
-            public void onConnect(int statusTextResourceId) {
+            public void onConnect(String state, String msg, int resid, ConnectionStatus level) {
                 log.debug("VPN connected");
-                if (WAS_CONNECTED) {
-                    log.debug("vpn was connected but reconnected, so after disconnect do work onConnect callback");
-                    afterDisconnectVPNTask = new AfterDisconnectVPNTask(userVPNPolicyI);
+                boolean was_WAS_CONNECTED = WAS_CONNECTED;
+
+                if (!was_WAS_CONNECTED) {
+                    log.debug("VPN was connected, but reconnected, don't create new connection");
+                    String status = VpnStatus.getLastCleanLogMessage(getApplicationContext());
+                    String virtualIP = status.split(",")[1];
+
+                    log.debug("virtualIP: {}", virtualIP);
+                    log.debug("do after connect staff");
                     try {
-                        afterDisconnectVPNTask.execute().get();
-                    } catch (ExecutionException e) {
-                        log.error("ExecutionException after disconnect VPN task");
-                    } catch (InterruptedException e) {
-                        log.error("InterruptedException after disconnect VPN task");
+                        userVPNPolicyI.afterConnectedToVPN(virtualIP, null);
+                    } catch (UserPolicyException e) {
+                        e.printStackTrace();
                     }
                 }
-                WAS_CONNECTED = true;
-                String status = VpnStatus.getLastCleanLogMessage(getApplicationContext());
-                String virtualIP = status.split(",")[1];
 
-                log.debug("virtualIP: {}", virtualIP);
-                log.debug("do after connect staff");
-                // TODO deviceip
-                try {
-                    userVPNPolicyI.afterConnectedToVPN(virtualIP, null);
-                } catch (UserPolicyException e) {
-                    e.printStackTrace();
-                }
+                WAS_CONNECTED = true;
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.semaphore_green);
-                        String text = getResources().getString(statusTextResourceId);
+                        String text = getResources().getString(resid);
                         statusTextView.setText(text);
                         log.debug("onConnect: setStatus to: " + text);
 
@@ -248,7 +242,7 @@ public class VPNActivity extends BaseActivity {
             }
 
             @Override
-            public void onDisconnect(int statusTextResourceId) {
+            public void onDisconnect(String state, String msg, int resid, ConnectionStatus level) {
                 log.debug("VPN was disconnected");
                 if (WAS_CONNECTED) {
                     afterDisconnectVPNTask = new AfterDisconnectVPNTask(userVPNPolicyI);
@@ -260,7 +254,7 @@ public class VPNActivity extends BaseActivity {
                     @Override
                     public void run() {
                         findViewById(R.id.connect_to_vpn).setBackgroundResource(R.drawable.semaphore_red);
-                        String text = getResources().getString(statusTextResourceId);
+                        String text = getResources().getString(resid);
                         statusTextView.setText(text);
                         log.debug("onDisconnect: setStatus to: " + text);
 
@@ -270,21 +264,27 @@ public class VPNActivity extends BaseActivity {
             }
 
             @Override
-            public void onChangeStatus(int statusTextResourceId) {
+            public void onChangeStatus(String state, String msg, int resid, ConnectionStatus level) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        String text = getResources().getString(statusTextResourceId);
+                        String text = getResources().getString(resid);
+
+                        if (state.equals("CONNECTRETRY")) {
+                            int seconds = 10;
+                            try {
+                                seconds = Integer.parseInt(msg);
+                            } catch (NumberFormatException ignored) {
+                            }
+                            text = String.format(text, seconds);
+                        }
+
                         statusTextView.setText(text);
-                        log.debug("onChangeStatus: setStatus to: " + text + ", statusTextResourceId: " + statusTextResourceId);
+                        log.debug("onChangeStatus: setStatus to: " + text + ", state: " + state +
+                                ", msg: " + msg + ", level: " + level.name());
                         calcSemaphoreState();
                     }
                 });
-            }
-
-            @Override
-            public void onStartConnecting() {
-                Toast.makeText(getApplicationContext(), "onStartConnecting", Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -386,30 +386,39 @@ public class VPNActivity extends BaseActivity {
                         @Override
                         public void run() {
                             // Do something here on the main thread
-                            int delay = 600000;
+                            int delay = 120000;
                             CheckUserDeviceTask checkUserDeviceTask = new CheckUserDeviceTask(userVPNPolicyI, ovcs);
                             checkUserDeviceTask.setOnPostExecuteListener(new CheckUserDeviceTask.CheckUserDeviceTaskPostListener() {
                                 @Override
                                 public void onCheckUserDeviceTaskPostListener(Integer value) {
                                     switch (value) {
                                         case USER_DEVICE_NOT_ACTIVE_ERROR_CODE:
+                                            statusTextView.setText(R.string.connect_device_deactivated_error);
+                                            createErrorBuilder(R.string.connect_device_deactivated_error_message,
+                                                    null, new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            dialog.dismiss();
+                                                            showDisconnectDialogVPN(DISCONNECT_VPN_REQUEST_CODE, true);
+                                                        }
+                                                    }).show();
                                             break;
                                         case USER_DEVICE_DELETED_ERROR_CODE:
                                             statusTextView.setText(R.string.connect_device_deleted_error);
-                                            DialogInterface.OnClickListener onPositiveClickListener = new DialogInterface.OnClickListener() {
+                                            createErrorBuilder(R.string.connect_device_deleted_error_message, R.string.side_menu_btn_log_out, new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     logoutUser();
                                                     dialog.dismiss();
                                                 }
-                                            };
-                                            createErrorBuilder(R.string.connect_device_deleted_error_message, R.string.side_menu_btn_log_out, onPositiveClickListener).show();
+                                            }).show();
                                             break;
                                         case USER_DEVICE_NO_ERROR_CODE:
                                             break;
                                     }
                                 }
                             });
+                            checkUserDeviceTask.execute();
                             checkUserDeviceHandler.postDelayed(this, delay);
                         }
                     };
@@ -558,7 +567,7 @@ public class VPNActivity extends BaseActivity {
             this.checkUserDeviceTask.setOnPostExecuteListener(null);
         }
         if (this.checkUserDeviceHandler != null) {
-            this.checkUserDeviceTask.setOnPostExecuteListener(null);
+            this.checkUserDeviceHandler = null;
         }
         if (this.logoutTask != null) {
             this.logoutTask.setListener(null);
@@ -713,7 +722,6 @@ public class VPNActivity extends BaseActivity {
             try {
                 boolean isActive = userVPNPolicyI.isUserDeviceActive();
                 if (!isActive) {
-                    VpnStatus.updateStateString("NOPROCESS", "No process running.", R.string.state_noprocess, ConnectionStatus.LEVEL_NOTCONNECTED);
                     return USER_DEVICE_NOT_ACTIVE_ERROR_CODE;
                 }
             } catch (UserDeviceNotFoundException e) {
