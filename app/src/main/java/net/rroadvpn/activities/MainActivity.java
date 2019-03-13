@@ -19,6 +19,12 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends BaseActivity {
@@ -52,7 +58,7 @@ public class MainActivity extends BaseActivity {
             ProgressBar pb = activityReference.get().findViewById(R.id.pbLoading);
             pb.setVisibility(ProgressBar.VISIBLE);
 
-//            this.logsDir = activityReference.get().getApplicationInfo().dataDir + "/logs";
+            this.logsDir = activityReference.get().getApplicationInfo().dataDir + "/logs";
         }
 
         @Override
@@ -63,12 +69,17 @@ public class MainActivity extends BaseActivity {
                 count += 10;
                 publishProgress(count);
             }
-//
-//            File directory = new File(logsDir);
-//            File[] files = directory.listFiles();
-//            for (File file : files) {
-//                boolean ok = file.delete();
-//            }
+
+            DateFormat df = new SimpleDateFormat("yyyyMMdd"); // Quoted "Z" to indicate UTC, no timezone offset
+            String todayDate = df.format(new Date());
+
+            File directory = new File(logsDir);
+            File[] files = directory.listFiles();
+            for (File file : files) {
+                if (!file.getName().startsWith(todayDate)) {
+                    file.delete();
+                }
+            }
             return "Complete";
         }
 
