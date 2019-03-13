@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spongycastle.util.encoders.Base64;
 
 import java.net.HttpURLConnection;
 import java.text.DateFormat;
@@ -492,7 +493,8 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
             ticket.put("extra_info", extraInfo);
         }
         if (zipFile != null) {
-            ticket.put("zipfile", zipFile);
+            String s = new String(Base64.encode(zipFile));
+            ticket.put("zipfile", s);
         }
 
         RESTResponse ur;
