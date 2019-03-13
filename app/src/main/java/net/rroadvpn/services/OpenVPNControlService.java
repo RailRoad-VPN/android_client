@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.net.VpnService;
 import android.os.IBinder;
+import android.os.RemoteException;
 
 import net.rroadvpn.activities.vpn.OpenVPNProfileException;
 import net.rroadvpn.activities.vpn.OpenVPNProfileManager;
@@ -32,6 +33,8 @@ public class OpenVPNControlService {
     private boolean mCmfixed = false;
     public static final String CLEARLOG = "clearlogconnect";
     public static final int VPN_SERVICE_INTENT_PERMISSION = 70;
+
+    public Integer CONNECTION_RETRIES_COUNT = 0;
 
     private Logger log = LoggerFactory.getLogger(OpenVPNControlService.class);
     private IOpenVPNServiceInternal mService;
@@ -71,25 +74,38 @@ public class OpenVPNControlService {
         log.debug("unBindService method exit");
     }
 
-    public boolean prepareToConnectVPN(String configBase64) {
+    public void createNewProfileForServer(String serverUUid, String configBase64) throws OpenVPNProfileException {
+        log.debug("createNewProfileForServer method enter");
+
+        log.debug("create new profile through profile manager");
+        byte[] decoded = android.util.Base64.decode(configBase64, android.util.Base64.DEFAULT);
+        OpenVPNProfileManager openVPNProfileManager = new OpenVPNProfileManager(decoded, serverUUid);
+
+        log.debug("work with profile");
+        this.mSelectedProfile = openVPNProfileManager.getVPNProfile();
+        ProfileManager pm = getPM();
+        pm.addProfile(this.mSelectedProfile);
+        pm.saveProfileList(this.ctx);
+        pm.saveProfile(this.ctx, this.mSelectedProfile);
+
+        log.debug("createNewProfileForServer method exit");
+    }
+
+    public boolean isProfileReady(String serverUUid) {
+        log.debug("isProfileReady method enter");
+
+        log.debug("get profile by name");
+        VpnProfile profileByName = getPM().getProfileByName(serverUUid);
+
+        log.debug("isProfileReady method exit");
+        return profileByName != null;
+    }
+
+    public boolean prepareToConnectVPN(String vpnServerUUid) {
         log.info("prepareToConnectVPN method enter");
 
-        byte[] decoded = android.util.Base64.decode(configBase64, android.util.Base64.DEFAULT);
-
-        OpenVPNProfileManager openVPNProfileManager = new OpenVPNProfileManager(decoded);
-
-        VpnProfile profile;
-        try {
-            log.debug("Working with profile");
-            profile = openVPNProfileManager.getVPNProfile();
-            ProfileManager pm = getPM();
-            pm.addProfile(profile);
-            pm.saveProfileList(this.ctx);
-            pm.saveProfile(this.ctx, profile);
-
-            this.mSelectedProfile = profile;
-        } catch (OpenVPNProfileException e) {
-            log.error("OpenVPNProfileException: {}", e);
+        this.mSelectedProfile = getPM().getProfileByName(vpnServerUUid);
+        if (this.mSelectedProfile == null) {
             return false;
         }
 
@@ -97,7 +113,7 @@ public class OpenVPNControlService {
         if (Preferences.getDefaultSharedPreferences(this.ctx).getBoolean(CLEARLOG, true))
             VpnStatus.clearLog();
 
-        int vpnok = profile.checkProfile(this.ctx);
+        int vpnok = this.mSelectedProfile.checkProfile(this.ctx);
         if (vpnok != R.string.no_error_found) {
             return false;
         }
@@ -153,6 +169,14 @@ public class OpenVPNControlService {
         ProfileManager.updateLRU(this.ctx, mSelectedProfile);
         VPNLaunchHelper.startOpenVpn(mSelectedProfile, this.ctx);
         log.info("connectToVPN method exit");
+    }
+
+    public void disconnectVPN() {
+        try {
+            mService.stopVPN(false);
+        } catch (RemoteException e) {
+            VpnStatus.logException(e);
+        }
     }
 
     public boolean ismCmfixed() {

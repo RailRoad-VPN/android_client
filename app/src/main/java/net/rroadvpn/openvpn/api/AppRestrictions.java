@@ -149,7 +149,7 @@ public class AppRestrictions {
         ConfigParser cp = new ConfigParser();
         try {
             cp.parseConfig(new StringReader(config));
-            VpnProfile vp = cp.convertProfile();
+            VpnProfile vp = cp.convertProfile(name);
             vp.mProfileCreator = PROFILE_CREATOR;
 
             // We don't want provisioned profiles to be editable

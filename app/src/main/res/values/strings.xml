@@ -11,9 +11,11 @@
     <string name="ipv4_format_error">Error parsing the IPv4 address</string>
     <string name="custom_route_format_error">Error parsing the custom routes</string>
     <string name="route_rejected">Route rejected by Android</string>
-    <string name="cancel_connection">Disconnect</string>
-    <string name="title_cancel">Cancel Confirmation</string>
-    <string name="cancel_connection_query">Disconnect the connected VPN/cancel the connection attempt?</string>
+    <string name="cancel_connection">Disconnect VPN</string>
+    <string name="title_cancel">Disconnect VPN</string>
+    <string name="title_cancel_force">Disconnecting…</string>
+    <string name="cancel_connection_query">Disconnect or cancel the connection attempt?</string>
+    <string name="cancel_connection_query_force">Disconnecting…</string>
     <string name="tun_error_helpful">On some custom ICS images the permission on /dev/tun might be wrong, or the tun module might be missing completely. For CM9 images try the fix ownership option under general settings</string>
     <string name="tun_open_error">Failed to open the tun interface</string>
     <string name="error">"Error: "</string>

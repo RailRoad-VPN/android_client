@@ -22,7 +22,6 @@ public class UserVPNPolicy implements UserVPNPolicyI {
     private PreferencesService preferencesService;
     private Utilities utilities;
 
-    private String serverUuid;
     private User user;
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -93,20 +92,37 @@ public class UserVPNPolicy implements UserVPNPolicyI {
     }
 
     @Override
-    public String getNewRandomVPNServer() throws UserPolicyException {
-        log.info("getNewRandomVPNServer method enter");
-        String vpnConfig;
+    public String getVPNServerByUuid(String serverUuid) throws UserPolicyException {
+        log.info("getVPNServerByUuid method enter");
         try {
-            this.serverUuid = us.getRandomServerUuid(user.getUuid());
-            this.preferencesService.save(VPNAppPreferences.SERVER_UUID, serverUuid);
-            vpnConfig = us.getVPNConfigurationByUserAndServer(user.getUuid(), serverUuid);
-            log.debug("MY CONFIG" + vpnConfig);
+            String userUuid = this.preferencesService.getString(VPNAppPreferences.USER_UUID);
+
+            String vpnConfigurationByUserAndServer = us.getVPNConfigurationByUserAndServer(userUuid, serverUuid);
+
+            log.info("getVPNServerByUuid method exit");
+
+            return vpnConfigurationByUserAndServer;
         } catch (UserServiceException e) {
             log.error("UserServiceException: {}", e);
             throw new UserPolicyException(e);
         }
-        log.info("getNewRandomVPNServer method exit");
-        return vpnConfig;
+    }
+
+    @Override
+    public String getRandomVPNServerUuid() throws UserPolicyException {
+        log.info("getRandomVPNServerUuid method enter");
+        try {
+            String serverUuid = us.getRandomServerUuid(user.getUuid());
+
+            this.preferencesService.save(VPNAppPreferences.SERVER_UUID, serverUuid);
+
+            log.info("getRandomVPNServerUuid method exit");
+
+            return serverUuid;
+        } catch (UserServiceException e) {
+            log.error("UserServiceException: {}", e);
+            throw new UserPolicyException(e);
+        }
     }
 
     @Override
@@ -116,9 +132,10 @@ public class UserVPNPolicy implements UserVPNPolicyI {
 
         String userDeviceUuid = this.preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID);
         String userUuid = this.preferencesService.getString(VPNAppPreferences.USER_UUID);
+        String serverUuid = this.preferencesService.getString(VPNAppPreferences.SERVER_UUID);
 
         try {
-            String connectionUuid = this.us.createConnection(userUuid, this.serverUuid,
+            String connectionUuid = this.us.createConnection(userUuid, serverUuid,
                     userDeviceUuid, deviceIp, virtualIP, null, null);
             this.preferencesService.save(VPNAppPreferences.CONNECTION_UUID, connectionUuid);
         } catch (UserServiceException e) {

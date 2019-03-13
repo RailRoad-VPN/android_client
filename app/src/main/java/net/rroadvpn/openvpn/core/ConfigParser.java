@@ -25,8 +25,6 @@ import net.rroadvpn.openvpn.VpnProfile;
 // </foo>
 public class ConfigParser {
 
-
-    public static final String CONVERTED_PROFILE = "converted Profile";
     final String[] unsupportedOptions = {"config",
             "tls-server"
 
@@ -338,9 +336,9 @@ public class ConfigParser {
 
     // This method is far too long
     @SuppressWarnings("ConstantConditions")
-    public VpnProfile convertProfile() throws ConfigParseError, IOException {
+    public VpnProfile convertProfile(String profileName) throws ConfigParseError, IOException {
         boolean noauthtypeset = true;
-        VpnProfile np = new VpnProfile(CONVERTED_PROFILE);
+        VpnProfile np = new VpnProfile(profileName);
         // Pull, client, tls-client
         np.clearDefaults();
 

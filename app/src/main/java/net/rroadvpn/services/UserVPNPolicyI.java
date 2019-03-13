@@ -11,7 +11,8 @@ public interface UserVPNPolicyI {
 
     void afterDisconnectVPN(Long bytesI, Long bytesO) throws UserPolicyException;
 
-    String getNewRandomVPNServer() throws UserPolicyException;
+    String getRandomVPNServerUuid() throws UserPolicyException;
+    String getVPNServerByUuid(String serverUuid) throws UserPolicyException;
 
     void afterConnectedToVPN(String virtualIP, String deviceIp)
             throws UserPolicyException;

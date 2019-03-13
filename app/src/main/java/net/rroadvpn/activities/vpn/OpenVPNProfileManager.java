@@ -13,9 +13,11 @@ public class OpenVPNProfileManager {
     private VpnProfile vpnProfile;
 
     private byte[] profileData;
+    private String profileName = "convertedProfile";
 
-    public OpenVPNProfileManager(byte[] data) {
+    public OpenVPNProfileManager(byte[] data, String profileName) {
         this.profileData = data;
+        this.profileName = profileName;
     }
 
     public VpnProfile getVPNProfile() throws OpenVPNProfileException {
@@ -26,7 +28,7 @@ public class OpenVPNProfileManager {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 
             cp.parseConfig(inputStreamReader);
-            this.vpnProfile = cp.convertProfile();
+            this.vpnProfile = cp.convertProfile(this.profileName);
             return this.vpnProfile;
         } catch (IOException | ConfigParser.ConfigParseError e) {
            System.out.println(e.getLocalizedMessage());

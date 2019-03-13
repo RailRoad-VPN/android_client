@@ -211,6 +211,7 @@ public class VPNActivity extends BaseActivity {
             public void onConnect(String state, String msg, int resid, ConnectionStatus level) {
                 log.debug("VPN connected");
                 boolean was_WAS_CONNECTED = WAS_CONNECTED;
+                ovcs.CONNECTION_RETRIES_COUNT = 0;
 
                 if (!was_WAS_CONNECTED) {
                     log.debug("VPN was connected, but reconnected, don't create new connection");
@@ -249,6 +250,7 @@ public class VPNActivity extends BaseActivity {
                     afterDisconnectVPNTask.execute();
                 }
                 WAS_CONNECTED = false;
+                ovcs.CONNECTION_RETRIES_COUNT = 0;
 
                 runOnUiThread(new Runnable() {
                     @Override
@@ -271,12 +273,19 @@ public class VPNActivity extends BaseActivity {
                         String text = getResources().getString(resid);
 
                         if (state.equals("CONNECTRETRY")) {
-                            int seconds = 10;
+                            ovcs.CONNECTION_RETRIES_COUNT += 1;
+                            int seconds = 4;
                             try {
                                 seconds = Integer.parseInt(msg);
                             } catch (NumberFormatException ignored) {
                             }
                             text = String.format(text, seconds);
+
+                            if (ovcs.CONNECTION_RETRIES_COUNT > 3) {
+                                ovcs.CONNECTION_RETRIES_COUNT = 0;
+                                ovcs.disconnectVPN();
+                                connectToVPN();
+                            }
                         }
 
                         statusTextView.setText(text);
@@ -390,8 +399,8 @@ public class VPNActivity extends BaseActivity {
                             CheckUserDeviceTask checkUserDeviceTask = new CheckUserDeviceTask(userVPNPolicyI, ovcs);
                             checkUserDeviceTask.setOnPostExecuteListener(new CheckUserDeviceTask.CheckUserDeviceTaskPostListener() {
                                 @Override
-                                public void onCheckUserDeviceTaskPostListener(Integer value) {
-                                    switch (value) {
+                                public void onCheckUserDeviceTaskPostListener(Integer code) {
+                                    switch (code) {
                                         case USER_DEVICE_NOT_ACTIVE_ERROR_CODE:
                                             statusTextView.setText(R.string.connect_device_deactivated_error);
                                             createErrorBuilder(R.string.connect_device_deactivated_error_message,
@@ -399,7 +408,7 @@ public class VPNActivity extends BaseActivity {
                                                         @Override
                                                         public void onClick(DialogInterface dialog, int which) {
                                                             dialog.dismiss();
-                                                            showDisconnectDialogVPN(DISCONNECT_VPN_REQUEST_CODE, true);
+                                                            ovcs.disconnectVPN();
                                                         }
                                                     }).show();
                                             break;
@@ -502,7 +511,7 @@ public class VPNActivity extends BaseActivity {
         return builder;
     }
 
-    private void showDisconnectDialogVPN(int requestCode, boolean immediate) {
+    private void showDisconnectDialogVPN(int requestCode, boolean force) {
         this.log.info("showDisconnectDialogVPN enter");
 
         if (this.connectVPNTask != null) {
@@ -514,7 +523,7 @@ public class VPNActivity extends BaseActivity {
 
         Intent disconnectVPN = new Intent(getBaseContext(), DisconnectVPN.class);
         disconnectVPN.setAction(DISCONNECT_VPN);
-        disconnectVPN.putExtra("immediate", immediate);
+        disconnectVPN.putExtra("force", force);
         this.log.info("showDisconnectDialogVPN exit");
         startActivityForResult(disconnectVPN, requestCode);
     }
@@ -604,6 +613,7 @@ public class VPNActivity extends BaseActivity {
     private void logoutUser() {
         this.log.info("logoutUser enter");
 
+        ovcs.disconnectVPN();
 
         if (this.logoutTask != null) {
             AsyncTask.Status status = this.logoutTask.getStatus();
@@ -729,10 +739,21 @@ public class VPNActivity extends BaseActivity {
                 return USER_DEVICE_DELETED_ERROR_CODE;
             }
 
-            log.debug("get new random server");
-            String vpnConfig = null;
+            log.debug("get new random server uuid");
+            String vpnServerUuid = null;
             try {
-                vpnConfig = userVPNPolicyI.getNewRandomVPNServer();
+                vpnServerUuid = userVPNPolicyI.getRandomVPNServerUuid();
+                log.debug("random server uuid: " + vpnServerUuid);
+
+                log.debug("check profile ready");
+                boolean isProfileReady = ovcs.isProfileReady(vpnServerUuid);
+                if (!isProfileReady) {
+                    log.debug("profile is not ready. get vpn server config");
+                    String vpnServerConfig = userVPNPolicyI.getVPNServerByUuid(vpnServerUuid);
+
+                    log.debug("create new profile for server");
+                    ovcs.createNewProfileForServer(vpnServerUuid, vpnServerConfig);
+                }
             } catch (UserPolicyException e) {
                 log.debug("UserPolicyException: {}", e);
                 VpnStatus.updateStateString("NOPROCESS", "No process running.", R.string.state_noprocess, ConnectionStatus.LEVEL_NOTCONNECTED);
@@ -742,12 +763,12 @@ public class VPNActivity extends BaseActivity {
                 VpnStatus.updateStateString("NOPROCESS", "No process running.", R.string.state_noprocess, ConnectionStatus.LEVEL_NOTCONNECTED);
                 return CONNECT_NO_NETWORK_ERROR_CODE;
             }
-            log.debug("random server: {}", vpnConfig);
 
             log.debug("prepare to connect to VPN");
-            boolean isOk = ovcs.prepareToConnectVPN(vpnConfig);
+            boolean isOk = ovcs.prepareToConnectVPN(vpnServerUuid);
 
             if (!isOk) {
+                log.debug("prepare failed");
                 return CONNECT_PREPARE_ERROR_CODE;
             }
 

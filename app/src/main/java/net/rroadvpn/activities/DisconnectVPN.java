@@ -68,20 +68,23 @@ public class DisconnectVPN extends Activity implements DialogInterface.OnClickLi
 
     private void showDisconnectDialog() {
 
-        boolean immediate = getIntent().getBooleanExtra("immediate", false);
+        boolean force = getIntent().getBooleanExtra("force", false);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.title_cancel);
-        builder.setMessage(R.string.cancel_connection_query);
-        if (!immediate) {
+        if (!force) {
+            builder.setTitle(R.string.title_cancel);
+            builder.setMessage(R.string.cancel_connection_query);
             builder.setNegativeButton(android.R.string.cancel, this);
+        } else {
+            builder.setTitle(R.string.title_cancel_force);
+            builder.setMessage(R.string.cancel_connection_query_force);
         }
         builder.setPositiveButton(R.string.cancel_connection, this);
         builder.setOnCancelListener(this);
 
         AlertDialog dialog = builder.create();
 
-        if (immediate) {
+        if (force) {
             dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                 private static final int AUTO_DISMISS_MILLIS = 6000;
                 @Override
