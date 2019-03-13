@@ -170,7 +170,7 @@ public class UserVPNPolicy implements UserVPNPolicyI {
     }
 
     @Override
-    public boolean isUserDeviceActive() {
+    public boolean isUserDeviceActive() throws UserDeviceNotFoundException {
         try {
             String userDeviceUuid = preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID);
             String userUuid = preferencesService.getString(VPNAppPreferences.USER_UUID);
@@ -181,12 +181,6 @@ public class UserVPNPolicy implements UserVPNPolicyI {
         } catch (UserPolicyException e) {
             log.error("UserPolicyException when get user device: {}", e);
             return false;
-        } catch (UserDeviceNotFoundException e) {
-            log.error("UserDeviceNotFoundException when get user device: {}", e);
-            return false;
-        } catch (Exception e) {
-            log.error("Exception when get user device: {}", e);
-            return true;
         }
     }
 

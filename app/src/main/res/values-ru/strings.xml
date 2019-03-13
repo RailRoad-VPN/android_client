@@ -101,7 +101,7 @@
   <string name="channel_name_background">Статистика подключения</string>
   <string name="channel_description_background">Текущая статистика установленного соединения RailroadVPN</string>
   <string name="channel_name_status">Изменение статуса соединения</string>
-  <string name="channel_description_status">Изменения состояния соединенияRailroadVPN(подключение, аутентификация,...)</string>
+  <string name="channel_description_status">Изменения состояния соединения RailroadVPN</string>
   <string name="openssl_cipher_name">Имена шифров OpenSSL</string>
   <string name="openssl_error">OpenSSL возвратил ошибку</string>
   <string name="running_test">Запуск теста&#8230;</string>
@@ -117,4 +117,26 @@
     <string name="state_user_vpn_permission">Ожидание разрешения запустить VPN</string>
   <string name="apprest_vpnconf">VPN конфигурация</string>
   <string name="unknown_state">Обратитесь в службу поддержки</string>
+  <string name="side_menu_btn_support">Нужна помощь?</string>
+  <string name="side_menu_btn_faq">FAQ</string>
+  <string name="status">Статус</string>
+  <string name="tap">Нажмите</string>
+  <string name="red_semaphore">красный семафор</string>
+  <string name="to_connect">подключиться</string>
+  <string name="green_semaphore">зеленый семафор</string>
+  <string name="to_disconnect">отключиться</string>
+  <string name="connect_device_deactivated_error">Активируйте свой девайс</string>
+  <string name="state_auth_pending">Ожидание аутентификации</string>
+  <string name="vpn_connect_network_error">Проверьте интернет соединение</string>
+  <string name="apprest_ovpn">Конфигурация</string>
+  <string name="connect_error_dialog_title">Ошибка соединения</string>
+  <string name="connect_unknown_error_create_ticket_btn_text">Создать тикет</string>
+  <string name="apprest_vpnlist">Список VPN конфигураций</string>
+  <string name="apprest_name">Имя</string>
+  <string name="apprest_name_desc">Имя VPN профиля</string>
+  <string name="connect_unknown_error">Неизвестная ошибка</string>
+  <string name="connect_device_deleted_error_message">Ваш девайс был удален в личном кабинете на сайте. Вам необходимо сгенерировать новый пинкод в личном кабинете на сайте</string>
+  <string name="connect_device_deactivated_error_message">Ваш девайс деактивировали. Вы можете активировать его в личном кабинете на сайте.</string>
+  <string name="connect_unknown_error_help_text">Когда: при подключении к VPN</string>
+  <string name="connect_device_deleted_error">Ваш девайс был удален</string>
 </resources>

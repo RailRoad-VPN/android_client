@@ -123,7 +123,7 @@
     <string name="side_menu_btn_log_out">Log out</string>
     <string name="side_menu_btn_profile">Profile</string>
     <string name="welcome">Welcome!</string>
-    <string name="side_menu_btn_support">Support</string>
+    <string name="side_menu_btn_support">Need Help?</string>
     <string name="side_menu_btn_faq">FAQ</string>
     <string name="status">Status</string>
     <string name="tap">Tap</string>
@@ -131,5 +131,15 @@
     <string name="to_connect">to connect</string>
     <string name="green_semaphore">green semaphore</string>
     <string name="to_disconnect">to disconnect</string>
+    <string name="connect_device_deactivated_error">Activate your device</string>
+    <string name="connect_device_deactivated_error_message">Your device is not active. Go to Profile on site and activate it</string>
+    <string name="connect_device_deleted_error">User device was deleted</string>
+    <string name="connect_device_deleted_error_message">Your device was deleted in profile on site. You have to generate new pincode at profile page.</string>
+    <string name="connect_unknown_error">Unknown Error</string>
+    <string name="connect_unknown_error_help_text">When: connect to VPN</string>
+    <string name="connect_unknown_error_create_ticket_btn_text">Create ticket</string>
+    <string name="connect_error_dialog_title">Connection Error</string>
+    <string name="vpn_connect_network_error">Check your internet connection</string>
+    <string name="apprest_ovpn_desc">Content of the RailroadVPN configuration file. These files are usually have the extension .ovpn (sometimes also .conf) and are plain text multi line configuration files. If your MDM does not support multiline configuration entries, you can also use a base64 encoded string here. A text file can be converted to base64 using openssl base64 -A -in</string>
 
 </resources>

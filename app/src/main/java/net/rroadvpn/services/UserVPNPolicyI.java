@@ -27,5 +27,5 @@ public interface UserVPNPolicyI {
 
     UserDevice getUserDevice(String userUuid, String uuid) throws UserPolicyException, UserDeviceNotFoundException;
 
-    boolean isUserDeviceActive();
+    boolean isUserDeviceActive() throws UserDeviceNotFoundException;
 }
