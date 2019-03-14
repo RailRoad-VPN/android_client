@@ -6,6 +6,8 @@ public final class VPNAppPreferences {
     private static final String API_URL = "https://api.rroadvpn.net";
     private static final String API_VER = "v1";
 
+    public static final String APP_VERSION = "app_version";
+
     public static final String PREF_USER_GLOBAL_KEY = "user_details";
     public static final String USER_UUID = "user_uuid";
     public static final String SERVER_UUID = "server_uuid";

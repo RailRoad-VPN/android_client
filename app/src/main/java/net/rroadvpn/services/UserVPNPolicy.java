@@ -233,6 +233,7 @@ public class UserVPNPolicy implements UserVPNPolicyI {
         extraInfo.put("server_uuid", this.preferencesService.getString(VPNAppPreferences.SERVER_UUID));
         extraInfo.put("device_id", this.preferencesService.getString(VPNAppPreferences.DEVICE_ID));
         extraInfo.put("device_token", this.preferencesService.getString(VPNAppPreferences.DEVICE_TOKEN));
+        extraInfo.put("app_version", this.preferencesService.getString(VPNAppPreferences.APP_VERSION));
         extraInfo.put("sdk", android.os.Build.VERSION.SDK);
         extraInfo.put("device", android.os.Build.DEVICE);
         extraInfo.put("model", android.os.Build.MODEL);

@@ -78,7 +78,7 @@
     <string name="app_no_longer_exists">Пакет %s больше не установлен, он удаляется из списка разрешённых/запрещённых приложений</string>
     <string name="remote_no_server_selected">Вы должны определить и включить как минимум один удаленный сервер.</string>
     <string name="ignore_multicast_route">Игнорируется мультиадресный маршрут: %s</string>
-    <string name="service_restarted">Перезапуск сервисаRailroadVPN(Приложение, вероятно, упало или было закрыто из-за нехватки памяти)</string>
+    <string name="service_restarted">Перезапуск сервиса RailroadVPN (приложение, вероятно, упало или было закрыто из-за нехватки памяти)</string>
     <string name="no_allowed_app">Не добавлено разрешенных приложений. Добавляем себя (%s), чтобы в списке разрешенных приложений было хотя бы одно приложение, иначе все приложения добавятся в список разрешенных</string>
     <string name="abi_mismatch">Preferred native ABI precedence of this device (%1$s) and ABI reported by native libraries (%2$s) mismatch</string>
     <string name="permission_revoked">Разрешение VPN отозвано ОС (например, запущена другая программа VPN), останавливаем VPN</string>
@@ -104,14 +104,14 @@
     <string name="openssl_error">OpenSSL возвратил ошибку</string>
     <string name="running_test">Запуск теста&#8230;</string>
     <string name="test_algoirhtms">Тестирование выбранных алгоритмов</string>
-    <string name="openvpn3_nostatickeys">РеализацияRailroadVPN3 C ++ не поддерживает статические ключи. Перейдите вRailroadVPN2.x под общие настройки.</string>
-    <string name="openvpn3_pkcs12">Использование файлов PKCS12 напрямую с помощьюRailroadVPN3 C ++ не поддерживается. Импортируйте файлы pkcs12 в хранилище ключей Android или заменитеRailroadVPN2.x на общие настройки.</string>
+    <string name="openvpn3_nostatickeys">Реализация RailroadVPN 3 C ++ не поддерживает статические ключи</string>
+    <string name="openvpn3_pkcs12">Использование файлов PKCS12 напрямую с помощью RailroadVPN 3 C ++ не поддерживается</string>
     <string name="side_menu_btn_profile">Профиль</string>
     <string name="side_menu_btn_log_out">Выйти из аккаунта</string>
     <string name="connect_disconnect">присоединится/отсоединится</string>
     <string name="welcome">Добро пожаловать!</string>
-    <string name="enter_pin_welcome">Введите ваш пинкод</string>
-    <string name="enter_pin_new_user">Нет аккаунта?</string>
+    <string name="enter_pin_welcome">Введите PIN-CODE</string>
+    <string name="enter_pin_new_user">Получить PIN-CODE</string>
     <string name="state_user_vpn_permission">Ожидание разрешения запустить VPN</string>
     <string name="apprest_vpnconf">VPN конфигурация</string>
     <string name="unknown_state">Обратитесь в службу поддержки</string>
@@ -140,4 +140,5 @@
     <string name="title_cancel_force">Отключение…</string>
     <string name="cancel_connection_query_force">Отключение…</string>
     <string name="help_form_description_required">Пожалуйста опишите вашу проблему, чтобы мы могли помочь вам</string>
+    <string name="n1_get_pin_code_n2_n3_n4_generate_pin_code">Как получить PIN-CODE?\n1. Нажмите на ссылку ПОЛУЧИТЬ PIN-CODE\n2. Ваш браузер откроет сайт\n3. Войдите в систему\n4. Нажмите кнопку GENERATE PIN-CODE</string>
 </resources>

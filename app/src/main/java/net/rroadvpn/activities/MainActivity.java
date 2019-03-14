@@ -29,6 +29,8 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends BaseActivity {
 
+    private static final String APP_VERSION = "1.0a";
+
     public static int REQUIRE_PIN = 0;
     public static int START_VPN = 1;
 
@@ -97,6 +99,7 @@ public class MainActivity extends BaseActivity {
             Context baseContext = activityReference.get().getBaseContext();
             PreferencesService preferencesService = new PreferencesService(baseContext, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
             String deviceToken = preferencesService.getString(VPNAppPreferences.DEVICE_TOKEN);
+            preferencesService.save(VPNAppPreferences.APP_VERSION, APP_VERSION);
 
             count = 65;
             publishProgress(count);

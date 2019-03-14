@@ -102,15 +102,15 @@
     <string name="volume_mbyte">%.1f MB</string>
     <string name="volume_gbyte">%.1f GB</string>
     <string name="channel_name_background">Connection statistics</string>
-    <string name="channel_description_background">Ongoing statistics of the establishedRailroadVPNconnection</string>
+    <string name="channel_description_background">Ongoing statistics of the established RailroadVPN connection</string>
     <string name="channel_name_status">Connection status change</string>
-    <string name="channel_description_status">Status changes of theRailroadVPNconnection (Connecting, authenticating,…)</string>
+    <string name="channel_description_status">Status changes of the RailroadVPN connection (Connecting, authenticating,…)</string>
     <string name="openssl_cipher_name">OpenSSL cipher names</string>
     <string name="openssl_error">OpenSSL returned an error</string>
     <string name="running_test">Running test…</string>
     <string name="test_algoirhtms">Test selected algorithms</string>
     <string name="openvpn3_nostatickeys">The OpenVPN 3 C++ implementation does not support static keys. Please change to OpenVPN 2.x under general settings.</string>
-    <string name="openvpn3_pkcs12">Using PKCS12 files directly with OpenVPN 3 C++ implementation is not supported. Please import the pkcs12 files into the Android keystore or change to OpenVPN 2.x under general settings.</string>
+    <string name="openvpn3_pkcs12">Using PKCS12 files directly with RailroadVPN 3 C++ implementation is not supported. Please import the pkcs12 files into the Android keystore or change to RailroadVPN 2.x under general settings.</string>
     <string name="openvpn3_socksproxy">RailroadVPN 3 C++ implementation does not support connecting via Socks proxy</string>
     <string name="no_orbotfound">Orbot application cannot be found. Please install Orbot or use manual Socks v5 integration.</string>
     <string name="error_orbot_and_proxy_options">Cannot use extra http-proxy-option statement and Orbot integration at the same timeO</string>
@@ -119,8 +119,8 @@
     <string name="openurl_requested">Open URL to continue VPN authentication</string>
     <string name="state_auth_pending">Authentication pending</string>
 
-    <string name="enter_pin_welcome">Enter your pin code</string>
-    <string name="enter_pin_new_user">Don’t have an account yet?</string>
+    <string name="enter_pin_welcome">Enter PIN-CODE</string>
+    <string name="enter_pin_new_user">GET PIN-CODE</string>
     <string name="connect_disconnect">connect/disconnect</string>
     <string name="side_menu_btn_log_out">Log out</string>
     <string name="side_menu_btn_profile">Profile</string>
@@ -144,5 +144,6 @@
     <string name="vpn_connect_network_error">Check your internet connection</string>
     <string name="apprest_ovpn_desc">Content of the RailroadVPN configuration file. These files are usually have the extension .ovpn (sometimes also .conf) and are plain text multi line configuration files. If your MDM does not support multiline configuration entries, you can also use a base64 encoded string here. A text file can be converted to base64 using openssl base64 -A -in</string>
     <string name="help_form_description_required">Please describe your problem to help you</string>
+    <string name="n1_get_pin_code_n2_n3_n4_generate_pin_code">How to get PIN-CODE?\n1. Press GET PIN-CODE link\n2. Your browser will open site\n3. Sign in or sign up\n4. Press GENERATE PIN-CODE button</string>
 
 </resources>

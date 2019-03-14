@@ -15,16 +15,15 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:layout_marginTop="40dp"
-        android:contentDescription="TODO"
-        android:src="@drawable/logo" />
+        android:src="@drawable/logo"
+        android:contentDescription="TODO" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:orientation="vertical"
-        android:paddingBottom="75dp">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/enter_pin_welcome"
@@ -63,8 +62,26 @@
             android:focusable="true"
             android:text="@string/enter_pin_new_user"
             android:textAlignment="center"
-            android:textColor="@color/white"
+            android:textAllCaps="true"
+            android:textColor="@color/design_default_color_primary"
             android:textSize="15sp" />
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <TextView
+            android:id="@+id/input_pin_help_text"
+            android:textColor="@color/black"
+            android:background="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/n1_get_pin_code_n2_n3_n4_generate_pin_code"
+            android:padding="10dp"
+            android:width="290dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp" />
 
     </LinearLayout>
 </RelativeLayout>
