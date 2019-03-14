@@ -325,6 +325,8 @@ public class VPNActivity extends BaseActivity {
                 final Button sendBtn = dialog.findViewById(R.id.help_form_send_btn);
                 final Button cancelBtn = dialog.findViewById(R.id.help_form_cancel_btn);
 
+                emailET.setText(preferencesService.getString(VPNAppPreferences.USER_EMAIL));
+
                 cancelBtn.setOnClickListener(new Button.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -338,12 +340,26 @@ public class VPNActivity extends BaseActivity {
                         String email = emailET.getText().toString();
                         String description = descriptonET.getText().toString();
 
+                        if (description.trim().equals("")) {
+                            Toast.makeText(that, R.string.help_form_description_required, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
                         SupportDialogSendTask supportDialogSendTask = new SupportDialogSendTask(userVPNPolicyI, email, description, that);
                         supportDialogSendTask.setListener(new SupportDialogSendTask.SupportDialogSendTaskListener() {
                             @Override
-                            public void onSupportDialogSendTaskListener(Boolean value) {
-                                if (value) {
-                                    dialog.dismiss();
+                            public void onSupportDialogSendTaskListener(Integer value) {
+                                dialog.dismiss();
+                                if (value != null) {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(that);
+                                    builder.setMessage("Ticket: " + String.valueOf(value));
+                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    builder.show();
                                 }
                             }
                         });
@@ -819,7 +835,6 @@ public class VPNActivity extends BaseActivity {
 
         @Override
         protected Integer doInBackground(Void... voids) {
-            log.debug("check user device task");
             if (!this.ovcs.isVPNConnected()) {
                 return USER_DEVICE_NO_ERROR_CODE;
             }
@@ -853,7 +868,7 @@ public class VPNActivity extends BaseActivity {
         }
     }
 
-    private static class SupportDialogSendTask extends AsyncTask<Void, Void, Boolean> {
+    private static class SupportDialogSendTask extends AsyncTask<Void, Void, Integer> {
         private Logger log = LoggerFactory.getLogger(SupportDialogSendTask.class);
 
         private SupportDialogSendTaskListener listener;
@@ -882,24 +897,22 @@ public class VPNActivity extends BaseActivity {
         }
 
         @Override
-        protected Boolean doInBackground(Void... voids) {
+        protected Integer doInBackground(Void... voids) {
             log.debug("support dialog send ticket");
 
             try {
-                this.userVPNPolicyI.sendSupportTicket(email, description, logsDir);
+                return this.userVPNPolicyI.sendSupportTicket(email, description, logsDir);
             } catch (UserPolicyException e) {
                 log.error("UserPolicyException when send support ticket: {}", e);
-                return false;
+                return null;
             } catch (Exception e) {
                 log.error("Exception when send support ticket: {}", e);
-                return true;
+                return null;
             }
-
-            return true;
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
+        protected void onPostExecute(Integer result) {
             if (dialog.isShowing()) {
                 dialog.dismiss();
             }
@@ -914,7 +927,7 @@ public class VPNActivity extends BaseActivity {
         }
 
         public interface SupportDialogSendTaskListener {
-            void onSupportDialogSendTaskListener(Boolean value);
+            void onSupportDialogSendTaskListener(Integer value);
         }
     }
 

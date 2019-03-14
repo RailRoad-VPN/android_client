@@ -143,5 +143,6 @@
     <string name="connect_error_dialog_title">Connection Error</string>
     <string name="vpn_connect_network_error">Check your internet connection</string>
     <string name="apprest_ovpn_desc">Content of the RailroadVPN configuration file. These files are usually have the extension .ovpn (sometimes also .conf) and are plain text multi line configuration files. If your MDM does not support multiline configuration entries, you can also use a base64 encoded string here. A text file can be converted to base64 using openssl base64 -A -in</string>
+    <string name="help_form_description_required">Please describe your problem to help you</string>
 
 </resources>

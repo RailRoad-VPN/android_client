@@ -357,7 +357,6 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
                                  String userDeviceUuid, Long bytesI, Long bytesO,
                                  Boolean isConnected, String modifyReason)
             throws UserServiceException {
-        log.info("updateConnection method enter");
 
         String url = String.format("%s/%s/servers/%s/connections/%s", this.getServiceURL(),
                 userUuid, serverUuid, connectionUuid);
@@ -380,9 +379,6 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         connection.put("user_device_uuid", userDeviceUuid);
         connection.put("modify_reason", modifyReason);
 
-        log.debug(String.format("url: %s\nheaders: %s\nhashmap: %s", url, headers, connection));
-        System.out.println();
-
         RESTResponse ur;
         try {
             ur = this.put(url, connection, headers);
@@ -393,8 +389,6 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         if (ur.code != HttpURLConnection.HTTP_OK || !ur.getStatus().equals("success")) {
             throw new UserServiceException("we can't update connection");
         }
-
-        log.info("updateConnection method exit");
     }
 
     public void deleteUserDevice(String userUuid, String userDeviceUuid) throws UserServiceException {
@@ -429,8 +423,6 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
 
     public UserDevice getUserDevice(String userUuid, String uuid) throws UserServiceException,
             UserDeviceNotFoundException {
-        log.info("getUserByUuid method enter");
-
         String url = String.format("%s/%s/devices/%s", this.getServiceURL(),
                 String.valueOf(userUuid), String.valueOf(uuid));
 
@@ -442,7 +434,6 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
 
         RESTResponse ur;
         try {
-            log.debug("do get call");
             ur = this.get(url, headers);
         } catch (RESTException e) {
             throw new UserServiceException(e);

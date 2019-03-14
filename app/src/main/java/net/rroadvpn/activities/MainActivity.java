@@ -41,7 +41,7 @@ public class MainActivity extends BaseActivity {
         progressBarTask.execute();
     }
 
-    public static class ProgressBarTask extends AsyncTask<Void, Integer, String> {
+    public static class ProgressBarTask extends AsyncTask<Void, Integer, Intent> {
         private Logger log = LoggerFactory.getLogger(ProgressBarTask.class);
 
         private WeakReference<MainActivity> activityReference;
@@ -49,38 +49,74 @@ public class MainActivity extends BaseActivity {
         private String logsDir;
         private int count = 0;
 
+        public int INTENT_CODE;
+
         ProgressBarTask(MainActivity context) {
             activityReference = new WeakReference<>(context);
         }
 
         @Override
         protected void onPreExecute() {
+            log.debug("create progressbar");
             ProgressBar pb = activityReference.get().findViewById(R.id.pbLoading);
             pb.setVisibility(ProgressBar.VISIBLE);
 
+            log.debug("get logs dir");
             this.logsDir = activityReference.get().getApplicationInfo().dataDir + "/logs";
+            log.debug("logs dir: " + this.logsDir);
         }
 
         @Override
-        protected String doInBackground(Void... params) {
-            SystemClock.sleep(200);
-            while (count < 100) {
-                SystemClock.sleep(200);
-                count += 10;
-                publishProgress(count);
-            }
+        protected Intent doInBackground(Void... params) {
+            count = 10;
+            publishProgress(count);
 
+            log.debug("create date format");
             DateFormat df = new SimpleDateFormat("yyyyMMdd"); // Quoted "Z" to indicate UTC, no timezone offset
             String todayDate = df.format(new Date());
 
+            count = 20;
+            publishProgress(count);
+
+            log.debug("get log files");
             File directory = new File(logsDir);
             File[] files = directory.listFiles();
+            log.debug("log files count: " + files.length);
+
+            log.debug("delete log files that no start with todayDate: " + todayDate);
             for (File file : files) {
                 if (!file.getName().startsWith(todayDate)) {
                     file.delete();
                 }
             }
-            return "Complete";
+
+            count = 30;
+            publishProgress(count);
+
+            log.debug("get preferences service");
+            Context baseContext = activityReference.get().getBaseContext();
+            PreferencesService preferencesService = new PreferencesService(baseContext, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
+            String deviceToken = preferencesService.getString(VPNAppPreferences.DEVICE_TOKEN);
+
+            count = 65;
+            publishProgress(count);
+
+            log.debug("check device token");
+            Intent intent;
+            if (deviceToken.equals("")) {
+                log.debug("device token is empty - open input pin activity");
+                intent = new Intent(baseContext, InputPinView.class);
+                INTENT_CODE = REQUIRE_PIN;
+            } else {
+                log.debug("device token is empty - open VPN activity");
+                intent = new Intent(baseContext, VPNActivity.class);
+                INTENT_CODE = START_VPN;
+            }
+
+            count = 100;
+            publishProgress(count);
+
+            return intent;
         }
 
         @Override
@@ -90,24 +126,12 @@ public class MainActivity extends BaseActivity {
         }
 
         @Override
-        protected void onPostExecute(String status) {
-            super.onPostExecute(status);
+        protected void onPostExecute(Intent intent) {
+            super.onPostExecute(intent);
 
-            Context baseContext = activityReference.get().getBaseContext();
-
-            PreferencesService preferencesService = new PreferencesService(baseContext, VPNAppPreferences.PREF_USER_GLOBAL_KEY);
-
-            String device_token = preferencesService.getString(VPNAppPreferences.DEVICE_TOKEN);
-
-            if (device_token.equals("")) {
-                Intent intent = new Intent(baseContext, InputPinView.class);
-                activityReference.get().startActivityForResult(intent, REQUIRE_PIN);
-                activityReference.get().finish();
-            } else {
-                Intent intent = new Intent(baseContext, VPNActivity.class);
-                activityReference.get().startActivityForResult(intent, START_VPN);
-                activityReference.get().finish();
-            }
+            log.debug("onPostExecute start activity");
+            activityReference.get().startActivityForResult(intent, INTENT_CODE);
+            activityReference.get().finish();
         }
     }
 }

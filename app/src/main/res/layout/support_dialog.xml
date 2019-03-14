@@ -20,7 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress">
-            <requestFocus />
         </EditText>
     </LinearLayout>
 
@@ -51,6 +50,7 @@
             android:layout_marginTop="20dp"
             android:minLines="5"
             android:inputType="text|textMultiLine">
+            <requestFocus />
         </EditText>
     </LinearLayout>
 

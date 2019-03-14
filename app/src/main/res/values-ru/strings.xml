@@ -139,4 +139,5 @@
     <string name="connect_device_deleted_error">Ваш девайс был удален</string>
     <string name="title_cancel_force">Отключение…</string>
     <string name="cancel_connection_query_force">Отключение…</string>
+    <string name="help_form_description_required">Пожалуйста опишите вашу проблему, чтобы мы могли помочь вам</string>
 </resources>

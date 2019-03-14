@@ -13,7 +13,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class UserVPNPolicy implements UserVPNPolicyI {
@@ -148,7 +150,6 @@ public class UserVPNPolicy implements UserVPNPolicyI {
     @Override
     public void updateConnection(Long bytesI, Long bytesO, Boolean isConnected, String modifyReason)
             throws UserPolicyException {
-        log.info("updateConnection method enter");
 
         String connectionUuid = this.preferencesService.getString(VPNAppPreferences.CONNECTION_UUID);
         String userUuid = this.preferencesService.getString(VPNAppPreferences.USER_UUID);
@@ -166,13 +167,10 @@ public class UserVPNPolicy implements UserVPNPolicyI {
             log.error("UserServiceException: {}", e);
             throw new UserPolicyException(e);
         }
-        log.info("updateConnection method exit");
     }
 
     @Override
     public UserDevice getUserDevice(String userUuid, String uuid) throws UserPolicyException, UserDeviceNotFoundException {
-        log.info("getUserDevice method enter");
-
         UserDevice userDevice;
         try {
             userDevice = this.us.getUserDevice(userUuid, uuid);
@@ -180,8 +178,6 @@ public class UserVPNPolicy implements UserVPNPolicyI {
             log.error("UserServiceException: {}", e);
             throw new UserPolicyException(e);
         }
-
-        log.info("getUserDevice method exit");
 
         return userDevice;
     }
@@ -193,7 +189,6 @@ public class UserVPNPolicy implements UserVPNPolicyI {
             String userUuid = preferencesService.getString(VPNAppPreferences.USER_UUID);
 
             UserDevice userDevice = this.getUserDevice(userUuid, userDeviceUuid);
-            log.error("check user device is active");
             return userDevice.isActive();
         } catch (UserPolicyException e) {
             log.error("UserPolicyException when get user device: {}", e);
@@ -231,10 +226,32 @@ public class UserVPNPolicy implements UserVPNPolicyI {
             log.error("can't create zip with log files for support ticket");
         }
 
+        Map<String, Object> extraInfo = new HashMap<>();
+        extraInfo.put("user_device_uuid", this.preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID));
+        extraInfo.put("user_email", this.preferencesService.getString(VPNAppPreferences.USER_EMAIL));
+        extraInfo.put("user_uuid", this.preferencesService.getString(VPNAppPreferences.USER_UUID));
+        extraInfo.put("server_uuid", this.preferencesService.getString(VPNAppPreferences.SERVER_UUID));
+        extraInfo.put("device_id", this.preferencesService.getString(VPNAppPreferences.DEVICE_ID));
+        extraInfo.put("device_token", this.preferencesService.getString(VPNAppPreferences.DEVICE_TOKEN));
+        extraInfo.put("sdk", android.os.Build.VERSION.SDK);
+        extraInfo.put("device", android.os.Build.DEVICE);
+        extraInfo.put("model", android.os.Build.MODEL);
+        extraInfo.put("product", android.os.Build.PRODUCT);
+        extraInfo.put("version_release", android.os.Build.VERSION.RELEASE);
+
+        String os_version = System.getProperty("os.version");
+        if (os_version != null) {
+            extraInfo.put("os_version", os_version);
+        }
+
+        if (contactEmail == null || contactEmail.equals("")) {
+            contactEmail = this.preferencesService.getString(VPNAppPreferences.USER_EMAIL);
+        }
+
         try {
             log.debug("create ticket");
             int supportTicket = us.createSupportTicket(userUuid, contactEmail, description,
-                    null, zipWithFiles);
+                    extraInfo, zipWithFiles);
             log.info("sendSupportTicket method exit");
             return supportTicket;
         } catch (UserServiceException e) {

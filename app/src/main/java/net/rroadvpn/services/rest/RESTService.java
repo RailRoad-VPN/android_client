@@ -67,7 +67,7 @@ public class RESTService implements RESTServiceI {
 
     @Override
     public RESTResponse get(String url, Map<String, String> headers) throws RESTException {
-        log.debug("get request with parameters: url={}, headers={}", url, headers);
+        //log.debug("get request with parameters: url={}, headers={}", url, headers);
 
         this.rebuildClient();
 
@@ -89,7 +89,7 @@ public class RESTService implements RESTServiceI {
 
         Response response;
         try {
-            log.debug("get request do call");
+            //log.debug("get request do call");
             response = this.client.newCall(request).execute();
         } catch (IOException e) {
             log.error("get request IOException: {}", e);
@@ -109,7 +109,7 @@ public class RESTService implements RESTServiceI {
                 throw new RESTException("Stub");
             } else {
                 responseBodyString = body.string();
-                log.debug("body string: {}", responseBodyString);
+                //log.debug("body string: {}", responseBodyString);
             }
         } catch (IOException e) {
             log.error("get request IOException: {}", e);
@@ -136,7 +136,7 @@ public class RESTService implements RESTServiceI {
 
     @Override
     public RESTResponse put(String url, Map<String, Object> data, Map<String, String> headers) throws RESTException {
-        log.debug("put request with parameters: url={}, data={}, headers={}", url, data, headers);
+        //log.debug("put request with parameters: url={}, data={}, headers={}", url, data, headers);
 
         this.rebuildClient();
 
@@ -159,7 +159,7 @@ public class RESTService implements RESTServiceI {
 
         Response response;
         try {
-            log.debug("put request do call");
+            //log.debug("put request do call");
             response = this.client.newCall(request).execute();
         } catch (IOException e) {
             e.printStackTrace();
@@ -175,11 +175,11 @@ public class RESTService implements RESTServiceI {
         try {
             ResponseBody body = response.body();
             if (body == null) {
-                log.error("get request body is null");
+                log.error("put request body is null");
                 throw new RESTException("Stub");
             } else {
                 responseBodyString = body.string();
-                log.debug("body string: {}", responseBodyString);
+                //log.debug("body string: {}", responseBodyString);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -198,7 +198,7 @@ public class RESTService implements RESTServiceI {
 
     @Override
     public RESTResponse post(String url, Map<String, Object> data, Map<String, String> headers) throws RESTException {
-        log.debug("post request with parameters: url={}, data={}, headers={}", url, data, headers);
+        //log.debug("post request with parameters: url={}, data={}, headers={}", url, data, headers);
 
         this.rebuildClient();
 
@@ -221,7 +221,7 @@ public class RESTService implements RESTServiceI {
 
         Response response;
         try {
-            log.debug("post request do call");
+            //log.debug("post request do call");
             response = this.client.newCall(request).execute();
         } catch (IOException e) {
             log.debug("post request IOException: {}", e);
@@ -235,14 +235,14 @@ public class RESTService implements RESTServiceI {
 
         String responseBodyString;
         try {
-            log.debug("post request get body");
+            //log.debug("post request get body");
             ResponseBody body = response.body();
             if (body == null) {
                 log.debug("post request body is null");
                 throw new RESTException("Stub");
             } else {
                 responseBodyString = body.string();
-                log.debug("post request body: {}", responseBodyString);
+                //log.debug("post request body: {}", responseBodyString);
             }
         } catch (IOException e) {
             log.debug("post request IOException: {}", e);
@@ -311,7 +311,7 @@ public class RESTService implements RESTServiceI {
     }
 
     private RequestBody prepareRequestBody(Map<String, Object> data) {
-        log.debug("prepareRequestBody with parameters data={}", data);
+        //log.debug("prepareRequestBody with parameters data={}", data);
         String dataJson = this.gson.toJson(data);
 
         return RequestBody.create(JSON, dataJson);
@@ -341,9 +341,9 @@ public class RESTService implements RESTServiceI {
 
     private RESTResponse parseResponse(int responseCode, boolean isOk, String responseBodyString,
                                        Headers headers) throws JSONException {
-        log.debug("parseResponse with parameters: responseCode={}, isOk={}, responseBodyString={}, headers={}", responseCode, isOk, responseBodyString, headers);
+        //log.debug("parseResponse with parameters: responseCode={}, isOk={}, responseBodyString={}, headers={}", responseCode, isOk, responseBodyString, headers);
         JSONObject jsonObj = new JSONObject(responseBodyString);
-        log.debug("Created JSON object from response body: {}", jsonObj.toString());
+        //log.debug("Created JSON object from response body: {}", jsonObj.toString());
 
         String status = (String) jsonObj.get("status");
 
@@ -352,21 +352,21 @@ public class RESTService implements RESTServiceI {
         restResponse.setOk(isOk);
 
         if (isOk) {
-            log.info("Response success");
+            //log.info("Response success");
             if (jsonObj.has("data")) {
-                log.debug("JSONObject contains data");
+                //log.debug("JSONObject contains data");
                 Object data = jsonObj.get("data");
                 restResponse.setData(data);
             }
 
             if (jsonObj.has("limit")) {
-                log.debug("JSONObject contains limit");
+                //log.debug("JSONObject contains limit");
                 Integer limit = (Integer) jsonObj.get("limit");
                 restResponse.setLimit(limit);
             }
 
             if (jsonObj.has("offset")) {
-                log.debug("JSONObject contains offset");
+                //log.debug("JSONObject contains offset");
                 Integer offset = (Integer) jsonObj.get("offset");
                 restResponse.setLimit(offset);
             }
