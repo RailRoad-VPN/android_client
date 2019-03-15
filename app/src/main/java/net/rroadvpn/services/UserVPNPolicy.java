@@ -264,6 +264,48 @@ public class UserVPNPolicy implements UserVPNPolicyI {
     @Override
     public int sendAnonymousSupportTicket(String contactEmail, String description, String logsDir)
             throws UserPolicyException {
-        return 0;
+        log.info("sendSupportTicket method enter");
+
+        String userUuid = "anonymous";
+
+        byte[] zipWithFiles = null;
+        try {
+            log.debug("log dir list files");
+            File directory = new File(logsDir);
+            File[] files = directory.listFiles();
+            log.debug("create zip with log files. files count: " + files.length);
+            zipWithFiles = utilities.createZipWithFiles(files);
+        } catch (IOException e) {
+            log.error("can't create zip with log files for support ticket");
+        }
+
+        Map<String, Object> extraInfo = new HashMap<>();
+        extraInfo.put("app_version", this.preferencesService.getString(VPNAppPreferences.APP_VERSION));
+        extraInfo.put("sdk", android.os.Build.VERSION.SDK);
+        extraInfo.put("device", android.os.Build.DEVICE);
+        extraInfo.put("model", android.os.Build.MODEL);
+        extraInfo.put("product", android.os.Build.PRODUCT);
+        extraInfo.put("version_release", android.os.Build.VERSION.RELEASE);
+
+        String os_version = System.getProperty("os.version");
+        if (os_version != null) {
+            extraInfo.put("os_version", os_version);
+        }
+
+        if (contactEmail == null || contactEmail.equals("")) {
+            contactEmail = this.preferencesService.getString(VPNAppPreferences.USER_EMAIL);
+        }
+
+        try {
+            log.debug("create ticket");
+            int supportTicket = us.createSupportTicket(userUuid, contactEmail, description,
+                    extraInfo, zipWithFiles);
+            log.info("sendSupportTicket method exit");
+            return supportTicket;
+        } catch (UserServiceException e) {
+            log.error("UserServiceException: {}", e);
+            throw new UserPolicyException(e);
+        }
     }
+
 }

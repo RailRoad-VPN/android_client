@@ -12,6 +12,7 @@
     <string name="custom_route_format_error">Error parsing the custom routes</string>
     <string name="route_rejected">Route rejected by Android</string>
     <string name="cancel_connection">Disconnect VPN</string>
+    <string name="cancel">Cancel</string>
     <string name="title_cancel">Disconnect VPN</string>
     <string name="title_cancel_force">Disconnecting…</string>
     <string name="cancel_connection_query">Disconnect or cancel the connection attempt?</string>
@@ -144,6 +145,13 @@
     <string name="vpn_connect_network_error">Check your internet connection</string>
     <string name="apprest_ovpn_desc">Content of the RailroadVPN configuration file. These files are usually have the extension .ovpn (sometimes also .conf) and are plain text multi line configuration files. If your MDM does not support multiline configuration entries, you can also use a base64 encoded string here. A text file can be converted to base64 using openssl base64 -A -in</string>
     <string name="help_form_description_required">Please describe your problem to help you</string>
-    <string name="n1_get_pin_code_n2_n3_n4_generate_pin_code">How to get PIN-CODE?\n1. Press GET PIN-CODE link\n2. Your browser will open site\n3. Sign in or sign up\n4. Press GENERATE PIN-CODE button</string>
-
+    <string name="n1_get_pin_code_n2_n3_n4_generate_pin_code">How to get PIN-CODE?\n1. Press GET PIN-CODE link\n2. You will see order page\n3. Complete order steps\n4. In profile page press GENERATE PIN-CODE</string>
+    <string name="help_form_error">Error when create support ticket. Please try again.</string>
+    <string name="logout_confirm">Are you sure to logout?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="pin_error">Wrong PIN-CODE. Check it twice!</string>
+    <string name="network_error">Check internet connection</string>
+    <string name="try_again">Try again</string>
+    <string name="write_support">Write to support</string>
 </resources>

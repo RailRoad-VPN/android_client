@@ -11,6 +11,7 @@
     <string name="custom_route_format_error">Невозможно распознать пользовательские маршруты</string>
     <string name="route_rejected">Маршрут отклонен Android</string>
     <string name="cancel_connection">Отключить VPN</string>
+    <string name="cancel">Отмена</string>
     <string name="title_cancel">Отключить VPN</string>
     <string name="cancel_connection_query">Отключить VPN или отменить подключения?</string>
     <string name="tun_error_helpful">На некоторых кастомных сборках права на /dev/tun могут быть неверными или tun-модуль может быть не включен. Для прошивки CM9 можете попробовать исправить владельца прямо из настроек программы</string>
@@ -140,5 +141,13 @@
     <string name="title_cancel_force">Отключение…</string>
     <string name="cancel_connection_query_force">Отключение…</string>
     <string name="help_form_description_required">Пожалуйста опишите вашу проблему, чтобы мы могли помочь вам</string>
-    <string name="n1_get_pin_code_n2_n3_n4_generate_pin_code">Как получить PIN-CODE?\n1. Нажмите на ссылку ПОЛУЧИТЬ PIN-CODE\n2. Ваш браузер откроет сайт\n3. Войдите в систему\n4. Нажмите кнопку GENERATE PIN-CODE</string>
+    <string name="n1_get_pin_code_n2_n3_n4_generate_pin_code">Как получить PIN-CODE?\n1. Нажмите на ссылку ПОЛУЧИТЬ PIN-CODE\n2. Откроется страница оформления подписки\n3. Оформите подписку\n4. В личном кабинете нажмите GENERATE PIN-CODE</string>
+    <string name="help_form_error">Ошибка при создании заявки. Попробуйте пожалуйста еще раз</string>
+    <string name="logout_confirm">Вы уверены что хотите разлогиниться?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="pin_error">Не верный PIN-CODE. Проверьте корректность PIN-CODE</string>
+    <string name="network_error">Проверьте интернет соединение</string>
+    <string name="try_again">Попробовать еще раз</string>
+    <string name="write_support">Написать в поддержку</string>
 </resources>

@@ -44,13 +44,11 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     public User getUserByPinCode(Integer pincode) throws UserServiceException {
         log.debug("getUserByPinCode method enter");
 
-        log.debug("create url");
         String url = String.format("%s/pincode/%s", this.getServiceURL(), String.valueOf(pincode));
-        log.debug("url: {}", url);
+        log.debug("URL: {}", url);
 
         Map<String, String> headers = new HashMap<String, String>();
 
-        log.debug("generate auth token");
         headers.put("x-auth-token", this.utilities.generateAuthToken());
 
         RESTResponse ur;
@@ -141,11 +139,10 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
 
         String url = String.format("%s/%s/devices", this.getServiceURL(), String.valueOf(userUuid));
 
-        log.debug("URL for request: {}", url);
+        log.debug("URL: {}", url);
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("x-auth-token", this.utilities.generateAuthToken());
 
-        log.debug("Prepare data for request");
         HashMap<String, Object> userDevice = new HashMap<String, Object>();
         userDevice.put("user_uuid", userUuid);
         userDevice.put("device_id", deviceId);
@@ -153,7 +150,6 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         userDevice.put("vpn_type_id", VPNAppPreferences.VPN_TYPE_ID);
         userDevice.put("is_active", true);
         userDevice.put("location", location);
-        log.debug("Prepared: {}", userDevice.toString());
 
         RESTResponse ur;
         try {

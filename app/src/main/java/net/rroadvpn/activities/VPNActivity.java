@@ -39,12 +39,9 @@ import net.rroadvpn.services.OpenVPNControlService;
 import net.rroadvpn.services.PreferencesService;
 import net.rroadvpn.services.UserVPNPolicyI;
 import net.rroadvpn.services.UserVPNPolicy;
-import net.rroadvpn.services.Utilities;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.ExecutionException;
 
 import static net.rroadvpn.openvpn.core.OpenVPNService.DISCONNECT_VPN;
 import static net.rroadvpn.services.OpenVPNControlService.VPN_SERVICE_INTENT_PERMISSION;
@@ -193,7 +190,22 @@ public class VPNActivity extends BaseActivity {
                 if (ovcs.isVPNActive()) {
                     showDisconnectDialogVPN(LOGOUT_DISCONNECT_VPN_REQUEST_CODE, false);
                 } else {
-                    logoutUser();
+                    createDialog(null,
+                            R.string.logout_confirm,
+                            R.string.yes,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    logoutUser();
+                                }
+                            },
+                            R.string.no,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            }, true).show();
                 }
             }
         });
@@ -350,16 +362,16 @@ public class VPNActivity extends BaseActivity {
                             @Override
                             public void onSupportDialogSendTaskListener(Integer value) {
                                 dialog.dismiss();
+
                                 if (value != null) {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(that);
-                                    builder.setMessage("Ticket: " + String.valueOf(value));
-                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    });
-                                    builder.show();
+                                    createDialog(null,
+                                            "Ticket #" + String.valueOf(value),
+                                            "OK",
+                                            null,
+                                            null,
+                                            null, true);
+                                } else {
+                                    createErrorDialog(R.string.help_form_error, null, null).show();
                                 }
                             }
                         });
@@ -419,7 +431,7 @@ public class VPNActivity extends BaseActivity {
                                     switch (code) {
                                         case USER_DEVICE_NOT_ACTIVE_ERROR_CODE:
                                             statusTextView.setText(R.string.connect_device_deactivated_error);
-                                            createErrorBuilder(R.string.connect_device_deactivated_error_message,
+                                            createErrorDialog(R.string.connect_device_deactivated_error_message,
                                                     null, new DialogInterface.OnClickListener() {
                                                         @Override
                                                         public void onClick(DialogInterface dialog, int which) {
@@ -430,7 +442,7 @@ public class VPNActivity extends BaseActivity {
                                             break;
                                         case USER_DEVICE_DELETED_ERROR_CODE:
                                             statusTextView.setText(R.string.connect_device_deleted_error);
-                                            createErrorBuilder(R.string.connect_device_deleted_error_message, R.string.side_menu_btn_log_out, new DialogInterface.OnClickListener() {
+                                            createErrorDialog(R.string.connect_device_deleted_error_message, R.string.side_menu_btn_log_out, new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     logoutUser();
@@ -459,7 +471,7 @@ public class VPNActivity extends BaseActivity {
                     switch (code) {
                         case USER_DEVICE_NOT_ACTIVE_ERROR_CODE:
                             statusTextView.setText(R.string.connect_device_deactivated_error);
-                            createErrorBuilder(R.string.connect_device_deactivated_error_message,
+                            createErrorDialog(R.string.connect_device_deactivated_error_message,
                                     null, onPositiveClickListener).show();
                             break;
                         case CONNECT_NO_NETWORK_ERROR_CODE:
@@ -474,7 +486,7 @@ public class VPNActivity extends BaseActivity {
                                     dialog.dismiss();
                                 }
                             };
-                            createErrorBuilder(R.string.connect_device_deleted_error_message,
+                            createErrorDialog(R.string.connect_device_deleted_error_message,
                                     R.string.side_menu_btn_log_out, onPositiveClickListener).show();
                             break;
                         default:
@@ -487,7 +499,7 @@ public class VPNActivity extends BaseActivity {
                                     ((EditText) findViewById(R.id.help_form_description_input)).setText(helpText);
                                 }
                             };
-                            createErrorBuilder(R.string.connect_device_deactivated_error_message, R.string.connect_unknown_error_create_ticket_btn_text, onPositiveClickListener).show();
+                            createErrorDialog(R.string.connect_device_deactivated_error_message, R.string.connect_unknown_error_create_ticket_btn_text, onPositiveClickListener).show();
                             break;
                     }
 
@@ -500,33 +512,100 @@ public class VPNActivity extends BaseActivity {
     }
 
 
-    private AlertDialog.Builder createErrorBuilder(Integer messageId, Integer positiveButtonTextId,
-                                                   DialogInterface.OnClickListener onPositiveClickListener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(R.string.connect_error_dialog_title); // Error connect to VPN
+    private AlertDialog createDialog(Integer titleId, Integer messageId,
+                                     Integer positiveButtonTextId,
+                                     DialogInterface.OnClickListener onPositiveClickListener,
+                                     Integer negativeButtonTextId,
+                                     DialogInterface.OnClickListener onNegativeClickListener,
+                                     boolean isCanceable) {
+        String titleText = null;
+        if (titleId != null) {
+            titleText = getResources().getString(titleId);
+        }
+        String messageText = null;
         if (messageId != null) {
-            String message = getResources().getString(messageId);
-            builder.setMessage(message);
+            messageText = getResources().getString(messageId);
         }
 
-        builder.setCancelable(false);
+        String positiveButtonText = null;
+        if (positiveButtonTextId != null) {
+            positiveButtonText = getResources().getString(positiveButtonTextId);
+        }
+
+        String negativeButtonText = null;
+        if (negativeButtonTextId != null) {
+            negativeButtonText = getResources().getString(negativeButtonTextId);
+        }
+
+        return createDialog(titleText, messageText, positiveButtonText, onPositiveClickListener,
+                negativeButtonText, onNegativeClickListener, isCanceable);
+    }
+
+
+    private AlertDialog createErrorDialog(Integer messageId, Integer positiveButtonTextId,
+                                          DialogInterface.OnClickListener onPositiveClickListener) {
+
+        String titleText = getResources().getString(R.string.connect_error_dialog_title);
+        boolean isCancelable = false;
+
+        String message = null;
+        if (messageId != null) {
+            message = getResources().getString(messageId);
+        }
 
         String positiveButtonText = "OK";
         if (positiveButtonTextId != null) {
             positiveButtonText = getResources().getString(positiveButtonTextId);
         }
 
-        if (onPositiveClickListener != null) {
-            builder.setPositiveButton(positiveButtonText, onPositiveClickListener);
-        } else {
-            builder.setPositiveButton(positiveButtonText, new DialogInterface.OnClickListener() {
+        return this.createDialog(titleText, message, positiveButtonText, onPositiveClickListener,
+                null, null, isCancelable);
+    }
+
+    private AlertDialog createDialog(String title, String message,
+                                     String positiveButtonText,
+                                     DialogInterface.OnClickListener onPositiveClickListener,
+                                     String negativeButtonText,
+                                     DialogInterface.OnClickListener onNegativeClickListener,
+                                     boolean isCanceable) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        if (message == null) {
+            message = "";
+        }
+
+        // positive button
+        if (positiveButtonText == null) {
+            positiveButtonText = "OK";
+        }
+        if (onPositiveClickListener == null) {
+            onPositiveClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                 }
-            });
+            };
         }
-        return builder;
+
+        // negative button
+        if (onNegativeClickListener != null) {
+            if (negativeButtonText == null) {
+                negativeButtonText = getResources().getString(R.string.cancel);
+            }
+            builder.setNegativeButton(negativeButtonText, onNegativeClickListener);
+        }
+
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setCancelable(isCanceable);
+        builder.setPositiveButton(positiveButtonText, onPositiveClickListener);
+
+        AlertDialog alertDialog = builder.create();
+        if (title == null) {
+            alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        }
+        return alertDialog;
     }
 
     private void showDisconnectDialogVPN(int requestCode, boolean force) {
@@ -576,9 +655,8 @@ public class VPNActivity extends BaseActivity {
         String userUUid = this.preferencesService.getString(VPNAppPreferences.USER_UUID);
         String userEmail = this.preferencesService.getString(VPNAppPreferences.USER_EMAIL);
 
-        if (userUUid == null || userEmail == null) {
-            // TODO logout
-            goToPin();
+        if (userUUid == null || userUUid.equals("") || userEmail == null || userEmail.equals("")) {
+            logoutUser();
         }
     }
 
