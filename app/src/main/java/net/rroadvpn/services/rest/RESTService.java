@@ -377,7 +377,12 @@ public class RESTService implements RESTServiceI {
             JSONArray errorsJson = jsonObj.getJSONArray("errors");
             for (int i = 0; i < errorsJson.length(); i++) {
                 JSONObject errorJson = errorsJson.getJSONObject(i);
-                errors.add(new RESTError(errorJson));
+                RESTError restError = new RESTError(errorJson);
+                errors.add(restError);
+                log.error("API ERROR!!");
+                log.error("Code: " + restError.getCode());
+                log.error("Message: " + restError.getMessage());
+                log.error("DeveloperMessage: " + restError.getDeveloper_message());
             }
             restResponse.setErrors(errors);
         }

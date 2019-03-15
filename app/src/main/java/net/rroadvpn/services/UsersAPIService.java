@@ -6,6 +6,7 @@ import net.rroadvpn.exception.UserServiceException;
 import net.rroadvpn.model.UserDevice;
 import net.rroadvpn.model.VPNAppPreferences;
 import net.rroadvpn.model.User;
+import net.rroadvpn.model.rest.RESTError;
 import net.rroadvpn.model.rest.RESTResponse;
 import net.rroadvpn.services.rest.RESTService;
 
@@ -45,7 +46,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         log.debug("getUserByPinCode method enter");
 
         String url = String.format("%s/pincode/%s", this.getServiceURL(), String.valueOf(pincode));
-        log.debug("URL: {}", url);
+        log.info("URL: " + url);
 
         Map<String, String> headers = new HashMap<String, String>();
 
@@ -97,6 +98,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         log.info("getUserByUuid method enter");
 
         String url = String.format("%s/%s/devices", this.getServiceURL(), String.valueOf(uuid));
+        log.info("URL: " + url);
 
         Map<String, String> headers = new HashMap<String, String>();
         if (!this.deviceToken.equals("")) {
@@ -138,8 +140,8 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         log.info("createUserDevice method enter");
 
         String url = String.format("%s/%s/devices", this.getServiceURL(), String.valueOf(userUuid));
+        log.info("URL: " + url);
 
-        log.debug("URL: {}", url);
         Map<String, String> headers = new HashMap<String, String>();
         headers.put("x-auth-token", this.utilities.generateAuthToken());
 
@@ -162,16 +164,20 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
             throw new UserServiceException("we can't create user device");
         }
 
+        log.info("get device token from header x-device-token");
         List<String> xDeviceTokenList = ur.getHeaders().get("x-device-token");
         if (xDeviceTokenList != null) {
-            this.preferencesService.save(VPNAppPreferences.DEVICE_TOKEN, xDeviceTokenList.get(0));
             this.deviceToken = xDeviceTokenList.get(0);
+            log.debug("Save to preference generated device token: {}", this.deviceToken);
+            this.preferencesService.save(VPNAppPreferences.DEVICE_TOKEN, this.deviceToken);
         }
 
+        log.info("get user device uuid form header Location");
         List<String> userDeviceLocation = ur.getHeaders().get("Location");
         if (userDeviceLocation != null) {
             String locationUrl = userDeviceLocation.get(0);
             String userDeviceUuid = locationUrl.substring(locationUrl.lastIndexOf("/") + 1);
+            log.debug("Save to preference generated device uuid: {}", userDeviceUuid);
             this.preferencesService.save(VPNAppPreferences.USER_DEVICE_UUID, userDeviceUuid);
         }
         log.info("createUserDevice method exit");
@@ -180,9 +186,10 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     public String getRandomServerUuid(String userUuid) throws UserServiceException {
         log.info("getRandomServerUuid method enter");
 
-        String url = String.format("%s/%s/servers?random", this.getServiceURL(), String.valueOf(userUuid));
-        Map<String, String> headers = new HashMap<String, String>();
+        String url = String.format("%s/%s/servers?random&type_id=" + VPNAppPreferences.VPN_TYPE_ID, this.getServiceURL(), String.valueOf(userUuid));
+        log.info("URL: " + url);
 
+        Map<String, String> headers = new HashMap<String, String>();
 
         if (!this.deviceToken.equals("")) {
             headers.put("x-device-token", deviceToken);
@@ -226,6 +233,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         String url = String.format("%s/%s/servers/%s/configurations?vpn_type_id=%s&platform_id=%s",
                 this.getServiceURL(), userUuid, serverUuid, VPNAppPreferences.VPN_TYPE_ID,
                 VPNAppPreferences.DEVICE_PLATFORM_ID);
+        log.info("URL: " + url);
         Map<String, String> headers = new HashMap<String, String>();
 
 
@@ -260,6 +268,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         log.info("updateUserDevice method enter");
 
         String url = String.format("%s/%s/devices/%s", this.getServiceURL(), userUuid, deviceUuid);
+        log.info("URL: " + url);
 
         Map<String, String> headers = new HashMap<String, String>();
         if (!this.deviceToken.equals("")) {
@@ -299,7 +308,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         log.info("createConnection method enter");
 
         String url = String.format("%s/%s/servers/%s/connections", this.getServiceURL(), userUuid, serverUuid);
-        System.out.println(url);
+        log.info("URL: " + url);
 
         Map<String, String> headers = new HashMap<String, String>();
         if (!this.deviceToken.equals("")) {
@@ -390,6 +399,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
     public void deleteUserDevice(String userUuid, String userDeviceUuid) throws UserServiceException {
         log.info("deleteUserDevice method enter");
         String url = String.format("%s/%s/devices/%s", this.getServiceURL(), userUuid, userDeviceUuid);
+        log.info("URL: " + url);
 
         Map<String, String> headers = new HashMap<String, String>();
         if (!this.deviceToken.equals("")) {
@@ -421,6 +431,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
             UserDeviceNotFoundException {
         String url = String.format("%s/%s/devices/%s", this.getServiceURL(),
                 String.valueOf(userUuid), String.valueOf(uuid));
+        log.info("URL: " + url);
 
         Map<String, String> headers = new HashMap<String, String>();
         if (!this.deviceToken.equals("")) {
@@ -465,6 +476,7 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
         log.info("createSupportTicket method enter");
 
         String url = String.format("%s/%s/tickets", this.getServiceURL(), String.valueOf(userUuid));
+        log.info("URL: " + url);
 
         Map<String, String> headers = new HashMap<String, String>();
         if (!this.deviceToken.equals("")) {

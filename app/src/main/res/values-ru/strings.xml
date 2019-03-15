@@ -148,6 +148,11 @@
     <string name="no">Нет</string>
     <string name="pin_error">Не верный PIN-CODE. Проверьте корректность PIN-CODE</string>
     <string name="network_error">Проверьте интернет соединение</string>
-    <string name="try_again">Попробовать еще раз</string>
+    <string name="try_again">Еще раз</string>
     <string name="write_support">Написать в поддержку</string>
+    <string name="logout_dialog">Выходим…</string>
+    <string name="sending_dialog">Отправка…</string>
+    <string name="help_form_description_empty_message">Опишите вашу проблему</string>
+    <string name="help_form_email_input_label">Введите email для обратной связи</string>
+    <string name="help_form_send_btn">Отправить</string>
 </resources>

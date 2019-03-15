@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Enter email to contact" />
+            android:text="@string/help_form_email_input_label" />
 
         <EditText
             android:id="@+id/help_form_email_input"
@@ -41,14 +41,14 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Describe your problem and click Send button" />
+            android:text="@string/help_form_description_empty_message" />
 
         <EditText
             android:id="@+id/help_form_description_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:minLines="5"
+            android:minLines="10"
+            android:gravity="top|left"
             android:inputType="text|textMultiLine">
             <requestFocus />
         </EditText>
@@ -72,14 +72,14 @@
             android:id="@+id/help_form_send_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send" />
+            android:text="@string/help_form_send_btn" />
         <Button
             android:id="@+id/help_form_cancel_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:text="Cancel" />
+            android:text="@string/cancel" />
     </RelativeLayout>
 
 </RelativeLayout>

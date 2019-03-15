@@ -48,6 +48,9 @@ public class UserVPNPolicy implements UserVPNPolicyI {
             user = us.getUserByPinCode(pinCode);
         } catch (UserServiceException e) {
             throw new UserPolicyException(e);
+        } catch (Exception e) {
+            log.error("Exception: {}", e);
+            throw new UserPolicyException(e);
         }
         log.debug("email: {}, userUuid: {}", user.getEmail(), user.getUuid());
         log.debug("checkPinCode method exit");
@@ -64,6 +67,9 @@ public class UserVPNPolicy implements UserVPNPolicyI {
 
             us.createUserDevice(user.getUuid(), deviceId, location, true);
         } catch (UserServiceException e) {
+            throw new UserPolicyException(e);
+        } catch (Exception e) {
+            log.error("Exception: {}", e);
             throw new UserPolicyException(e);
         }
         log.info("createUserDevice method exit");
@@ -86,6 +92,9 @@ public class UserVPNPolicy implements UserVPNPolicyI {
         } catch (UserServiceException e) {
             log.error("UserServiceException: {}", e);
             throw new UserPolicyException(e);
+        } catch (Exception e) {
+            log.error("Exception: {}", e);
+            throw new UserPolicyException(e);
         }
 
         this.preferencesService.save(VPNAppPreferences.CONNECTION_UUID, "");
@@ -107,6 +116,9 @@ public class UserVPNPolicy implements UserVPNPolicyI {
         } catch (UserServiceException e) {
             log.error("UserServiceException: {}", e);
             throw new UserPolicyException(e);
+        } catch (Exception e) {
+            log.error("Exception: {}", e);
+            throw new UserPolicyException(e);
         }
     }
 
@@ -123,6 +135,9 @@ public class UserVPNPolicy implements UserVPNPolicyI {
             return serverUuid;
         } catch (UserServiceException e) {
             log.error("UserServiceException: {}", e);
+            throw new UserPolicyException(e);
+        } catch (Exception e) {
+            log.error("Exception: {}", e);
             throw new UserPolicyException(e);
         }
     }
@@ -142,6 +157,9 @@ public class UserVPNPolicy implements UserVPNPolicyI {
             this.preferencesService.save(VPNAppPreferences.CONNECTION_UUID, connectionUuid);
         } catch (UserServiceException e) {
             log.error("UserServiceException: {}", e);
+            throw new UserPolicyException(e);
+        } catch (Exception e) {
+            log.error("Exception: {}", e);
             throw new UserPolicyException(e);
         }
         log.info("afterConnectedToVPN method exit");
@@ -166,6 +184,9 @@ public class UserVPNPolicy implements UserVPNPolicyI {
         } catch (UserServiceException e) {
             log.error("UserServiceException: {}", e);
             throw new UserPolicyException(e);
+        } catch (Exception e) {
+            log.error("Exception: {}", e);
+            throw new UserPolicyException(e);
         }
     }
 
@@ -176,6 +197,9 @@ public class UserVPNPolicy implements UserVPNPolicyI {
             userDevice = this.us.getUserDevice(userUuid, uuid);
         } catch (UserServiceException e) {
             log.error("UserServiceException: {}", e);
+            throw new UserPolicyException(e);
+        } catch (Exception e) {
+            log.error("Exception: {}", e);
             throw new UserPolicyException(e);
         }
 
@@ -193,19 +217,27 @@ public class UserVPNPolicy implements UserVPNPolicyI {
         } catch (UserPolicyException e) {
             log.error("UserPolicyException when get user device: {}", e);
             return false;
+        } catch (Exception e) {
+            log.error("Exception when get user device: {}", e);
+            return false;
         }
     }
 
     @Override
     public void deleteUserSettings() throws UserPolicyException {
         log.info("deleteUserSettings method enter");
+
         try {
             this.us.deleteUserDevice(this.user.getUuid(), this.preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID));
         } catch (UserServiceException e) {
-            log.error("UserServiceException: {}", e);
+            log.error("UserServiceException when delete user device: {}", e);
             throw new UserPolicyException(e);
+        } catch (Exception e) {
+            log.error("Exception when delete user device: {}", e);
+            throw new UserPolicyException(e);
+        } finally {
+            this.preferencesService.clear();
         }
-        this.preferencesService.clear();
         log.info("deleteUserSettings method exit");
     }
 
@@ -258,6 +290,9 @@ public class UserVPNPolicy implements UserVPNPolicyI {
         } catch (UserServiceException e) {
             log.error("UserServiceException: {}", e);
             throw new UserPolicyException(e);
+        } catch (Exception e) {
+            log.error("Exception: {}", e);
+            throw new UserPolicyException(e);
         }
     }
 
@@ -277,6 +312,8 @@ public class UserVPNPolicy implements UserVPNPolicyI {
             zipWithFiles = utilities.createZipWithFiles(files);
         } catch (IOException e) {
             log.error("can't create zip with log files for support ticket");
+        } catch (Exception e) {
+            log.error("Exception: {}", e);
         }
 
         Map<String, Object> extraInfo = new HashMap<>();
@@ -303,7 +340,10 @@ public class UserVPNPolicy implements UserVPNPolicyI {
             log.info("sendSupportTicket method exit");
             return supportTicket;
         } catch (UserServiceException e) {
-            log.error("UserServiceException: {}", e);
+            log.error("UserServiceException when create support ticket: {}", e);
+            throw new UserPolicyException(e);
+        } catch (Exception e) {
+            log.error("Exception when create support ticket: {}", e);
             throw new UserPolicyException(e);
         }
     }
