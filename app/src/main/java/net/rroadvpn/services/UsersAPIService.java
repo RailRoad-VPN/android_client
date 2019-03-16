@@ -475,7 +475,8 @@ public class UsersAPIService extends RESTService implements UsersAPIServiceI {
             throws UserServiceException {
         log.info("createSupportTicket method enter");
 
-        String url = String.format("%s/%s/tickets", this.getServiceURL(), String.valueOf(userUuid));
+        // TODO separate service
+        String url = String.format("%s/tickets", this.getServiceURL()).replace("users/", "");
         log.info("URL: " + url);
 
         Map<String, String> headers = new HashMap<String, String>();

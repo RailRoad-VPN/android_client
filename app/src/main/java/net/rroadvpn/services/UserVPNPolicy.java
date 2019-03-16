@@ -254,17 +254,11 @@ public class UserVPNPolicy implements UserVPNPolicyI {
             File[] files = directory.listFiles();
             log.debug("create zip with log files. files count: " + files.length);
             zipWithFiles = utilities.createZipWithFiles(files);
-        } catch (IOException e) {
-            log.error("can't create zip with log files for support ticket");
+        } catch (Exception e) {
+            log.error("Exception. can't create zip with log files for support ticket", e);
         }
 
         Map<String, Object> extraInfo = new HashMap<>();
-        extraInfo.put("user_device_uuid", this.preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID));
-        extraInfo.put("user_email", this.preferencesService.getString(VPNAppPreferences.USER_EMAIL));
-        extraInfo.put("user_uuid", this.preferencesService.getString(VPNAppPreferences.USER_UUID));
-        extraInfo.put("server_uuid", this.preferencesService.getString(VPNAppPreferences.SERVER_UUID));
-        extraInfo.put("device_id", this.preferencesService.getString(VPNAppPreferences.DEVICE_ID));
-        extraInfo.put("device_token", this.preferencesService.getString(VPNAppPreferences.DEVICE_TOKEN));
         extraInfo.put("app_version", this.preferencesService.getString(VPNAppPreferences.APP_VERSION));
         extraInfo.put("sdk", android.os.Build.VERSION.SDK);
         extraInfo.put("device", android.os.Build.DEVICE);
@@ -279,6 +273,15 @@ public class UserVPNPolicy implements UserVPNPolicyI {
 
         if (contactEmail == null || contactEmail.equals("")) {
             contactEmail = this.preferencesService.getString(VPNAppPreferences.USER_EMAIL);
+        }
+
+        if (userUuid != null && !userUuid.equals("")) {
+            extraInfo.put("user_device_uuid", this.preferencesService.getString(VPNAppPreferences.USER_DEVICE_UUID));
+            extraInfo.put("user_email", this.preferencesService.getString(VPNAppPreferences.USER_EMAIL));
+            extraInfo.put("user_uuid", this.preferencesService.getString(VPNAppPreferences.USER_UUID));
+            extraInfo.put("server_uuid", this.preferencesService.getString(VPNAppPreferences.SERVER_UUID));
+            extraInfo.put("device_id", this.preferencesService.getString(VPNAppPreferences.DEVICE_ID));
+            extraInfo.put("device_token", this.preferencesService.getString(VPNAppPreferences.DEVICE_TOKEN));
         }
 
         try {
@@ -295,57 +298,4 @@ public class UserVPNPolicy implements UserVPNPolicyI {
             throw new UserPolicyException(e);
         }
     }
-
-    @Override
-    public int sendAnonymousSupportTicket(String contactEmail, String description, String logsDir)
-            throws UserPolicyException {
-        log.info("sendSupportTicket method enter");
-
-        String userUuid = "anonymous";
-
-        byte[] zipWithFiles = null;
-        try {
-            log.debug("log dir list files");
-            File directory = new File(logsDir);
-            File[] files = directory.listFiles();
-            log.debug("create zip with log files. files count: " + files.length);
-            zipWithFiles = utilities.createZipWithFiles(files);
-        } catch (IOException e) {
-            log.error("can't create zip with log files for support ticket");
-        } catch (Exception e) {
-            log.error("Exception: {}", e);
-        }
-
-        Map<String, Object> extraInfo = new HashMap<>();
-        extraInfo.put("app_version", this.preferencesService.getString(VPNAppPreferences.APP_VERSION));
-        extraInfo.put("sdk", android.os.Build.VERSION.SDK);
-        extraInfo.put("device", android.os.Build.DEVICE);
-        extraInfo.put("model", android.os.Build.MODEL);
-        extraInfo.put("product", android.os.Build.PRODUCT);
-        extraInfo.put("version_release", android.os.Build.VERSION.RELEASE);
-
-        String os_version = System.getProperty("os.version");
-        if (os_version != null) {
-            extraInfo.put("os_version", os_version);
-        }
-
-        if (contactEmail == null || contactEmail.equals("")) {
-            contactEmail = this.preferencesService.getString(VPNAppPreferences.USER_EMAIL);
-        }
-
-        try {
-            log.debug("create ticket");
-            int supportTicket = us.createSupportTicket(userUuid, contactEmail, description,
-                    extraInfo, zipWithFiles);
-            log.info("sendSupportTicket method exit");
-            return supportTicket;
-        } catch (UserServiceException e) {
-            log.error("UserServiceException when create support ticket: {}", e);
-            throw new UserPolicyException(e);
-        } catch (Exception e) {
-            log.error("Exception when create support ticket: {}", e);
-            throw new UserPolicyException(e);
-        }
-    }
-
 }

@@ -146,6 +146,11 @@ public class InputPinView extends BaseActivity {
                                                 String email = emailET.getText().toString();
                                                 String description = descriptonET.getText().toString();
 
+                                                if (email.trim().equals("")) {
+                                                    Toast.makeText(that, R.string.help_form_email_required, Toast.LENGTH_LONG).show();
+                                                    return;
+                                                }
+
                                                 if (description.trim().equals("")) {
                                                     Toast.makeText(that, R.string.help_form_description_required, Toast.LENGTH_LONG).show();
                                                     return;
@@ -163,7 +168,7 @@ public class InputPinView extends BaseActivity {
                                                                     "OK",
                                                                     null,
                                                                     null,
-                                                                    null, true);
+                                                                    null, true).show();
                                                         } else {
                                                             createErrorDialog(R.string.help_form_error, null, null).show();
                                                         }
@@ -334,10 +339,10 @@ public class InputPinView extends BaseActivity {
 
         @Override
         protected Integer doInBackground(Void... voids) {
-            log.debug("support dialog send anonymous ticket");
+            log.debug("support dialog send ticket");
 
             try {
-                return this.userVPNPolicyI.sendAnonymousSupportTicket(email, description, logsDir);
+                return this.userVPNPolicyI.sendSupportTicket(email, description, logsDir);
             } catch (UserPolicyException e) {
                 log.error("UserPolicyException when send support ticket: {}", e);
                 return null;

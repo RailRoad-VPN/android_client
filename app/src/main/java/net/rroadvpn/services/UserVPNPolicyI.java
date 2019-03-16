@@ -21,8 +21,6 @@ public interface UserVPNPolicyI {
 
     int sendSupportTicket(String contactEmail, String description, String logsDir) throws UserPolicyException;
 
-    int sendAnonymousSupportTicket(String contactEmail, String description, String logsDir) throws UserPolicyException;
-
     void updateConnection(Long bytesI, Long bytesO, Boolean isConnected, String modifyReason)
             throws UserPolicyException;
 
