@@ -388,6 +388,11 @@ public class VPNActivity extends BaseActivity {
                         String email = emailET.getText().toString();
                         String description = descriptonET.getText().toString();
 
+                        if (email.trim().equals("")) {
+                            Toast.makeText(that, R.string.help_form_email_required, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
                         if (description.trim().equals("")) {
                             Toast.makeText(that, R.string.help_form_description_required, Toast.LENGTH_LONG).show();
                             return;
